@@ -17,7 +17,7 @@ COPY --from=build /opt/godiddy-cli/target/*.jar /opt/godiddy-cli/
 
 # variables
 
-ENV godiddy.cli.sourceBases=/0.1.0,/1.0.0
+ENV godiddy.cli.dummy=dummy
 
 # done
 

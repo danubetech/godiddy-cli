@@ -5,4 +5,5 @@
 /bin/
 docker-compose.override.yml
 /.idea/
+/logs/
 *.iml

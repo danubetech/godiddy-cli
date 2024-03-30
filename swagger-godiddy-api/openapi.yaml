@@ -1427,7 +1427,7 @@ components:
             be executed. See <a href="https://identity.foundation/did-registration/#options">https://identity.foundation/did-registration/#options</a>.
           type: object
           example:
-            chain: testnet
+            network: testnet
         secret:
           description: This input field contains an object with DID controller keys
             and other secrets needed for performing the DID operation. See <a href="https://identity.foundation/did-registration/#secret">https://identity.foundation/did-registration/#secret</a>.
@@ -1447,6 +1447,7 @@ components:
               type: object
               additionalProperties:
                 $ref: '#/components/schemas/DecryptionResponse'
+          additionalProperties: {}
           example:
             seed: 72WGp7NgFR1Oqdi8zlt7jQQ434XR0cNQ
     CreateRequest:
@@ -1547,6 +1548,7 @@ components:
                 anyOf:
                   - $ref: '#/components/schemas/VerificationMethodPublicData'
                   - $ref: '#/components/schemas/VerificationMethodPrivateData'
+          additionalProperties: {}
           example:
             verificationMethod:
               - id: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw#key-1
@@ -1570,6 +1572,7 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/DecryptionRequest'
+      additionalProperties: {}
     SigningRequest:
       description: A signing request, see https://identity.foundation/did-registration/#signing-request-set.
       type: object
