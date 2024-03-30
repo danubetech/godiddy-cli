@@ -21,5 +21,4 @@ ENV godiddy.cli.sourceBases=/0.1.0,/1.0.0
 
 # done
 
-EXPOSE 21080
-CMD java -jar /opt/godiddy-cli/*.jar
+ENTRYPOINT [ "java","-jar", "/opt/godiddy-cli/*.jar" ]
