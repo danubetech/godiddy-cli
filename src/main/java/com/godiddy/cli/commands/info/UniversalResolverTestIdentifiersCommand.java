@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "testidentifiers",
-        description = "Return a map of test identifiers",
+        description = "Return a map of test identifiers.",
         mixinStandardHelpOptions = true
 )
 public class UniversalResolverTestIdentifiersCommand extends GodiddyCommand implements Callable<Integer> {

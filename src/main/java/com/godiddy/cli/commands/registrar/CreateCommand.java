@@ -5,6 +5,7 @@ import com.godiddy.api.client.swagger.model.CreateState;
 import com.godiddy.api.client.swagger.model.RegistrarRequestSecret;
 import com.godiddy.cli.GodiddyCommand;
 import com.godiddy.cli.api.Api;
+import com.godiddy.cli.state.State;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -66,14 +67,13 @@ public class CreateCommand extends GodiddyCommand implements Callable<Integer> {
     @Option(
             names = "--diddoc",
             description = "This input field contains the DID document to be used for the DID create operation.",
-            interactive = true,
             defaultValue = "{}"
     )
     String didDocument;
 
     @Option(
             names = {"-i", "--interactive"},
-            description = "Interactive mode to handle action states."
+            description = "This enables interactive mode where the request is prepared but not executed. You can then either run \"godiddy-cli state edit-next\" or \"godiddy-cli state continue-next\"."
     )
     Boolean interactive;
 
@@ -94,13 +94,31 @@ public class CreateCommand extends GodiddyCommand implements Callable<Integer> {
         createRequest.setSecret(Objects.requireNonNullElse(Api.fromJson(this.secret, RegistrarRequestSecret.class), new RegistrarRequestSecret()));
         createRequest.setDidDocument(Objects.requireNonNullElse(Api.fromJson(this.didDocument), new HashMap<>()));
 
+        // interactive?
+
+        if (Boolean.TRUE.equals(this.interactive)) {
+            State.setState(null);
+            State.setPrev(null);
+            State.setNext(createRequest);
+            Api.print(createRequest);
+            return 0;
+        }
+
         // execute
 
-        CreateState result = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, createRequest));
+        CreateState state = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, createRequest));
 
-        // handle action state?
+        // handle state
 
-
+        if ("finished".equalsIgnoreCase(state.getDidState().getState())) {
+            State.setState(null);
+            State.setPrev(null);
+            State.setNext(null);
+        } else {
+            State.setState(state);
+            State.setPrev(createRequest);
+            State.setNext(null);
+        }
 
         // done
 

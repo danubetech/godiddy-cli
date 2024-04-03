@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "methods",
-        description = "Return a list of supported DID methods",
+        description = "Return a list of supported DID methods.",
         mixinStandardHelpOptions = true
 )
 public class UniversalResolverMethodsCommand extends GodiddyCommand implements Callable<Integer> {

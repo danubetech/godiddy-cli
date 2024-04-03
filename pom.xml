@@ -309,7 +309,6 @@
 								<dateLibrary>java8</dateLibrary>
 								<hideGenerationTimestamp>true</hideGenerationTimestamp>
 								<openApiNullable>false</openApiNullable>
-								<useSpringBoot3>true</useSpringBoot3>
 								<useJakartaEe>true</useJakartaEe>
 							</configOptions>
 						</configuration>

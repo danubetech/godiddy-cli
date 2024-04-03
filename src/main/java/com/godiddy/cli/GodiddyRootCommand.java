@@ -4,6 +4,7 @@ import com.godiddy.cli.commands.config.ConfigRootCommand;
 import com.godiddy.cli.commands.info.InfoRootCommand;
 import com.godiddy.cli.commands.registrar.CreateCommand;
 import com.godiddy.cli.commands.resolver.ResolveCommand;
+import com.godiddy.cli.commands.state.StateRootCommand;
 import com.godiddy.cli.commands.wallet.WalletRootCommand;
 import picocli.CommandLine;
 
@@ -20,6 +21,7 @@ import java.util.concurrent.Callable;
                 InfoRootCommand.class,
                 ResolveCommand.class,
                 CreateCommand.class,
+                StateRootCommand.class,
                 WalletRootCommand.class
         }
 )

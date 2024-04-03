@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "properties",
-        description = "Return a map of configuration properties",
+        description = "Return a map of configuration properties.",
         mixinStandardHelpOptions = true
 )
 public class UniversalRegistrarPropertiesCommand extends GodiddyCommand implements Callable<Integer> {

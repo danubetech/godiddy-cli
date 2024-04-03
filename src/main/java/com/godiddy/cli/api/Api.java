@@ -115,7 +115,7 @@ public class Api {
         }
     }
 
-    private static void print(Object object) {
+    public static void print(Object object) {
         String string;
         Formatting.Value formatting = Formatting.getFormatting();
         try {
@@ -138,7 +138,7 @@ public class Api {
         if (string != null) System.out.println(string);
     }
 
-    private static void print(HttpHeaders httpHeaders, String prefix) {
+    public static void print(HttpHeaders httpHeaders, String prefix) {
         String string;
         Headers.Value headers = Headers.getHeaders();
         if (headers == Headers.Value.on) {
