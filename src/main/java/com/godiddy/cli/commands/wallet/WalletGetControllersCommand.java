@@ -20,29 +20,23 @@ public class WalletGetControllersCommand extends GodiddyCommand implements Calla
     private static final Logger log = LogManager.getLogger(WalletGetControllersCommand.class);
 
     @Option(
-            names = {"-t", "--types"},
+            names = {"-t", "--type"},
             description = "The type of the key(s) to retrieve."
     )
     String type;
 
     @Option(
-            names = {"-p", "--purpose"},
+            names = {"-o", "--purpose"},
             description = "The purpose(s) of the key(s) to retrieve."
     )
     String purpose;
 
     @Option(
             names = {"-l", "--limit"},
-            description = "The limit (total number) of keys to retrieve."
+            description = "The limit (total number) of keys to retrieve.",
+            defaultValue = "10"
     )
     Long limit;
-
-    @Option(
-            names = {"-p", "--pretty"},
-            description = "Pretty-print the result.",
-            defaultValue = "true"
-    )
-    Boolean pretty;
 
     @Override
     public Integer call() throws Exception {
@@ -55,12 +49,10 @@ public class WalletGetControllersCommand extends GodiddyCommand implements Calla
 
         // execute
 
-        List<String> result = Api.walletServiceApi().getControllers(type, purpose, limit);
+        List<String> result = Api.execute(() -> Api.walletServiceApi().getControllersWithHttpInfo(type, purpose, limit));
 
-        // response
+        // done
 
-        boolean pretty = Boolean.TRUE.equals(this.pretty);
-        System.out.println(Api.toJson(result, pretty));
         return 0;
     }
 }

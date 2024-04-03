@@ -25,11 +25,10 @@ public class UniversalRegistrarMethodsCommand extends GodiddyCommand implements 
 
         // execute
 
-        List<String> result = Api.universalRegistrarApi().universalRegistrarGetMethods();
+        List<String> result = Api.execute(() -> Api.universalRegistrarApi().universalRegistrarGetMethodsWithHttpInfo());
 
-        // response
+        // done
 
-        System.out.println(Api.toJson(result, true));
         return 0;
     }
 }

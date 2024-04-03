@@ -24,11 +24,10 @@ public class UniversalResolverTestIdentifiersCommand extends GodiddyCommand impl
 
         // execute
 
-        Object result = Api.universalResolverApi().universalResolverGetTestIdentifiers();
+        Object result = Api.execute(() -> Api.universalResolverApi().universalResolverGetTestIdentifiersWithHttpInfo());
 
-        // response
+        // done
 
-        System.out.println(Api.toJson(result, true));
         return 0;
     }
 }

@@ -24,11 +24,10 @@ public class UniversalRegistrarPropertiesCommand extends GodiddyCommand implemen
 
         // execute
 
-        Object result = Api.universalRegistrarApi().universalRegistrarGetMethods();
+        Object result = Api.execute(() -> Api.universalRegistrarApi().universalRegistrarGetMethodsWithHttpInfo());
 
-        // response
+        // done
 
-        System.out.println(Api.toJson(result, true));
         return 0;
     }
 }

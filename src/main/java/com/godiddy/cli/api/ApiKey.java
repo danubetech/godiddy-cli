@@ -13,7 +13,7 @@ public class ApiKey {
 
     public static final String DEFAULT_APIKEY = "b082c420-df67-4b06-899c-b7c51d75fba0";
     public static final Map<String, String> PREDEFINED_APIKEYS = Map.of(
-            "default", DEFAULT_APIKEY
+            "def", DEFAULT_APIKEY
     );
 
     public static String getApiKey() {

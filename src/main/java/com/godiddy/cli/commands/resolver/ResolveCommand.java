@@ -32,13 +32,6 @@ public class ResolveCommand extends GodiddyCommand implements Callable<Integer> 
     )
     String identifier;
 
-    @Option(
-            names = {"-p", "--pretty"},
-            description = "Pretty-print the result.",
-            defaultValue = "true"
-    )
-    Boolean pretty;
-
     @Override
     public Integer call() throws Exception {
 
@@ -49,12 +42,10 @@ public class ResolveCommand extends GodiddyCommand implements Callable<Integer> 
 
         // execute
 
-        Object result = Api.universalResolverApi().resolve(identifier, accept);
+        Object result = Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(identifier, accept));
 
-        // response
+        // done
 
-        boolean pretty = Boolean.TRUE.equals(this.pretty);
-        System.out.println(Api.toJson(result, pretty));
         return 0;
     }
 }

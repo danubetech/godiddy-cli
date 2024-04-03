@@ -72,18 +72,18 @@ public class CreateCommand extends GodiddyCommand implements Callable<Integer> {
     String didDocument;
 
     @Option(
-            names = {"-p", "--pretty"},
-            description = "Pretty-print the result.",
-            defaultValue = "true"
+            names = {"-i", "--interactive"},
+            description = "Interactive mode to handle action states."
     )
-    Boolean pretty;
+    Boolean interactive;
 
     @Override
     public Integer call() throws Exception {
 
         // request
 
-        Map<String, Object> options = new LinkedHashMap<>(this.options);
+        Map<String, Object> options = new LinkedHashMap<>();
+        if (this.options != null) options.putAll(this.options);
         if (this.clientManagedSecretMode != null) options.put("clientSecretMode", this.clientManagedSecretMode);
         if (this.network != null) options.put("network", this.network);
 
@@ -96,12 +96,14 @@ public class CreateCommand extends GodiddyCommand implements Callable<Integer> {
 
         // execute
 
-        CreateState createState = Api.universalRegistrarApi().create(method, createRequest);
+        CreateState result = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, createRequest));
 
-        // response
+        // handle action state?
 
-        boolean pretty = Boolean.TRUE.equals(this.pretty);
-        System.out.println(Api.toJson(createState, pretty));
+
+
+        // done
+
         return 0;
     }
 }

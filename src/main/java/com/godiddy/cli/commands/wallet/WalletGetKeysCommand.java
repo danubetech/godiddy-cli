@@ -34,49 +34,41 @@ public class WalletGetKeysCommand extends GodiddyCommand implements Callable<Int
     String url;
 
     @Option(
-            names = {"-t", "--types"},
+            names = {"-t", "--type"},
             description = "The type of the key(s) to retrieve."
     )
     String type;
 
     @Option(
-            names = {"-p", "--purpose"},
+            names = {"-o", "--purpose"},
             description = "The purpose(s) of the key(s) to retrieve."
     )
     String purpose;
 
     @Option(
             names = {"-l", "--limit"},
-            description = "The limit (total number) of keys to retrieve."
+            description = "The limit (total number) of keys to retrieve.",
+            defaultValue = "10"
     )
     Long limit;
-
-    @Option(
-            names = {"-p", "--pretty"},
-            description = "Pretty-print the result.",
-            defaultValue = "true"
-    )
-    Boolean pretty;
 
     @Override
     public Integer call() throws Exception {
 
         // request
 
-        URI controller = URI.create(this.controller);
-        URI url = URI.create(this.url);
+        URI controller = this.controller == null ? null : URI.create(this.controller);
+        URI url = this.url == null ? null : URI.create(this.url);
         String type = this.type;
         String purpose = this.purpose;
         Long limit = this.limit;
 
         // execute
 
-        List<Key> result = Api.walletServiceApi().getKeys(controller, url, type, purpose, limit);
+        List<Key> result = Api.execute(() -> Api.walletServiceApi().getKeysWithHttpInfo(controller, url, type, purpose, limit));
 
-        // response
+        // done
 
-        boolean pretty = Boolean.TRUE.equals(this.pretty);
-        System.out.println(Api.toJson(result, pretty));
         return 0;
     }
 }

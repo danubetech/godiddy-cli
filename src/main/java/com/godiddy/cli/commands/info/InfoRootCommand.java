@@ -14,5 +14,5 @@ import java.util.concurrent.Callable;
                 UniversalRegistrarInfoCommand.class
         }
 )
-public class InfoCommand extends GodiddyCommand implements Callable<Integer> {
+public class InfoRootCommand extends GodiddyCommand implements Callable<Integer> {
 }

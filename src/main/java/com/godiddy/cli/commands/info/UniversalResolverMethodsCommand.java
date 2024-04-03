@@ -25,11 +25,10 @@ public class UniversalResolverMethodsCommand extends GodiddyCommand implements C
 
         // execute
 
-        List<String> result = Api.universalResolverApi().universalResolverGetMethods();
+        List<String> result = Api.execute(() -> Api.universalResolverApi().universalResolverGetMethodsWithHttpInfo());
 
-        // response
+        // done
 
-        System.out.println(Api.toJson(result, true));
         return 0;
     }
 }

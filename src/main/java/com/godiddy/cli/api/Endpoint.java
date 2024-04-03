@@ -14,7 +14,7 @@ public class Endpoint {
 
     public static final String DEFAULT_ENDPOINT = "https://api.godiddy.com/1.0.0/";
     public static final Map<String, String> PREDEFINED_ENDPOINTS = Map.of(
-            "default", DEFAULT_ENDPOINT,
+            "def", DEFAULT_ENDPOINT,
             "godiddy", "https://api.godiddy.com/1.0.0/",
             "godiddy-dev", "https://api.dev.godiddy.com/1.0.0/",
             "godiddy-0.1.0", "https://api.godiddy.com/0.1.0/",
@@ -26,7 +26,7 @@ public class Endpoint {
     public static String getEndpoint() {
         String endpoint = Objects.requireNonNullElse(Configuration.getEndpoint(), DEFAULT_ENDPOINT);
         if (DEFAULT_ENDPOINT.equals(endpoint)) {
-            log.info("Using default endpoint.");
+            log.info("Using default endpoint: " + DEFAULT_ENDPOINT);
         }
         return endpoint;
     }

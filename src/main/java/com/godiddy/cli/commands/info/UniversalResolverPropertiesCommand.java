@@ -24,11 +24,10 @@ public class UniversalResolverPropertiesCommand extends GodiddyCommand implement
 
         // execute
 
-        Object result = Api.universalResolverApi().universalResolverGetProperties();
+        Object result = Api.execute(() -> Api.universalResolverApi().universalResolverGetPropertiesWithHttpInfo());
 
-        // response
+        // done
 
-        System.out.println(Api.toJson(result, true));
         return 0;
     }
 }
