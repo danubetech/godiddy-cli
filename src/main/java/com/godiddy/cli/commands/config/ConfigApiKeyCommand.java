@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
         description = "Get or set the API key of the Godiddy API.",
         mixinStandardHelpOptions = true
 )
-public class ConfigApiKeyCommand extends ConfigCommand implements Callable<Integer> {
+public class ConfigApiKeyCommand extends ConfigAbstractCommand implements Callable<Integer> {
 
     private static final Logger log = LogManager.getLogger(ConfigApiKeyCommand.class);
 

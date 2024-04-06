@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.wallet;
 
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import picocli.CommandLine.Command;
 
 import java.util.concurrent.Callable;
@@ -14,5 +14,5 @@ import java.util.concurrent.Callable;
                 WalletGetControllersCommand.class
         }
 )
-public class WalletRootCommand extends GodiddyCommand implements Callable<Integer> {
+public class WalletRootCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 }

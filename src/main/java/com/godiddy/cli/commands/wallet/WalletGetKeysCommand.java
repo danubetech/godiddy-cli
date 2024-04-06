@@ -1,7 +1,7 @@
 package com.godiddy.cli.commands.wallet;
 
 import com.godiddy.api.client.swagger.model.Key;
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +17,7 @@ import java.util.concurrent.Callable;
         description = "Get key(s) ",
         mixinStandardHelpOptions = true
 )
-public class WalletGetKeysCommand extends GodiddyCommand implements Callable<Integer> {
+public class WalletGetKeysCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
     private static final Logger log = LogManager.getLogger(WalletGetKeysCommand.class);
 

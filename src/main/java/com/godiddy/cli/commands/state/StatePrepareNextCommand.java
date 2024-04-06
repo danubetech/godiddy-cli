@@ -1,7 +1,7 @@
 package com.godiddy.cli.commands.state;
 
 import com.godiddy.api.client.swagger.model.*;
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.state.State;
 import com.godiddy.cli.util.RequestWrapper;
@@ -17,7 +17,7 @@ import java.util.concurrent.Callable;
         description = "Handle the previous request and current state, and prepare the next request.",
         mixinStandardHelpOptions = true
 )
-public class StatePrepareNextCommand extends GodiddyCommand implements Callable<Integer> {
+public class StatePrepareNextCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
     private static final Logger log = LogManager.getLogger(StatePrepareNextCommand.class);
 
@@ -56,6 +56,7 @@ public class StatePrepareNextCommand extends GodiddyCommand implements Callable<
         nextRequestWrapper.setJobId(stateWrapper.getJobId());
         nextRequestWrapper.setOptions(prevRequestWrapper.getOptions());
         nextRequestWrapper.setSecret(prevRequestWrapper.getSecret());
+
         State.setNext(nextRequestWrapper.getWrappedRequest());
         Api.print(nextRequestWrapper.getWrappedRequest());
         return 0;

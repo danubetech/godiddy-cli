@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
         description = "Get or set the display of the Godiddy API requests and responses. Default value: " + Formatting.DEFAULT_FORMATTING + ".",
         mixinStandardHelpOptions = true
 )
-public class ConfigFormattingCommand extends ConfigCommand implements Callable<Integer> {
+public class ConfigFormattingCommand extends ConfigAbstractCommand implements Callable<Integer> {
 
     private static final Logger log = LogManager.getLogger(ConfigFormattingCommand.class);
 

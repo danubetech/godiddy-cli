@@ -3,7 +3,7 @@ package com.godiddy.cli.commands.registrar;
 import com.godiddy.api.client.swagger.model.CreateRequest;
 import com.godiddy.api.client.swagger.model.CreateState;
 import com.godiddy.api.client.swagger.model.RegistrarRequestSecret;
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.state.State;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +22,7 @@ import java.util.concurrent.Callable;
         description = "Create a DID.",
         mixinStandardHelpOptions = true
 )
-public class CreateCommand extends GodiddyCommand implements Callable<Integer> {
+public class CreateCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
     private static final Logger log = LogManager.getLogger(CreateCommand.class);
 
@@ -97,6 +97,7 @@ public class CreateCommand extends GodiddyCommand implements Callable<Integer> {
         // interactive?
 
         if (Boolean.TRUE.equals(this.interactive)) {
+            State.setMethod(null);
             State.setState(null);
             State.setPrev(null);
             State.setNext(createRequest);
@@ -111,10 +112,12 @@ public class CreateCommand extends GodiddyCommand implements Callable<Integer> {
         // handle state
 
         if ("finished".equalsIgnoreCase(state.getDidState().getState())) {
+            State.setMethod(null);
             State.setState(null);
             State.setPrev(null);
             State.setNext(null);
         } else {
+            State.setMethod(method);
             State.setState(state);
             State.setPrev(createRequest);
             State.setNext(null);

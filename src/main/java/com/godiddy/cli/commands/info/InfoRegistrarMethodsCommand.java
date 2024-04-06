@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.info;
 
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,9 +14,9 @@ import java.util.concurrent.Callable;
         description = "Return a list of supported DID methods.",
         mixinStandardHelpOptions = true
 )
-public class UniversalRegistrarMethodsCommand extends GodiddyCommand implements Callable<Integer> {
+public class InfoRegistrarMethodsCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
-    private static final Logger log = LogManager.getLogger(UniversalRegistrarMethodsCommand.class);
+    private static final Logger log = LogManager.getLogger(InfoRegistrarMethodsCommand.class);
 
     @Override
     public Integer call() throws Exception {

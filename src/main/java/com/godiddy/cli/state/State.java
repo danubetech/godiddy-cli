@@ -12,7 +12,7 @@ public class State {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static Object get(String key) {
+    private static Object getObject(String key) {
         try {
             String value = preferences.get(key, null);
             String valueClass = preferences.get(key + "Class", null);
@@ -22,7 +22,7 @@ public class State {
         }
     }
 
-    public static void set(String key, Object value) {
+    public static void setObject(String key, Object value) {
         if (value == null) {
             preferences.remove(key);
             preferences.remove(key + "Class");
@@ -36,27 +36,39 @@ public class State {
         }
     }
 
+    private static String getMethod() {
+        return preferences.get("method", null);
+    }
+
+    public static void setMethod(String method) {
+        if (method == null) {
+            preferences.remove("method");
+        } else {
+            preferences.put("method", method);
+        }
+    }
+
     public static Object getState() {
-        return get("state");
+        return getObject("state");
     }
 
     public static void setState(Object state) {
-        set("state", state);
+        setObject("state", state);
     }
 
     public static Object getPrev() {
-        return get("prev");
+        return getObject("prev");
     }
 
     public static void setPrev(Object prev) {
-        set("prev", prev);
+        setObject("prev", prev);
     }
 
     public static Object getNext() {
-        return get("next");
+        return getObject("next");
     }
 
     public static void setNext(Object next) {
-        set("next", next);
+        setObject("next", next);
     }
 }

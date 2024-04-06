@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.info;
 
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import picocli.CommandLine.Command;
 
 import java.util.concurrent.Callable;
@@ -10,10 +10,10 @@ import java.util.concurrent.Callable;
         description = "Information about the Universal Resolver in the Godiddy API.",
         mixinStandardHelpOptions = true,
         subcommands = {
-                UniversalResolverPropertiesCommand.class,
-                UniversalResolverMethodsCommand.class,
-                UniversalResolverTestIdentifiersCommand.class
+                InfoResolverPropertiesCommand.class,
+                InfoResolverMethodsCommand.class,
+                InfoResolverTestIdentifiersCommand.class
         }
 )
-public class UniversalResolverInfoCommand extends GodiddyCommand implements Callable<Integer> {
+public class InfoResolverCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 }

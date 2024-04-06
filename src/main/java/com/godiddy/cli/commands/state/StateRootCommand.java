@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.state;
 
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import picocli.CommandLine.Command;
 
 import java.util.concurrent.Callable;
@@ -17,5 +17,5 @@ import java.util.concurrent.Callable;
                 StateEditNextCommand.class
         }
 )
-public class StateRootCommand extends GodiddyCommand implements Callable<Integer> {
+public class StateRootCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 }

@@ -1,7 +1,7 @@
 package com.godiddy.cli.commands.state;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.state.State;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +16,7 @@ import java.util.concurrent.Callable;
         description = "Edit the next request.",
         mixinStandardHelpOptions = true
 )
-public class StateEditNextCommand extends GodiddyCommand implements Callable<Integer> {
+public class StateEditNextCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
     private static final Logger log = LogManager.getLogger(StateEditNextCommand.class);
 

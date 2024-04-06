@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.info;
 
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,9 +13,9 @@ import java.util.concurrent.Callable;
         description = "Return a map of configuration properties.",
         mixinStandardHelpOptions = true
 )
-public class UniversalRegistrarPropertiesCommand extends GodiddyCommand implements Callable<Integer> {
+public class InfoRegistrarPropertiesCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
-    private static final Logger log = LogManager.getLogger(UniversalRegistrarPropertiesCommand.class);
+    private static final Logger log = LogManager.getLogger(InfoRegistrarPropertiesCommand.class);
 
     @Override
     public Integer call() throws Exception {

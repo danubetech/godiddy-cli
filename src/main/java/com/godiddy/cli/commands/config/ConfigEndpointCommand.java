@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
         description = "Get or set the endpoint URL of the Godiddy API. Default value: " + Endpoint.DEFAULT_ENDPOINT + ".",
         mixinStandardHelpOptions = true
 )
-public class ConfigEndpointCommand extends ConfigCommand implements Callable<Integer> {
+public class ConfigEndpointCommand extends ConfigAbstractCommand implements Callable<Integer> {
 
     private static final Logger log = LogManager.getLogger(ConfigEndpointCommand.class);
 

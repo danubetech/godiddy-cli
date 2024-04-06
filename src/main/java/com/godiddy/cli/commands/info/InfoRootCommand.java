@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.info;
 
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import picocli.CommandLine.Command;
 
 import java.util.concurrent.Callable;
@@ -10,9 +10,9 @@ import java.util.concurrent.Callable;
         description = "Various information about the Godiddy API.",
         mixinStandardHelpOptions = true,
         subcommands = {
-                UniversalResolverInfoCommand.class,
-                UniversalRegistrarInfoCommand.class
+                InfoResolverCommand.class,
+                InfoRegistrarCommand.class
         }
 )
-public class InfoRootCommand extends GodiddyCommand implements Callable<Integer> {
+public class InfoRootCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 }

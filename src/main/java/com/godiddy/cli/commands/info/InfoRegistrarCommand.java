@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.info;
 
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import picocli.CommandLine.Command;
 
 import java.util.concurrent.Callable;
@@ -10,9 +10,9 @@ import java.util.concurrent.Callable;
         description = "Information about the Universal Registrar in the Godiddy API.",
         mixinStandardHelpOptions = true,
         subcommands = {
-                UniversalRegistrarPropertiesCommand.class,
-                UniversalRegistrarMethodsCommand.class
+                InfoRegistrarPropertiesCommand.class,
+                InfoRegistrarMethodsCommand.class
         }
 )
-public class UniversalRegistrarInfoCommand extends GodiddyCommand implements Callable<Integer> {
+public class InfoRegistrarCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 }

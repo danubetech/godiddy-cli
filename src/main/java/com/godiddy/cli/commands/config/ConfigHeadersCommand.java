@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
         description = "Get or set the display of the Godiddy API headers for display purposes. Default value: " + Headers.DEFAULT_HEADERS + ".",
         mixinStandardHelpOptions = true
 )
-public class ConfigHeadersCommand extends ConfigCommand implements Callable<Integer> {
+public class ConfigHeadersCommand extends ConfigAbstractCommand implements Callable<Integer> {
 
     private static final Logger log = LogManager.getLogger(ConfigHeadersCommand.class);
 

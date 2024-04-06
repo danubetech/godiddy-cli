@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.info;
 
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,9 +13,9 @@ import java.util.concurrent.Callable;
         description = "Return a map of test identifiers.",
         mixinStandardHelpOptions = true
 )
-public class UniversalResolverTestIdentifiersCommand extends GodiddyCommand implements Callable<Integer> {
+public class InfoResolverTestIdentifiersCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
-    private static final Logger log = LogManager.getLogger(UniversalResolverTestIdentifiersCommand.class);
+    private static final Logger log = LogManager.getLogger(InfoResolverTestIdentifiersCommand.class);
 
     @Override
     public Integer call() throws Exception {

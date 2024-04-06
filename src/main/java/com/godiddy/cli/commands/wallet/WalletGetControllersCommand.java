@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.wallet;
 
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +15,7 @@ import java.util.concurrent.Callable;
         description = "Get controller(s) ",
         mixinStandardHelpOptions = true
 )
-public class WalletGetControllersCommand extends GodiddyCommand implements Callable<Integer> {
+public class WalletGetControllersCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
     private static final Logger log = LogManager.getLogger(WalletGetControllersCommand.class);
 

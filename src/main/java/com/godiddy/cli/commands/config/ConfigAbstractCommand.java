@@ -1,11 +1,11 @@
 package com.godiddy.cli.commands.config;
 
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
-public abstract class ConfigCommand extends GodiddyCommand implements Callable<Integer> {
+public abstract class ConfigAbstractCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
         @CommandLine.Option(
                 names = {"-d", "--delete"},

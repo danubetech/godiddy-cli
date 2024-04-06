@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.config;
 
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import picocli.CommandLine.Command;
 
 import java.util.concurrent.Callable;
@@ -16,5 +16,5 @@ import java.util.concurrent.Callable;
                 ConfigHeadersCommand.class
         }
 )
-public class ConfigRootCommand extends GodiddyCommand implements Callable<Integer> {
+public class ConfigRootCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 }

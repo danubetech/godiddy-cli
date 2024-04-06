@@ -25,5 +25,5 @@ import java.util.concurrent.Callable;
                 WalletRootCommand.class
         }
 )
-public class GodiddyRootCommand extends GodiddyCommand implements Callable<Integer> {
+public class GodiddyRootCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 }

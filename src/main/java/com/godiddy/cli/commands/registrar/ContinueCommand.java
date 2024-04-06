@@ -1,14 +1,13 @@
 package com.godiddy.cli.commands.registrar;
 
 import com.godiddy.api.client.swagger.model.*;
-import com.godiddy.cli.GodiddyCommand;
+import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.state.State;
 import com.godiddy.cli.util.StateWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
 
 import java.util.concurrent.Callable;
 
@@ -17,16 +16,9 @@ import java.util.concurrent.Callable;
         description = "Continue an ongoing DID operation.",
         mixinStandardHelpOptions = true
 )
-public class ContinueCommand extends GodiddyCommand implements Callable<Integer> {
+public class ContinueCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
     private static final Logger log = LogManager.getLogger(ContinueCommand.class);
-
-    @Option(
-            names = {"-m", "--method"},
-            description = "The requested DID method for the operation.",
-            required = true
-    )
-    String method;
 
     @Override
     public Integer call() throws Exception {
