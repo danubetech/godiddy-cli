@@ -1,6 +1,6 @@
 package com.godiddy.cli.api;
 
-import com.godiddy.cli.config.Configuration;
+import com.godiddy.cli.cliconfig.CLIConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +24,7 @@ public class Endpoint {
     );
 
     public static String getEndpoint() {
-        String endpoint = Objects.requireNonNullElse(Configuration.getEndpoint(), DEFAULT_ENDPOINT);
+        String endpoint = Objects.requireNonNullElse(CLIConfig.getEndpoint(), DEFAULT_ENDPOINT);
         if (DEFAULT_ENDPOINT.equals(endpoint)) {
             log.info("Using default endpoint: " + DEFAULT_ENDPOINT);
         }

@@ -12,7 +12,7 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "resolve",
-        description = "Resolve a DID / Dereference a DID URL.",
+        description = "Resolve a DID / Dereference a DID URL, using the Universal Resolver API.",
         mixinStandardHelpOptions = true
 )
 public class ResolveCommand extends GodiddyAbstractCommand implements Callable<Integer> {

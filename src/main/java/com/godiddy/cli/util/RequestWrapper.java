@@ -1,9 +1,9 @@
 package com.godiddy.cli.util;
 
-import com.godiddy.api.client.swagger.model.CreateRequest;
-import com.godiddy.api.client.swagger.model.DeactivateRequest;
-import com.godiddy.api.client.swagger.model.RegistrarRequestSecret;
-import com.godiddy.api.client.swagger.model.UpdateRequest;
+import com.godiddy.api.client.openapi.model.CreateRequest;
+import com.godiddy.api.client.openapi.model.DeactivateRequest;
+import com.godiddy.api.client.openapi.model.RequestSecret;
+import com.godiddy.api.client.openapi.model.UpdateRequest;
 
 public class RequestWrapper {
 
@@ -77,7 +77,7 @@ public class RequestWrapper {
         }
     }
 
-    public RegistrarRequestSecret getSecret() {
+    public RequestSecret getSecret() {
         switch (this.request) {
             case CreateRequest createRequest -> {
                 return createRequest.getSecret();
@@ -92,7 +92,7 @@ public class RequestWrapper {
         }
     }
 
-    public void setSecret(RegistrarRequestSecret secret) {
+    public void setSecret(RequestSecret secret) {
         switch (this.request) {
             case CreateRequest createRequest -> {
                 createRequest.setSecret(secret);

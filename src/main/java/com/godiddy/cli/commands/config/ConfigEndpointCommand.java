@@ -1,7 +1,7 @@
 package com.godiddy.cli.commands.config;
 
 import com.godiddy.cli.api.Endpoint;
-import com.godiddy.cli.config.Configuration;
+import com.godiddy.cli.cliconfig.CLIConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
@@ -27,12 +27,12 @@ public class ConfigEndpointCommand extends ConfigAbstractCommand implements Call
     @Override
     public Integer call() throws Exception {
         log.trace("Parameter 'endpoint': " + this.endpoint);
-        if (Boolean.TRUE.equals(this.remove)) {
-            Configuration.setEndpoint(null);
-            System.out.println("Endpoint successfully removed.");
+        if (Boolean.TRUE.equals(this.delete)) {
+            CLIConfig.setEndpoint(null);
+            System.out.println("Endpoint setting successfully deleted.");
         } else {
             if (this.endpoint == null) {
-                String endpoint = Configuration.getEndpoint();
+                String endpoint = CLIConfig.getEndpoint();
                 if (endpoint == null) {
                     System.out.println("No endpoint set.");
                 } else {
@@ -45,7 +45,7 @@ public class ConfigEndpointCommand extends ConfigAbstractCommand implements Call
                     System.out.println("Using predefined endpoint value '" + predefinedEndpoint + "' for parameter value '" + endpoint + "'.");
                     endpoint = predefinedEndpoint;
                 }
-                Configuration.setEndpoint(endpoint);
+                CLIConfig.setEndpoint(endpoint);
                 System.out.println("Endpoint successfully set.");
             }
         }

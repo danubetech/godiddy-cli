@@ -4,12 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.godiddy.api.client.ApiClient;
 import com.godiddy.api.client.ApiResponse;
-import com.godiddy.api.client.swagger.api.*;
+import com.godiddy.api.client.openapi.api.*;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;

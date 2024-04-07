@@ -12,5 +12,5 @@ public abstract class ConfigAbstractCommand extends GodiddyAbstractCommand imple
                 description = "Delete a configuration setting.",
                 defaultValue = "false"
         )
-        Boolean remove;
+        Boolean delete;
 }

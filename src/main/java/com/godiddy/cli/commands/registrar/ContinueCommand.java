@@ -1,9 +1,9 @@
 package com.godiddy.cli.commands.registrar;
 
-import com.godiddy.api.client.swagger.model.*;
+import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
-import com.godiddy.cli.state.State;
+import com.godiddy.cli.clistate.CLIState;
 import com.godiddy.cli.util.StateWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "continue",
-        description = "Continue an ongoing DID operation.",
+        description = "Continue an ongoing DID operation, using the Universal Registrar API.",
         mixinStandardHelpOptions = true
 )
 public class ContinueCommand extends GodiddyAbstractCommand implements Callable<Integer> {
@@ -25,12 +25,12 @@ public class ContinueCommand extends GodiddyAbstractCommand implements Callable<
 
         // request and execute
 
-        Object next = State.getNext();
+        String method = CLIState.getMethod();
+        Object next = CLIState.getNext();
         if (next == null) {
             System.err.println("No next request to continue with. Try running \"godiddy-cli state prepare-next\" first.");
             return 1;
         }
-        String method = this.method;
         Object request = next;
         StateWrapper stateWrapper;
         switch (request) {
@@ -51,14 +51,14 @@ public class ContinueCommand extends GodiddyAbstractCommand implements Callable<
 
         // handle state
 
-        if ("finished".equalsIgnoreCase(stateWrapper.getDidState().getState())) {
-            State.setState(null);
-            State.setPrev(null);
-            State.setNext(null);
+        if (stateWrapper.getDidState() instanceof DidStateFinished) {
+            CLIState.setState(null);
+            CLIState.setPrev(null);
+            CLIState.setNext(null);
         } else {
-            State.setState(stateWrapper.getWrappedState());
-            State.setPrev(request);
-            State.setNext(null);
+            CLIState.setState(stateWrapper.getWrappedState());
+            CLIState.setPrev(request);
+            CLIState.setNext(null);
         }
 
         // done

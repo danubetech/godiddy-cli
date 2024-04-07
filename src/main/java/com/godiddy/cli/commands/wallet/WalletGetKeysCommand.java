@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.wallet;
 
-import com.godiddy.api.client.swagger.model.Key;
+import com.godiddy.api.client.openapi.model.Key;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import org.apache.logging.log4j.LogManager;

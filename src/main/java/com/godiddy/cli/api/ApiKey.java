@@ -1,6 +1,6 @@
 package com.godiddy.cli.api;
 
-import com.godiddy.cli.config.Configuration;
+import com.godiddy.cli.cliconfig.CLIConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +17,7 @@ public class ApiKey {
     );
 
     public static String getApiKey() {
-        String apiKey = Objects.requireNonNullElse(Configuration.getApiKey(), DEFAULT_APIKEY);
+        String apiKey = Objects.requireNonNullElse(CLIConfig.getApiKey(), DEFAULT_APIKEY);
         if (DEFAULT_APIKEY.equals(apiKey)) {
             log.warn("Warning: Using default API key, which can only be used in a limited way, so you may encounter restrictions. Consider setting your own API key.");
         }

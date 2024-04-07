@@ -1,15 +1,16 @@
 package com.godiddy.cli.commands.registrar;
 
-import com.godiddy.api.client.swagger.model.CreateRequest;
-import com.godiddy.api.client.swagger.model.CreateState;
-import com.godiddy.api.client.swagger.model.RegistrarRequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
-import com.godiddy.cli.state.State;
+import com.godiddy.cli.clistate.CLIState;
+import foundation.identity.did.DIDDocument;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import uniregistrar.request.CreateRequest;
+import uniregistrar.state.CreateState;
+import uniregistrar.state.State;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -19,7 +20,7 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "create",
-        description = "Create a DID.",
+        description = "Create a DID, using the Universal Registrar API.",
         mixinStandardHelpOptions = true
 )
 public class CreateCommand extends GodiddyAbstractCommand implements Callable<Integer> {
@@ -49,7 +50,7 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
             names = {"-c", "--clientSecretMode"},
             description = "Enables client-managed secret mode. Equivalent to setting -o clientSecretMode=true."
     )
-    Boolean clientManagedSecretMode;
+    Boolean clientSecretMode;
 
     @Option(
             names = {"-n", "--network"},
@@ -84,43 +85,48 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
 
         Map<String, Object> options = new LinkedHashMap<>();
         if (this.options != null) options.putAll(this.options);
-        if (this.clientManagedSecretMode != null) options.put("clientSecretMode", this.clientManagedSecretMode);
+        if (this.clientSecretMode != null) options.put("clientSecretMode", this.clientSecretMode);
         if (this.network != null) options.put("network", this.network);
+
+        Map<String, Object> secret = new LinkedHashMap<>();
 
         String method = this.method;
         CreateRequest createRequest = new CreateRequest();
         createRequest.setJobId(this.jobId);
         createRequest.setOptions(options);
-        createRequest.setSecret(Objects.requireNonNullElse(Api.fromJson(this.secret, RegistrarRequestSecret.class), new RegistrarRequestSecret()));
-        createRequest.setDidDocument(Objects.requireNonNullElse(Api.fromJson(this.didDocument), new HashMap<>()));
+        createRequest.setSecret(Objects.requireNonNullElse(Api.fromJson(this.secret), new LinkedHashMap()));
+        createRequest.setDidDocument(Objects.requireNonNullElse(Api.fromJson(this.didDocument, DIDDocument.class), new DIDDocument()));
 
         // interactive?
 
         if (Boolean.TRUE.equals(this.interactive)) {
-            State.setMethod(null);
-            State.setState(null);
-            State.setPrev(null);
-            State.setNext(createRequest);
+            CLIState.setMethod(null);
+            CLIState.setState(null);
+            CLIState.setPrev(null);
+            CLIState.setNext(createRequest);
             Api.print(createRequest);
             return 0;
         }
 
         // execute
 
-        CreateState state = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, createRequest));
+        com.godiddy.api.client.openapi.model.CreateRequest apiCreateRequest = new com.godiddy.api.client.openapi.model.CreateRequest();
+        com.godiddy.api.client.openapi.model.CreateState apiState = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, apiCreateRequest));
 
         // handle state
 
-        if ("finished".equalsIgnoreCase(state.getDidState().getState())) {
-            State.setMethod(null);
-            State.setState(null);
-            State.setPrev(null);
-            State.setNext(null);
+        State state = CreateState.build();
+
+        if ("finished".equalsIgnoreCase((String) state.getDidState().get("state"))) {
+            CLIState.setMethod(null);
+            CLIState.setState(null);
+            CLIState.setPrev(null);
+            CLIState.setNext(null);
         } else {
-            State.setMethod(method);
-            State.setState(state);
-            State.setPrev(createRequest);
-            State.setNext(null);
+            CLIState.setMethod(method);
+            CLIState.setState(state);
+            CLIState.setPrev(createRequest);
+            CLIState.setNext(null);
         }
 
         // done

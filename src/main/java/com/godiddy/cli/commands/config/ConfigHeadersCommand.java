@@ -1,7 +1,7 @@
 package com.godiddy.cli.commands.config;
 
 import com.godiddy.cli.api.Headers;
-import com.godiddy.cli.config.Configuration;
+import com.godiddy.cli.cliconfig.CLIConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
@@ -27,12 +27,12 @@ public class ConfigHeadersCommand extends ConfigAbstractCommand implements Calla
     @Override
     public Integer call() throws Exception {
         log.trace("Parameter 'headers': " + this.headers);
-        if (Boolean.TRUE.equals(this.remove)) {
-            Configuration.setHeaders(null);
-            System.out.println("Headers successfully removed.");
+        if (Boolean.TRUE.equals(this.delete)) {
+            CLIConfig.setHeaders(null);
+            System.out.println("Headers setting successfully deleted.");
         } else {
             if (this.headers == null) {
-                Headers.Value headers = Configuration.getHeaders();
+                Headers.Value headers = CLIConfig.getHeaders();
                 if (headers == null) {
                     System.out.println("No headers set.");
                 } else {
@@ -45,7 +45,7 @@ public class ConfigHeadersCommand extends ConfigAbstractCommand implements Calla
                     System.out.println("Using predefined headers value '" + predefinedHeaders + "' for parameter value '" + headers + "'.");
                     headers = predefinedHeaders;
                 }
-                Configuration.setHeaders(headers);
+                CLIConfig.setHeaders(headers);
                 System.out.println("Headers successfully set.");
             }
         }

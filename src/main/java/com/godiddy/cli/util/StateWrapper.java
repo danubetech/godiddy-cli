@@ -1,9 +1,9 @@
 package com.godiddy.cli.util;
 
-import com.godiddy.api.client.swagger.model.CreateState;
-import com.godiddy.api.client.swagger.model.DeactivateState;
-import com.godiddy.api.client.swagger.model.DidState;
-import com.godiddy.api.client.swagger.model.UpdateState;
+import com.godiddy.api.client.openapi.model.CreateState;
+import com.godiddy.api.client.openapi.model.DeactivateState;
+import com.godiddy.api.client.openapi.model.DidState;
+import com.godiddy.api.client.openapi.model.UpdateState;
 
 public class StateWrapper {
 

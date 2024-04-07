@@ -3,7 +3,7 @@ package com.godiddy.cli.commands.state;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
-import com.godiddy.cli.state.State;
+import com.godiddy.cli.clistate.CLIState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -24,11 +24,17 @@ public class StateEditNextCommand extends GodiddyAbstractCommand implements Call
 
     @Override
     public Integer call() throws Exception {
-        Object next = State.getNext();
+
+        // load next request
+
+        Object next = CLIState.getNext();
         if (next == null) {
-            System.err.println("No next request to handle.");
+            System.err.println("No next request to edit.");
             return 1;
         }
+
+        // edit next request
+
         File tempFile = File.createTempFile("next-request-", ".json");
         objectMapper.writerWithDefaultPrettyPrinter().writeValue(tempFile, next);
         ProcessBuilder processBuilder = new ProcessBuilder("/usr/bin/vi", tempFile.getAbsolutePath());
@@ -36,8 +42,14 @@ public class StateEditNextCommand extends GodiddyAbstractCommand implements Call
         processBuilder.start().waitFor();
         next = objectMapper.readValue(tempFile, next.getClass());
         tempFile.deleteOnExit();
-        State.setNext(next);
+
+        // save and print next reqest
+
+        CLIState.setNext(next);
         Api.print(next);
+
+        // done
+
         return 0;
     }
 }

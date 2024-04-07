@@ -25,6 +25,10 @@
 			<id>danubetech-maven-public</id>
 			<url>https://repo.danubetech.com/repository/maven-public/</url>
 		</repository>
+		<repository>
+			<id>danubetech-maven-internal</id>
+			<url>https://repo.danubetech.com/repository/maven-internal/</url>
+		</repository>
 	</repositories>
 
 	<properties>
@@ -47,6 +51,7 @@
 		<maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
 		<maven-install-plugin.version>3.1.1</maven-install-plugin.version>
 		<maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
+		<maven-release-plugin.version>3.0.1</maven-release-plugin.version>
 		<maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.6.1</maven-dependency-plugin.version>
@@ -85,14 +90,20 @@
 
 		<!-- Danube Tech Versions -->
 
+		<uni-registrar-client.version>0.21.0</uni-registrar-client.version>
+		<wallet-service.version>0.11.0</wallet-service.version>
+		<key-formats-java.version>1.15.0</key-formats-java.version>
+		<did-common-java.version>1.11.0</did-common-java.version>
+		<danubetech-common-java.version>1.14.0</danubetech-common-java.version>
+
 		<!-- Other Versions -->
 
 		<commons-codec.version>1.16.1</commons-codec.version>
 		<info.picocli-picocli.version>4.7.5</info.picocli-picocli.version>
+		<org.modelmapper-modelmapper.version>3.2.0</org.modelmapper-modelmapper.version>
 	</properties>
 
 	<build>
-
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -134,6 +145,11 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
 					<version>${maven-deploy-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>${maven-release-plugin.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -193,7 +209,7 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>${project.basedir}/swagger-godiddy-api/java-client-generated/</directory>
+							<directory>${project.basedir}/openapi-godiddy-api/java-client-generated/</directory>
 							<includes>
 								<include>**/*</include>
 							</includes>
@@ -290,18 +306,19 @@
 						</goals>
 						<configuration>
 							<generatorName>java</generatorName>
-							<inputSpec>${project.basedir}/swagger-godiddy-api/openapi.yaml</inputSpec>
-							<output>${project.basedir}/swagger-godiddy-api/java-client-generated/</output>
-							<apiPackage>com.godiddy.api.client.swagger.api</apiPackage>
-							<modelPackage>com.godiddy.api.client.swagger.model</modelPackage>
+							<inputSpec>${project.basedir}/openapi-godiddy-api/openapi.yaml</inputSpec>
+							<output>openapi-godiddy-api/java-client-generated/</output>
+							<apiPackage>com.godiddy.api.client.openapi.api</apiPackage>
+							<modelPackage>com.godiddy.api.client.openapi.model</modelPackage>
 							<invokerPackage>com.godiddy.api.client</invokerPackage>
+							<openapiNormalizer>REF_AS_PARENT_IN_ALLOF=true</openapiNormalizer>
 							<configOptions>
 								<basePackage>com.godiddy.api.client</basePackage>
 								<sourceFolder>src/main/java/</sourceFolder>
 								<groupId>com.godiddy</groupId>
-								<artifactId>godiddy-api-client-swagger</artifactId>
+								<artifactId>godiddy-api-client-openapi</artifactId>
 								<artifactVersion>${project.version}</artifactVersion>
-								<configPackage>com.godiddy.api.client.swagger.config</configPackage>
+								<configPackage>com.godiddy.api.client.openapi.config</configPackage>
 								<asyncNative>false</asyncNative>
 								<disallowAdditionalPropertiesIfNotPresent>false</disallowAdditionalPropertiesIfNotPresent>
 								<library>native</library>
@@ -398,11 +415,6 @@
 			<!-- System Dependencies -->
 
 			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>javax.servlet-api</artifactId>
-				<version>${javax.servlet.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-api</artifactId>
 				<version>${apache.log4j.version}</version>
@@ -466,6 +478,34 @@
 				<version>${jakarta-validation.version}</version>
 			</dependency>
 
+			<!-- Danube Tech Dependencies -->
+
+			<dependency>
+				<groupId>decentralized-identity</groupId>
+				<artifactId>uni-registrar-client</artifactId>
+				<version>${uni-registrar-client.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.danubetech</groupId>
+				<artifactId>wallet-service-client</artifactId>
+				<version>${wallet-service.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.danubetech</groupId>
+				<artifactId>key-formats-java</artifactId>
+				<version>${key-formats-java.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>decentralized-identity</groupId>
+				<artifactId>did-common-java</artifactId>
+				<version>${did-common-java.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.danubetech</groupId>
+				<artifactId>danubetech-common-java</artifactId>
+				<version>${danubetech-common-java.version}</version>
+			</dependency>
+
 			<!-- Other Dependencies -->
 
 			<dependency>
@@ -477,6 +517,11 @@
 				<groupId>info.picocli</groupId>
 				<artifactId>picocli</artifactId>
 				<version>${info.picocli-picocli.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.modelmapper</groupId>
+				<artifactId>modelmapper</artifactId>
+				<version>${org.modelmapper-modelmapper.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -542,6 +587,27 @@
 
 		<!-- Danube Tech Dependencies -->
 
+		<dependency>
+			<groupId>decentralized-identity</groupId>
+			<artifactId>uni-registrar-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.danubetech</groupId>
+			<artifactId>wallet-service-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.danubetech</groupId>
+			<artifactId>key-formats-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>decentralized-identity</groupId>
+			<artifactId>did-common-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.danubetech</groupId>
+			<artifactId>danubetech-common-java</artifactId>
+		</dependency>
+
 		<!-- Other Dependencies -->
 
 		<dependency>
@@ -551,6 +617,10 @@
 		<dependency>
 			<groupId>info.picocli</groupId>
 			<artifactId>picocli</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
 		</dependency>
 	</dependencies>
 </project>

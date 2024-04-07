@@ -1,6 +1,6 @@
 package com.godiddy.cli.api;
 
-import com.godiddy.cli.config.Configuration;
+import com.godiddy.cli.cliconfig.CLIConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +26,7 @@ public class Formatting {
     );
 
     public static Value getFormatting() {
-        Value formatting = Objects.requireNonNullElse(Configuration.getFormatting(), Value.valueOf(DEFAULT_FORMATTING));
+        Value formatting = Objects.requireNonNullElse(CLIConfig.getFormatting(), Value.valueOf(DEFAULT_FORMATTING));
         if (Value.valueOf(DEFAULT_FORMATTING).equals(formatting)) {
             log.info("Using default formatting: " + DEFAULT_FORMATTING);
         }

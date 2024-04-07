@@ -1,7 +1,7 @@
 package com.godiddy.cli.commands.config;
 
 import com.godiddy.cli.api.ApiKey;
-import com.godiddy.cli.config.Configuration;
+import com.godiddy.cli.cliconfig.CLIConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
@@ -27,12 +27,12 @@ public class ConfigApiKeyCommand extends ConfigAbstractCommand implements Callab
     @Override
     public Integer call() throws Exception {
         log.trace("Parameter 'apiKey': " + this.apiKey);
-        if (Boolean.TRUE.equals(this.remove)) {
-            Configuration.setApiKey(null);
-            System.out.println("API key successfully removed.");
+        if (Boolean.TRUE.equals(this.delete)) {
+            CLIConfig.setApiKey(null);
+            System.out.println("API key setting successfully deleted.");
         } else {
             if (this.apiKey == null) {
-                String apiKey = Configuration.getApiKey();
+                String apiKey = CLIConfig.getApiKey();
                 if (apiKey == null) {
                     System.out.println("No API key set.");
                 } else {
@@ -45,7 +45,7 @@ public class ConfigApiKeyCommand extends ConfigAbstractCommand implements Callab
                     System.out.println("Using predefined API key value '" + predefinedApiKey + "' for parameter value '" + apiKey + "'.");
                     apiKey = predefinedApiKey;
                 }
-                Configuration.setApiKey(apiKey);
+                CLIConfig.setApiKey(apiKey);
                 System.out.println("API key successfully set.");
             }
         }

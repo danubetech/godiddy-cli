@@ -1,4 +1,4 @@
-package com.godiddy.cli.config;
+package com.godiddy.cli.cliconfig;
 
 import com.godiddy.cli.GodiddyCLIApplication;
 import com.godiddy.cli.api.Formatting;
@@ -6,7 +6,7 @@ import com.godiddy.cli.api.Headers;
 
 import java.util.prefs.Preferences;
 
-public class Configuration {
+public class CLIConfig {
 
     private static final Preferences preferences = Preferences.userNodeForPackage(GodiddyCLIApplication.class);
 

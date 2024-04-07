@@ -1,6 +1,6 @@
 package com.godiddy.cli.api;
 
-import com.godiddy.cli.config.Configuration;
+import com.godiddy.cli.cliconfig.CLIConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +24,7 @@ public class Headers {
     );
 
     public static Value getHeaders() {
-        Value headers = Objects.requireNonNullElse(Configuration.getHeaders(), Value.valueOf(DEFAULT_HEADERS));
+        Value headers = Objects.requireNonNullElse(CLIConfig.getHeaders(), Value.valueOf(DEFAULT_HEADERS));
         if (Value.valueOf(DEFAULT_HEADERS).equals(headers)) {
             log.info("Using default headers: " + DEFAULT_HEADERS);
         }

@@ -1,4 +1,4 @@
-package com.godiddy.cli.state;
+package com.godiddy.cli.clistate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,7 @@ import com.godiddy.cli.GodiddyCLIApplication;
 
 import java.util.prefs.Preferences;
 
-public class State {
+public class CLIState {
 
     private static final Preferences preferences = Preferences.userNodeForPackage(GodiddyCLIApplication.class);
 
@@ -36,7 +36,7 @@ public class State {
         }
     }
 
-    private static String getMethod() {
+    public static String getMethod() {
         return preferences.get("method", null);
     }
 

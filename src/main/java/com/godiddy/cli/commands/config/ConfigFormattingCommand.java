@@ -1,7 +1,7 @@
 package com.godiddy.cli.commands.config;
 
 import com.godiddy.cli.api.Formatting;
-import com.godiddy.cli.config.Configuration;
+import com.godiddy.cli.cliconfig.CLIConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
@@ -27,12 +27,12 @@ public class ConfigFormattingCommand extends ConfigAbstractCommand implements Ca
     @Override
     public Integer call() throws Exception {
         log.trace("Parameter 'formatting': " + this.formatting);
-        if (Boolean.TRUE.equals(this.remove)) {
-            Configuration.setFormatting(null);
-            System.out.println("Formatting successfully removed.");
+        if (Boolean.TRUE.equals(this.delete)) {
+            CLIConfig.setFormatting(null);
+            System.out.println("Formatting setting successfully deleted.");
         } else {
             if (this.formatting == null) {
-                Formatting.Value formatting = Configuration.getFormatting();
+                Formatting.Value formatting = CLIConfig.getFormatting();
                 if (formatting == null) {
                     System.out.println("No formatting set.");
                 } else {
@@ -45,7 +45,7 @@ public class ConfigFormattingCommand extends ConfigAbstractCommand implements Ca
                     System.out.println("Using predefined formatting value '" + predefinedFormatting + "' for parameter value '" + formatting + "'.");
                     formatting = predefinedFormatting;
                 }
-                Configuration.setFormatting(formatting);
+                CLIConfig.setFormatting(formatting);
                 System.out.println("Formatting successfully set.");
             }
         }

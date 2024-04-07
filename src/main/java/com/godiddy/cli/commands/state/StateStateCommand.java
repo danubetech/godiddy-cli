@@ -2,7 +2,7 @@ package com.godiddy.cli.commands.state;
 
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
-import com.godiddy.cli.state.State;
+import com.godiddy.cli.clistate.CLIState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -20,7 +20,7 @@ public class StateStateCommand extends GodiddyAbstractCommand implements Callabl
 
     @Override
     public Integer call() throws Exception {
-        Object state = State.getState();
+        Object state = CLIState.getState();
         Api.print(state);
         return 0;
     }
