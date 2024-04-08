@@ -1,21 +1,15 @@
 package com.godiddy.cli.commands.registrar;
 
+import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.clistate.CLIState;
-import foundation.identity.did.DIDDocument;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import uniregistrar.request.CreateRequest;
-import uniregistrar.state.CreateState;
-import uniregistrar.state.State;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.Callable;
 
 @Command(
@@ -83,19 +77,21 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
 
         // request
 
-        Map<String, Object> options = new LinkedHashMap<>();
-        if (this.options != null) options.putAll(this.options);
-        if (this.clientSecretMode != null) options.put("clientSecretMode", this.clientSecretMode);
-        if (this.network != null) options.put("network", this.network);
+        RegistrarRequestOptions registrarRequestOptions = new RegistrarRequestOptions();
+        if (this.options != null) registrarRequestOptions.putAll(this.options);
+        if (this.clientSecretMode != null) registrarRequestOptions.setClientSecretMode(this.clientSecretMode);
+        if (this.network != null) registrarRequestOptions.put("network", this.network);
 
-        Map<String, Object> secret = new LinkedHashMap<>();
+        RequestSecret requestSecret = new RequestSecret();
+
+        DidDocument didDocument = new DidDocument();
 
         String method = this.method;
         CreateRequest createRequest = new CreateRequest();
         createRequest.setJobId(this.jobId);
-        createRequest.setOptions(options);
-        createRequest.setSecret(Objects.requireNonNullElse(Api.fromJson(this.secret), new LinkedHashMap()));
-        createRequest.setDidDocument(Objects.requireNonNullElse(Api.fromJson(this.didDocument, DIDDocument.class), new DIDDocument()));
+        createRequest.setOptions(registrarRequestOptions);
+        createRequest.setSecret(requestSecret);
+        createRequest.setDidDocument(didDocument);
 
         // interactive?
 
@@ -110,21 +106,18 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
 
         // execute
 
-        com.godiddy.api.client.openapi.model.CreateRequest apiCreateRequest = new com.godiddy.api.client.openapi.model.CreateRequest();
-        com.godiddy.api.client.openapi.model.CreateState apiState = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, apiCreateRequest));
+        CreateState createState = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, createRequest));
 
         // handle state
 
-        State state = CreateState.build();
-
-        if ("finished".equalsIgnoreCase((String) state.getDidState().get("state"))) {
+        if (createState.getDidState() instanceof DidStateFinished) {
             CLIState.setMethod(null);
             CLIState.setState(null);
             CLIState.setPrev(null);
             CLIState.setNext(null);
         } else {
             CLIState.setMethod(method);
-            CLIState.setState(state);
+            CLIState.setState(createState);
             CLIState.setPrev(createRequest);
             CLIState.setNext(null);
         }

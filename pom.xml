@@ -90,11 +90,10 @@
 
 		<!-- Danube Tech Versions -->
 
-		<uni-registrar-client.version>0.21.0</uni-registrar-client.version>
 		<wallet-service.version>0.11.0</wallet-service.version>
 		<key-formats-java.version>1.15.0</key-formats-java.version>
 		<did-common-java.version>1.11.0</did-common-java.version>
-		<danubetech-common-java.version>1.14.0</danubetech-common-java.version>
+		<danubetech-common-java.version>1.16-SNAPSHOT</danubetech-common-java.version>
 
 		<!-- Other Versions -->
 
@@ -481,16 +480,6 @@
 			<!-- Danube Tech Dependencies -->
 
 			<dependency>
-				<groupId>decentralized-identity</groupId>
-				<artifactId>uni-registrar-client</artifactId>
-				<version>${uni-registrar-client.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.danubetech</groupId>
-				<artifactId>wallet-service-client</artifactId>
-				<version>${wallet-service.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.danubetech</groupId>
 				<artifactId>key-formats-java</artifactId>
 				<version>${key-formats-java.version}</version>
@@ -587,14 +576,6 @@
 
 		<!-- Danube Tech Dependencies -->
 
-		<dependency>
-			<groupId>decentralized-identity</groupId>
-			<artifactId>uni-registrar-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.danubetech</groupId>
-			<artifactId>wallet-service-client</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>com.danubetech</groupId>
 			<artifactId>key-formats-java</artifactId>

@@ -1,16 +1,26 @@
 package com.godiddy.cli.commands.state;
 
-import com.godiddy.api.client.openapi.model.*;
+import com.danubetech.uniregistrar.clientkeyinterface.ClientKeyInterface;
+import com.danubetech.uniregistrar.clientstateinterface.ClientStateInterface;
+import com.danubetech.uniregistrar.local.extensions.handlers.action.HandleActionState;
+import com.danubetech.uniregistrar.local.extensions.handlers.action.HandleStateUpdateVerificationMethods;
+import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretJsonWebKeys;
+import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretVerificationMethods;
+import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateUpdateTempKeys;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.godiddy.api.client.openapi.model.RegistrarRequest;
+import com.godiddy.api.client.openapi.model.RegistrarState;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
-import com.godiddy.cli.commands.state.prepare.HandleActionStateExtension;
 import com.godiddy.cli.clistate.CLIState;
-import com.godiddy.cli.util.RequestWrapper;
-import com.godiddy.cli.util.StateWrapper;
+import com.godiddy.cli.commands.state.cliinterfaces.CLIClientKeyInterface;
+import com.godiddy.cli.commands.state.cliinterfaces.CLIClientStateInterface;
+import com.godiddy.cli.util.MappingUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
 
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Command(
@@ -22,93 +32,46 @@ public class StatePrepareNextCommand extends GodiddyAbstractCommand implements C
 
     private static final Logger log = LogManager.getLogger(StatePrepareNextCommand.class);
 
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     public Integer call() throws Exception {
 
         // load state and next request
 
-        Object state = CLIState.getState();
+        RegistrarState state = (RegistrarState) CLIState.getState();
         if (state == null) {
             System.err.println("No current state for preparing next command.");
             return 1;
         }
-        Object prev = CLIState.getPrev();
-        if (prev == null) {
+        RegistrarRequest prevRequest = (RegistrarRequest) CLIState.getPrev();
+        if (prevRequest == null) {
             System.err.println("No previous request for preparing next command.");
             return 1;
         }
 
         // prepare next request
 
-        StateWrapper stateWrapper = new StateWrapper(state);
-        RegistrarRequest prevRequest = (RegistrarRequest) prev;
-        RegistrarRequest nextRequest;
+        ClientKeyInterface clientKeyInterface = new CLIClientKeyInterface();
+        ClientStateInterface clientStateInterface = new CLIClientStateInterface();
 
-        switch (prev) {
-            case CreateRequest ignored -> nextRequest = new CreateRequest();
-            case UpdateRequest ignored -> nextRequest = new UpdateRequest();
-            case DeactivateRequest ignored -> nextRequest = new DeactivateRequest();
-            default -> throw new IllegalStateException("Unexpected state class: " + state.getClass().getName());
-        }
+        RegistrarRequest nextRequest = objectMapper.convertValue(objectMapper.convertValue(prevRequest, Map.class), prevRequest.getClass());
 
-        // prepare next request - jobId
+        // handle
 
-        nextRequest.setJobId(stateWrapper.getJobId());
+        uniregistrar.openapi.model.RegistrarState handleState = MappingUtil.map(state);
+        uniregistrar.openapi.model.RegistrarRequest handlePrevRequest = MappingUtil.map(prevRequest);
 
-        // prepare next request - options
+        HandleFinishedStateImportSecretJsonWebKeys.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+        HandleFinishedStateImportSecretVerificationMethods.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+        HandleStateUpdateVerificationMethods.handleState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+        HandleFinishedStateUpdateTempKeys.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
 
-        nextRequest.setOptions(prevRequest.getOptions());
+        uniregistrar.openapi.model.RegistrarRequest handleNextRequest = MappingUtil.map(nextRequest);
 
-        // prepare next request - secret
+        HandleActionState.handleActionState(handlePrevRequest, handleState, handleNextRequest, clientKeyInterface, clientStateInterface);
 
-        nextRequest.setSecret(prevRequest.getSecret());
-
-        // prepare next request - did
-
-        switch (prev) {
-            case CreateRequest prevCreateRequest -> {
-            }
-            case UpdateRequest prevUpdateRequest -> {
-                ((UpdateRequest) nextRequest).setDid(prevUpdateRequest.getDid());
-            }
-            case DeactivateRequest prevDeactivateRequest -> {
-                ((DeactivateRequest) nextRequest).setDid(prevDeactivateRequest.getDid());
-            }
-            default -> throw new IllegalStateException("Unexpected state class: " + state.getClass().getName());
-        }
-
-        // prepare next request - didDocumentOperation
-
-        switch (prev) {
-            case CreateRequest prevCreateRequest -> {
-            }
-            case UpdateRequest prevUpdateRequest -> {
-                ((UpdateRequest) nextRequest).setDidDocumentOperation(prevUpdateRequest.getDidDocumentOperation());
-            }
-            case DeactivateRequest prevDeactivateRequest -> {
-            }
-            default -> throw new IllegalStateException("Unexpected state class: " + state.getClass().getName());
-        }
-
-        // prepare next request - didDocument
-
-        switch (prev) {
-            case CreateRequest prevCreateRequest -> {
-                ((CreateRequest) nextRequest).setDidDocument(prevCreateRequest.getDidDocument());
-            }
-            case UpdateRequest prevUpdateRequest -> {
-                ((UpdateRequest) nextRequest).setDidDocument(prevUpdateRequest.getDidDocument());
-            }
-            case DeactivateRequest prevDeactivateRequest -> {
-            }
-            default -> throw new IllegalStateException("Unexpected state class: " + state.getClass().getName());
-        }
-
-        // prepare next request - didState.action="getVerificationMethod"
-
-/*        if ("getVerificationMethod".equals(stateWrapper.getDidState().getState())) {
-            new HandleActionStateExtension().handleGetVerificationAction(stateWrapper.getDidState(), null);
-        }*/
+        nextRequest = MappingUtil.map(handleNextRequest);
 
         // save and print next request
 
