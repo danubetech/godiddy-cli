@@ -1,4 +1,4 @@
-package com.godiddy.cli.commands.state.cliinterfaces;
+package com.godiddy.cli.commands.state.interfaces;
 
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKey;
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKeyInterface;
@@ -35,7 +35,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
         List<Key> keys;
 
         try {
-            keys = walletServiceClient.tryRun((w) -> w.getKeys(controller, url, type, purpose, WalletServiceClientKeyInterface.this.reference, null));
+            keys = walletServiceClient.tryRun(w -> w.getKeys(controller, url, type, purpose, WalletServiceClientKeyInterface.this.reference, null));
         } catch (WalletServiceClientException e) {
             throw new RegistrationException("Cannot get keys from wallet service: " + e.getMessage(), e);
         }
@@ -50,7 +50,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
         List<Key> keys;
 
         try {
-            keys = walletServiceClient.tryRun((w) -> w.getKeys(controller, url, type, purpose, WalletServiceClientKeyInterface.this.reference, 2L));
+            keys = walletServiceClient.tryRun(w -> w.getKeys(controller, url, type, purpose, WalletServiceClientKeyInterface.this.reference, 2L));
         } catch (WalletServiceClientException e) {
             throw new RegistrationException("Cannot get keys from wallet service: " + e.getMessage(), e);
         }
@@ -59,11 +59,11 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
         Key key = keys.isEmpty() ? null : keys.getFirst();
 
         if (log.isDebugEnabled()) log.debug("For controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose + " and reference " + reference + " found key: " + key);
-        return modelMapper.map(key, ClientKey.class);
+        return key == null ? null : modelMapper.map(key, ClientKey.class);
     }
 
     @Override
-    public ClientKey generateKey(URI controller, URI url, String type, String purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
+    public ClientKey generateKey(URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
 
         Key generateKey = new Key();
         generateKey.setController(controller);
@@ -77,17 +77,17 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
         Key generatedKey;
 
         try {
-            generatedKey = walletServiceClient.tryRun((w) -> w.generateKey(generateKey));
+            generatedKey = walletServiceClient.tryRun(w -> w.generateKey(generateKey));
         } catch (WalletServiceClientException e) {
             throw new RegistrationException("Cannot generate key in wallet service: " + e.getMessage(), e);
         }
 
         if (log.isDebugEnabled()) log.debug("For controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose + " and key metadata " + keyMetadata + " and reference " + reference + " generated key: " + generatedKey);
-        return modelMapper.map(generatedKey, ClientKey.class);
+        return generatedKey == null ? null : modelMapper.map(generatedKey, ClientKey.class);
     }
 
     @Override
-    public void importKey(URI controller, URI url, String type, String purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
+    public void importKey(URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
 
         Key importKey = new Key();
 
@@ -100,7 +100,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
         importKey.setReference(reference);
 
         try {
-            walletServiceClient.tryRun((w) -> { w.importKey(importKey); return null; });
+            walletServiceClient.tryRun(w -> { w.importKey(importKey); return null; });
         } catch (WalletServiceClientException ex) {
             throw new RegistrationException("For URL " + url + " cannot import key: " + ex.getMessage(), ex);
         }
@@ -109,7 +109,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
     }
 
     @Override
-    public void updateKey(UUID id, URI controller, URI url, String type, String purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
+    public void updateKey(UUID id, URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
 
         Key updateKey = new Key();
 
@@ -122,7 +122,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
         updateKey.setReference(reference);
 
         try {
-            walletServiceClient.tryRun((w) -> { w.updateKey(id, updateKey); return null; });
+            walletServiceClient.tryRun(w -> { w.updateKey(id, updateKey); return null; });
         } catch (WalletServiceClientException ex) {
             throw new RegistrationException("For id " + id + " cannot update key: " + ex.getMessage(), ex);
         }
@@ -134,7 +134,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
     public void deleteKey(UUID id) throws RegistrationException {
 
         try {
-            walletServiceClient.tryRun((w) -> { w.deleteKey(id); return null; });
+            walletServiceClient.tryRun(w -> { w.deleteKey(id); return null; });
         } catch (WalletServiceClientException ex) {
             throw new RegistrationException("For id " + id + " cannot delete key: " + ex.getMessage(), ex);
         }
@@ -148,7 +148,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
         byte[] signature;
 
         try {
-            signature = walletServiceClient.tryRun((w) -> { w.signWithKey(id, url, algorithm, content); return null; });
+            signature = walletServiceClient.tryRun(w -> w.signWithKey(id, url, algorithm, content));
         } catch (WalletServiceClientException ex) {
             throw new RegistrationException("For id " + id + " and url " + url + " and algorithm " + algorithm + " cannot sign with key: " + ex.getMessage(), ex);
         }
@@ -163,7 +163,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
         byte[] decryptedPayload;
 
         try {
-            decryptedPayload = walletServiceClient.tryRun((w) -> { w.decryptWithKey(id, url, algorithm, content); return null; });
+            decryptedPayload = walletServiceClient.tryRun(w -> w.decryptWithKey(id, url, algorithm, content));
         } catch (WalletServiceClientException ex) {
             throw new RegistrationException("For id " + id + " and url " + url + " and algorithm " + algorithm + " cannot decrypt with key: " + ex.getMessage(), ex);
         }

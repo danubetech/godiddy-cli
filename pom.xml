@@ -92,8 +92,8 @@
 		<!-- Danube Tech Versions -->
 
 		<wallet-service.version>1.2-SNAPSHOT</wallet-service.version>
-		<key-formats-java.version>1.15.0</key-formats-java.version>
-		<did-common-java.version>1.11.0</did-common-java.version>
+		<key-formats-java.version>1.16.0</key-formats-java.version>
+		<did-common-java.version>1.12.0</did-common-java.version>
 		<danubetech-common-java.version>1.16-SNAPSHOT</danubetech-common-java.version>
 
 		<!-- Other Versions -->
@@ -341,8 +341,10 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-patch-plugin</artifactId>
 				<configuration>
-					<patchFile>src/main/patches/com/godiddy/api/client/openapi/model/SecretVerificationMethodInner.patch</patchFile>
+					<patchDirectory>src/main/patches/</patchDirectory>
 					<targetDirectory>openapi-godiddy-api/java-client-generated/</targetDirectory>
+					<naturalOrderProcessing>true</naturalOrderProcessing>
+					<skipApplication>false</skipApplication>
 				</configuration>
 				<executions>
 					<execution>
@@ -468,7 +470,22 @@
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${fasterxml.jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-databind</artifactId>
+				<version>${fasterxml.jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-jsr310</artifactId>
+				<version>${fasterxml.jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openapitools</groupId>
+				<artifactId>jackson-databind-nullable</artifactId>
 				<version>${fasterxml.jackson.version}</version>
 			</dependency>
 

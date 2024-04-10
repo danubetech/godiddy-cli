@@ -395,7 +395,7 @@ paths:
           name: purpose
           schema:
             type: string
-          description: The purpose(s) of the key(s) to retrieve.
+          description: The purpose of the key(s) to retrieve.
           example: authentication
         - in: query
           name: limit
@@ -419,7 +419,11 @@ paths:
                     controller: did:key:z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz
                     url: did:key:z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz#z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz
                     type: Ed25519
-                    purpose: '[''authentication'',''assertionMethod'',''capabilityDelegation'',''capabilityInvocation'']'
+                    purpose:
+                      - authentication
+                      - assertionMethod
+                      - capabilityDelegation
+                      - capabilityInvocation
                     key:
                       kty: OKP
                       crv: Ed25519
@@ -430,7 +434,8 @@ paths:
                     controller: did:key:z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz
                     url: did:key:z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz#z6LStgSrgnA1qWUdiEBcMEduv29jX1n8zmbgw1hcaewouhQV
                     type: X25519
-                    purpose: '[''keyAgreement'']'
+                    purpose:
+                      - keyAgreement
                     key:
                       kty: OKP
                       crv: X25519
@@ -635,6 +640,12 @@ paths:
             format: uri
           description: The URL of the key to use for verifying.
           example: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw#keys-1
+        - in: query
+          name: algorithm
+          schema:
+            type: string
+          description: The cryptographic algorithm (JWA) to use for verifying.
+          example: EdDSA
       requestBody:
         content:
           application/octet-stream:
@@ -724,7 +735,7 @@ paths:
           name: purpose
           schema:
             type: string
-          description: The purpose(s) of the controller(s) to retrieve.
+          description: The purpose of the controller(s) to retrieve.
           example: authentication
         - in: query
           name: limit
@@ -1503,11 +1514,19 @@ components:
         id:
           $ref: '#/components/schemas/String'
           example: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
+        controller:
+          $ref: '#/components/schemas/DidDocumentController'
+          example:
+            - did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
         verificationMethod:
           $ref: '#/components/schemas/DidDocumentVerificationMethod'
         service:
           $ref: '#/components/schemas/DidDocumentService'
       additionalProperties: {}
+    DidDocumentController:
+      type: array
+      items:
+        type: string
     DidDocumentVerificationMethod:
       type: array
       items:
@@ -1839,8 +1858,14 @@ components:
           type: string
           example: Ed25519
         purpose:
-          type: string
-          example: '[''authentication'',''assertionMethod'',''capabilityDelegation'',''capabilityInvocation'']'
+          type: array
+          items:
+            type: string
+          example:
+            - authentication
+            - assertionMethod
+            - capabilityDelegation
+            - capabilityInvocation
         key:
           type: object
           example:

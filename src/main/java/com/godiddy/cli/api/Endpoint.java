@@ -17,6 +17,8 @@ public class Endpoint {
             "def", DEFAULT_ENDPOINT,
             "godiddy", "https://api.godiddy.com/1.0.0/",
             "godiddy-dev", "https://api.dev.godiddy.com/1.0.0/",
+            "godiddy-1.0.0", "https://api.godiddy.com/1.0.0/",
+            "godiddy-dev-1.0.0", "https://api.dev.godiddy.com/1.0.0/",
             "godiddy-0.1.0", "https://api.godiddy.com/0.1.0/",
             "godiddy-dev-0.1.0", "https://api.dev.godiddy.com/0.1.0/",
             "dif-universalresolver", "https://dev.uniresolver.io/1.0/",

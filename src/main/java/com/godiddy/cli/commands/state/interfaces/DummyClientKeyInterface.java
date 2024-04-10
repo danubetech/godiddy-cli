@@ -1,4 +1,4 @@
-package com.godiddy.cli.commands.state.cliinterfaces;
+package com.godiddy.cli.commands.state.interfaces;
 
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKey;
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKeyInterface;
@@ -26,7 +26,7 @@ public class DummyClientKeyInterface implements ClientKeyInterface {
         clientKey.setController(controller);
         clientKey.setUrl(url);
         clientKey.setType(type);
-        clientKey.setPurpose(purpose);
+        clientKey.setPurpose(Collections.singletonList(purpose));
         clientKey.setKey(DUMMY_KEY);
 
         return Collections.singletonList(clientKey);
@@ -39,14 +39,14 @@ public class DummyClientKeyInterface implements ClientKeyInterface {
         clientKey.setController(controller);
         clientKey.setUrl(url);
         clientKey.setType(type);
-        clientKey.setPurpose(purpose);
+        clientKey.setPurpose(Collections.singletonList(purpose));
         clientKey.setKey(DUMMY_KEY);
 
         return clientKey;
     }
 
     @Override
-    public ClientKey generateKey(URI controller, URI url, String type, String purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
+    public ClientKey generateKey(URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
 
         ClientKey clientKey = new ClientKey();
         clientKey.setController(controller);
@@ -59,12 +59,12 @@ public class DummyClientKeyInterface implements ClientKeyInterface {
     }
 
     @Override
-    public void importKey(URI controller, URI url, String type, String purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
+    public void importKey(URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
         throw new RuntimeException("Not implemented.");
     }
 
     @Override
-    public void updateKey(UUID id, URI controller, URI url, String type, String purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
+    public void updateKey(UUID id, URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
         throw new RuntimeException("Not implemented.");
     }
 

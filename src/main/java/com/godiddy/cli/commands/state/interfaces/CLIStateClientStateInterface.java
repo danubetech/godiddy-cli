@@ -1,4 +1,4 @@
-package com.godiddy.cli.commands.state.cliinterfaces;
+package com.godiddy.cli.commands.state.interfaces;
 
 import com.danubetech.uniregistrar.clientstateinterface.ClientStateInterface;
 import com.godiddy.cli.clistate.CLIState;

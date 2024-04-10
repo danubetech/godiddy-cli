@@ -12,8 +12,8 @@ import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.clistate.CLIState;
-import com.godiddy.cli.commands.state.cliinterfaces.DummyClientKeyInterface;
-import com.godiddy.cli.commands.state.cliinterfaces.CLIStateClientStateInterface;
+import com.godiddy.cli.commands.state.interfaces.DummyClientKeyInterface;
+import com.godiddy.cli.commands.state.interfaces.CLIStateClientStateInterface;
 import com.godiddy.cli.util.MappingUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -81,6 +81,8 @@ public class StatePrepareNextCommand extends GodiddyAbstractCommand implements C
         // handle
 
         uniregistrar.openapi.model.RegistrarRequest handleNextRequest = MappingUtil.map(nextRequest);
+        System.out.println(">> " + state);
+        System.out.println(">> " + handleState);
 
         HandleActionState.handleActionState(handlePrevRequest, handleState, handleNextRequest, clientKeyInterface, clientStateInterface);
 

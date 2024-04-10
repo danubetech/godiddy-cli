@@ -78,9 +78,9 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
         // request
 
         RequestOptions requestOptions = new RequestOptions();
-        if (this.options != null) requestOptions.putAll(this.options);
+        if (this.options != null) requestOptions.getAdditionalProperties().putAll(this.options);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
-        if (this.network != null) requestOptions.put("network", this.network);
+        if (this.network != null) requestOptions.putAdditionalProperty("network", this.network);
 
         RequestSecret requestSecret = new RequestSecret();
 
