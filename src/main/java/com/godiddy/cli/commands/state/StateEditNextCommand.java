@@ -1,6 +1,7 @@
 package com.godiddy.cli.commands.state;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.godiddy.api.client.openapi.model.RegistrarRequest;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.clistate.CLIState;
@@ -27,8 +28,8 @@ public class StateEditNextCommand extends GodiddyAbstractCommand implements Call
 
         // load next request
 
-        Object next = CLIState.getNext();
-        if (next == null) {
+        RegistrarRequest nextRequest = CLIState.getNextRequest();
+        if (nextRequest == null) {
             System.err.println("No next request to edit.");
             return 1;
         }
@@ -36,17 +37,17 @@ public class StateEditNextCommand extends GodiddyAbstractCommand implements Call
         // edit next request
 
         File tempFile = File.createTempFile("next-request-", ".json");
-        objectMapper.writerWithDefaultPrettyPrinter().writeValue(tempFile, next);
+        objectMapper.writerWithDefaultPrettyPrinter().writeValue(tempFile, nextRequest);
         ProcessBuilder processBuilder = new ProcessBuilder("/usr/bin/vi", tempFile.getAbsolutePath());
         processBuilder.inheritIO();
         processBuilder.start().waitFor();
-        next = objectMapper.readValue(tempFile, next.getClass());
+        nextRequest = objectMapper.readValue(tempFile, nextRequest.getClass());
         tempFile.deleteOnExit();
 
         // save and print next reqest
 
-        CLIState.setNext(next);
-        Api.print(next);
+        CLIState.setNextRequest(nextRequest);
+        Api.print(nextRequest);
 
         // done
 

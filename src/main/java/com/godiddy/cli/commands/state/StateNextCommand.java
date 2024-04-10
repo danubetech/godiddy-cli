@@ -20,8 +20,8 @@ public class StateNextCommand extends GodiddyAbstractCommand implements Callable
 
     @Override
     public Integer call() throws Exception {
-        Object next = CLIState.getNext();
-        Api.print(next);
+        Object nextRequest = CLIState.getNextRequest();
+        Api.print(nextRequest);
         return 0;
     }
 }

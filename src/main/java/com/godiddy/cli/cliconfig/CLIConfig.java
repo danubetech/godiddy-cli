@@ -34,6 +34,18 @@ public class CLIConfig {
         }
     }
 
+    public static String getWalletServiceBase() {
+        return preferences.get("walletServiceBase", null);
+    }
+
+    public static void setWalletServiceBase(String walletServiceBase) {
+        if (walletServiceBase == null) {
+            preferences.remove("walletServiceBase");
+        } else {
+            preferences.put("walletServiceBase", walletServiceBase);
+        }
+    }
+
     public static Formatting.Value getFormatting() {
         return preferences.get("formatting", null) == null ? null : Formatting.Value.valueOf(preferences.get("formatting", null));
     }

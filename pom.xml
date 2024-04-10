@@ -56,6 +56,7 @@
 		<maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.6.1</maven-dependency-plugin.version>
 		<codehaus.mojo.version>3.2.0</codehaus.mojo.version>
+		<maven-patch-plugin.version>1.2</maven-patch-plugin.version>
 
 		<!-- Testing Versions -->
 
@@ -90,7 +91,7 @@
 
 		<!-- Danube Tech Versions -->
 
-		<wallet-service.version>0.11.0</wallet-service.version>
+		<wallet-service.version>1.2-SNAPSHOT</wallet-service.version>
 		<key-formats-java.version>1.15.0</key-formats-java.version>
 		<did-common-java.version>1.11.0</did-common-java.version>
 		<danubetech-common-java.version>1.16-SNAPSHOT</danubetech-common-java.version>
@@ -179,6 +180,11 @@
 					<groupId>org.openapitools</groupId>
 					<artifactId>openapi-generator-maven-plugin</artifactId>
 					<version>${openapi-generator.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-patch-plugin</artifactId>
+					<version>${maven-patch-plugin.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -328,6 +334,23 @@
 								<useJakartaEe>true</useJakartaEe>
 							</configOptions>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-patch-plugin</artifactId>
+				<configuration>
+					<patchFile>src/main/patches/com/godiddy/api/client/openapi/model/SecretVerificationMethodInner.patch</patchFile>
+					<targetDirectory>openapi-godiddy-api/java-client-generated/</targetDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<id>patch</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>apply</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -481,6 +504,11 @@
 
 			<dependency>
 				<groupId>com.danubetech</groupId>
+				<artifactId>wallet-service-client</artifactId>
+				<version>${wallet-service.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.danubetech</groupId>
 				<artifactId>key-formats-java</artifactId>
 				<version>${key-formats-java.version}</version>
 			</dependency>
@@ -576,6 +604,10 @@
 
 		<!-- Danube Tech Dependencies -->
 
+		<dependency>
+			<groupId>com.danubetech</groupId>
+			<artifactId>wallet-service-client</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.danubetech</groupId>
 			<artifactId>key-formats-java</artifactId>

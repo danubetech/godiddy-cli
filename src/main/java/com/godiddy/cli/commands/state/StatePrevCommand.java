@@ -20,8 +20,8 @@ public class StatePrevCommand extends GodiddyAbstractCommand implements Callable
 
     @Override
     public Integer call() throws Exception {
-        Object prev = CLIState.getPrev();
-        Api.print(prev);
+        Object prevRequest = CLIState.getPrevRequest();
+        Api.print(prevRequest);
         return 0;
     }
 }

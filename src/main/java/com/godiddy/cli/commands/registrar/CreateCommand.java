@@ -77,49 +77,49 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
 
         // request
 
-        RegistrarRequestOptions registrarRequestOptions = new RegistrarRequestOptions();
-        if (this.options != null) registrarRequestOptions.putAll(this.options);
-        if (this.clientSecretMode != null) registrarRequestOptions.setClientSecretMode(this.clientSecretMode);
-        if (this.network != null) registrarRequestOptions.put("network", this.network);
+        RequestOptions requestOptions = new RequestOptions();
+        if (this.options != null) requestOptions.putAll(this.options);
+        if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
+        if (this.network != null) requestOptions.put("network", this.network);
 
         RequestSecret requestSecret = new RequestSecret();
 
         DidDocument didDocument = new DidDocument();
 
         String method = this.method;
-        CreateRequest createRequest = new CreateRequest();
-        createRequest.setJobId(this.jobId);
-        createRequest.setOptions(registrarRequestOptions);
-        createRequest.setSecret(requestSecret);
-        createRequest.setDidDocument(didDocument);
+        CreateRequest request = new CreateRequest();
+        request.setJobId(this.jobId);
+        request.setOptions(requestOptions);
+        request.setSecret(requestSecret);
+        request.setDidDocument(didDocument);
 
         // interactive?
 
         if (Boolean.TRUE.equals(this.interactive)) {
             CLIState.setMethod(null);
             CLIState.setState(null);
-            CLIState.setPrev(null);
-            CLIState.setNext(createRequest);
-            Api.print(createRequest);
+            CLIState.setPrevRequest(null);
+            CLIState.setNextRequest(request);
+            Api.print(request);
             return 0;
         }
 
         // execute
 
-        CreateState createState = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, createRequest));
+        CreateState state = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, request));
 
         // handle state
 
-        if (createState.getDidState() instanceof DidStateFinished) {
+        if (state.getDidState() instanceof DidStateFinished) {
             CLIState.setMethod(null);
             CLIState.setState(null);
-            CLIState.setPrev(null);
-            CLIState.setNext(null);
+            CLIState.setPrevRequest(null);
+            CLIState.setNextRequest(null);
         } else {
             CLIState.setMethod(method);
-            CLIState.setState(createState);
-            CLIState.setPrev(createRequest);
-            CLIState.setNext(null);
+            CLIState.setState(state);
+            CLIState.setPrevRequest(request);
+            CLIState.setNextRequest(null);
         }
 
         // done

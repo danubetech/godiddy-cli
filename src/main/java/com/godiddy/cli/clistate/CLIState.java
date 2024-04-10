@@ -2,8 +2,11 @@ package com.godiddy.cli.clistate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.godiddy.api.client.openapi.model.RegistrarRequest;
+import com.godiddy.api.client.openapi.model.RegistrarState;
 import com.godiddy.cli.GodiddyCLIApplication;
 
+import java.util.Map;
 import java.util.prefs.Preferences;
 
 public class CLIState {
@@ -48,27 +51,43 @@ public class CLIState {
         }
     }
 
-    public static Object getState() {
-        return getObject("state");
+    public static RegistrarState getState() {
+        return (RegistrarState) getObject("state");
     }
 
-    public static void setState(Object state) {
+    public static void setState(RegistrarState state) {
         setObject("state", state);
     }
 
-    public static Object getPrev() {
-        return getObject("prev");
+    public static RegistrarRequest getPrevRequest() {
+        return (RegistrarRequest) getObject("prevRequest");
     }
 
-    public static void setPrev(Object prev) {
-        setObject("prev", prev);
+    public static void setPrevRequest(RegistrarRequest prevRequest) {
+        setObject("prevRequest", prevRequest);
     }
 
-    public static Object getNext() {
-        return getObject("next");
+    public static RegistrarRequest getNextRequest() {
+        return (RegistrarRequest) getObject("nextRequest");
     }
 
-    public static void setNext(Object next) {
-        setObject("next", next);
+    public static void setNextRequest(RegistrarRequest nextRequest) {
+        setObject("nextRequest", nextRequest);
+    }
+
+    public static Map<String, Object> getClientKeyObject() {
+        return (Map<String, Object>) getObject("clientKeyObject");
+    }
+
+    public static void setClientKeyObject(Map<String, Object> clientKeyObject) {
+        setObject("clientKeyObject", clientKeyObject);
+    }
+
+    public static Map<String, Object> getClientStateObject() {
+        return (Map<String, Object>) getObject("clientStateObject");
+    }
+
+    public static void setClientStateObject(Map<String, Object> clientStateObject) {
+        setObject("clientStateObject", clientStateObject);
     }
 }
