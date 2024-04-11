@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 StateStateCommand.class,
                 StatePrevCommand.class,
                 StateNextCommand.class,
-                StatePrepareNextCommand.class,
+                StateProcessCommand.class,
                 StateEditNextCommand.class,
                 StateResetCommand.class
         }

@@ -27,7 +27,7 @@ public class ContinueCommand extends GodiddyAbstractCommand implements Callable<
         String method = CLIState.getMethod();
         RegistrarRequest nextRequest = CLIState.getNextRequest();
         if (nextRequest == null) {
-            System.err.println("No next request to continue with. Try running \"godiddy-cli state prepare-next\" first.");
+            System.err.println("No next request to continue with. Try running \"godiddy-cli state process\" first.");
             return 1;
         }
 
@@ -39,19 +39,12 @@ public class ContinueCommand extends GodiddyAbstractCommand implements Callable<
             default -> throw new IllegalStateException("Unexpected request class: " + nextRequest.getClass().getName());
         }
 
-        // handle state
+        // store state
 
-        if (state.getDidState() instanceof DidStateFinished) {
-            CLIState.setMethod(null);
-            CLIState.setState(null);
-            CLIState.setPrevRequest(null);
-            CLIState.setNextRequest(null);
-        } else {
-            CLIState.setMethod(method);
-            CLIState.setState(state);
-            CLIState.setPrevRequest(nextRequest);
-            CLIState.setNextRequest(null);
-        }
+        CLIState.setMethod(method);
+        CLIState.setState(state);
+        CLIState.setPrevRequest(nextRequest);
+        CLIState.setNextRequest(null);
 
         // done
 

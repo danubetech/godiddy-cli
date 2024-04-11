@@ -26,13 +26,13 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Command(
-        name = "prepare-next",
-        description = "Handle the previous request and current state, and prepare the next request.",
+        name = "process",
+        description = "Process the previous request and current state, and prepare the next request.",
         mixinStandardHelpOptions = true
 )
-public class StatePrepareNextCommand extends GodiddyAbstractCommand implements Callable<Integer> {
+public class StateProcessCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
-    private static final Logger log = LogManager.getLogger(StatePrepareNextCommand.class);
+    private static final Logger log = LogManager.getLogger(StateProcessCommand.class);
 
     public enum ClientKeyInterfaceType {
         dummy,
@@ -102,6 +102,10 @@ public class StatePrepareNextCommand extends GodiddyAbstractCommand implements C
         uniregistrar.openapi.model.RegistrarRequest handleNextRequest = MappingUtil.map(nextRequest);
         HandleActionState.handleActionState(handlePrevRequest, handleState, handleNextRequest, clientKeyInterface, clientStateInterface);
         nextRequest = MappingUtil.map(handleNextRequest);
+
+        if (state.getDidState() instanceof DidStateFinished || state.getDidState() instanceof DidStateFailed) {
+            nextRequest = null;
+        }
 
         // save and print next request
 

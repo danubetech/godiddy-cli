@@ -108,19 +108,12 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
 
         CreateState state = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, request));
 
-        // handle state
+        // store state
 
-        if (state.getDidState() instanceof DidStateFinished) {
-            CLIState.setMethod(null);
-            CLIState.setState(null);
-            CLIState.setPrevRequest(null);
-            CLIState.setNextRequest(null);
-        } else {
-            CLIState.setMethod(method);
-            CLIState.setState(state);
-            CLIState.setPrevRequest(request);
-            CLIState.setNextRequest(null);
-        }
+        CLIState.setMethod(method);
+        CLIState.setState(state);
+        CLIState.setPrevRequest(request);
+        CLIState.setNextRequest(null);
 
         // done
 

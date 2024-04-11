@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   description: See https://docs.godiddy.com/ for additional documentation.
   version: 1.0.0
@@ -1623,11 +1623,11 @@ components:
               items:
                 $ref: '#/components/schemas/VerificationMethodTemplate'
             signingRequest:
-              type: object
+              type: [object, null]
               additionalProperties:
                 $ref: '#/components/schemas/SigningRequest'
             decryptionRequest:
-              type: object
+              type: [object, null]
               additionalProperties:
                 $ref: '#/components/schemas/DecryptionRequest'
     DidStateWait:
@@ -1677,11 +1677,11 @@ components:
         - type: object
           properties:
             signingResponse:
-              type: object
+              type: [object, null]
               additionalProperties:
                 $ref: '#/components/schemas/SigningResponse'
             decryptionResponse:
-              type: object
+              type: [object, null]
               additionalProperties:
                 $ref: '#/components/schemas/DecryptionResponse'
           example:
@@ -1798,7 +1798,7 @@ components:
         - type: object
           properties:
             publicKeyJwk:
-              type: object
+              type: [object, null]
               additionalProperties: {}
             publicKeyMultibase:
               type: string
@@ -1809,7 +1809,7 @@ components:
         - type: object
           properties:
             privateKeyJwk:
-              type: object
+              type: [object, null]
               additionalProperties: {}
             privateKeyMultibase:
               type: string
@@ -1828,7 +1828,7 @@ components:
           items:
             type: string
         publicKeyJwk:
-          type: object
+          type: [object, null]
           additionalProperties: {}
     String:
       type: string
@@ -1867,14 +1867,14 @@ components:
             - capabilityDelegation
             - capabilityInvocation
         key:
-          type: object
+          type: [object, null]
           example:
             kty: OKP
             crv: Ed25519
             x: KUnc6ztOeq1mR4UHxY2vmtJQZDk_VikOBTyPvrAu-c8
           additionalProperties: {}
         keyMetadata:
-          type: object
+          type: [object, null]
           example: {}
           additionalProperties: {}
     DidRecord:

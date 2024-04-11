@@ -114,19 +114,12 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
 
         UpdateState state = Api.execute(() -> Api.universalRegistrarApi().updateWithHttpInfo(request));
 
-        // handle state
+        // store state
 
-        if (state.getDidState() instanceof DidStateFinished) {
-            CLIState.setMethod(null);
-            CLIState.setState(null);
-            CLIState.setPrevRequest(null);
-            CLIState.setNextRequest(null);
-        } else {
-            CLIState.setMethod(null);
-            CLIState.setState(state);
-            CLIState.setPrevRequest(request);
-            CLIState.setNextRequest(null);
-        }
+        CLIState.setMethod(null);
+        CLIState.setState(state);
+        CLIState.setPrevRequest(request);
+        CLIState.setNextRequest(null);
 
         // done
 

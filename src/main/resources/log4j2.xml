@@ -26,8 +26,8 @@
 			<AppenderRef ref="RollingFile"/>
 		</Root>
 
-		<Logger name="com.godiddy.cli" level="info"/>
-		<Logger name="com.danubetech" level="info"/>
+		<Logger name="com.godiddy.cli" level="debug"/>
+		<Logger name="com.danubetech" level="debug"/>
 	</Loggers>
 
 </Configuration>

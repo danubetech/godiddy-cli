@@ -92,19 +92,12 @@ public class DeactivateCommand extends GodiddyAbstractCommand implements Callabl
 
         DeactivateState state = Api.execute(() -> Api.universalRegistrarApi().deactivateWithHttpInfo(request));
 
-        // handle state
+        // store state
 
-        if (state.getDidState() instanceof DidStateFinished) {
-            CLIState.setMethod(null);
-            CLIState.setState(null);
-            CLIState.setPrevRequest(null);
-            CLIState.setNextRequest(null);
-        } else {
-            CLIState.setMethod(null);
-            CLIState.setState(state);
-            CLIState.setPrevRequest(request);
-            CLIState.setNextRequest(null);
-        }
+        CLIState.setMethod(null);
+        CLIState.setState(state);
+        CLIState.setPrevRequest(request);
+        CLIState.setNextRequest(null);
 
         // done
 
