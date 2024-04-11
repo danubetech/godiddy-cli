@@ -7,16 +7,19 @@ import com.danubetech.uniregistrar.local.extensions.handlers.action.HandleAction
 import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretJsonWebKeys;
 import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretVerificationMethods;
 import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateUpdateTempKeys;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.danubetech.walletservice.client.WalletServiceClient;
 import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
+import com.godiddy.cli.api.WalletServiceBase;
 import com.godiddy.cli.clistate.CLIState;
-import com.godiddy.cli.commands.state.interfaces.DummyClientKeyInterface;
 import com.godiddy.cli.commands.state.interfaces.CLIStateClientStateInterface;
+import com.godiddy.cli.commands.state.interfaces.DummyClientKeyInterface;
+import com.godiddy.cli.commands.state.interfaces.WalletServiceClientKeyInterface;
 import com.godiddy.cli.util.MappingUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 import java.util.Map;
@@ -31,7 +34,20 @@ public class StatePrepareNextCommand extends GodiddyAbstractCommand implements C
 
     private static final Logger log = LogManager.getLogger(StatePrepareNextCommand.class);
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    public enum ClientKeyInterfaceType {
+        dummy,
+        wallet
+    };
+
+    public static final String DEFAULT_CLIENTKEYINTERFACETYPE = "dummy";
+
+    @CommandLine.Option(
+            names = {"-k", "--keyinterface"},
+            description = "The type of client key interface to use. Valid values: ${COMPLETION-CANDIDATES}. Default value: " + DEFAULT_CLIENTKEYINTERFACETYPE + ".",
+            arity = "0..1",
+            defaultValue = "dummy"
+    )
+    ClientKeyInterfaceType clientKeyInterfaceType;
 
     @Override
     public Integer call() throws Exception {
@@ -51,7 +67,10 @@ public class StatePrepareNextCommand extends GodiddyAbstractCommand implements C
 
         // prepare interfaces
 
-        ClientKeyInterface clientKeyInterface = new DummyClientKeyInterface();
+        ClientKeyInterface clientKeyInterface = switch (this.clientKeyInterfaceType) {
+            case dummy -> new DummyClientKeyInterface();
+            case wallet -> new WalletServiceClientKeyInterface(WalletServiceClient.create(WalletServiceBase.getWalletServiceBase()), "default");
+        };
         ClientStateInterface clientStateInterface = new CLIStateClientStateInterface();
 
         // handle
@@ -66,7 +85,7 @@ public class StatePrepareNextCommand extends GodiddyAbstractCommand implements C
 
         // prepare next request
 
-        RegistrarRequest nextRequest = objectMapper.convertValue(objectMapper.convertValue(prevRequest, Map.class), prevRequest.getClass());
+        RegistrarRequest nextRequest = Api.convert(Api.convert(prevRequest, Map.class), prevRequest.getClass());
         if (state.getJobId() != null) nextRequest.setJobId(state.getJobId());
         if (state.getDidState().getDidDocument() != null) {
             switch (nextRequest) {
@@ -81,11 +100,7 @@ public class StatePrepareNextCommand extends GodiddyAbstractCommand implements C
         // handle
 
         uniregistrar.openapi.model.RegistrarRequest handleNextRequest = MappingUtil.map(nextRequest);
-        System.out.println(">> " + state);
-        System.out.println(">> " + handleState);
-
         HandleActionState.handleActionState(handlePrevRequest, handleState, handleNextRequest, clientKeyInterface, clientStateInterface);
-
         nextRequest = MappingUtil.map(handleNextRequest);
 
         // save and print next request

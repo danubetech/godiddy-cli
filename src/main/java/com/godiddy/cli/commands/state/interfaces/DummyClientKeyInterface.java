@@ -2,7 +2,6 @@ package com.godiddy.cli.commands.state.interfaces;
 
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKey;
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKeyInterface;
-import uniregistrar.RegistrationException;
 
 import java.net.URI;
 import java.util.Collections;
@@ -13,14 +12,14 @@ import java.util.UUID;
 public class DummyClientKeyInterface implements ClientKeyInterface {
 
     private static final Map<String, Object> DUMMY_KEY = Map.of(
-            "kty", "EC",
-            "crv", "secp256k1",
-            "x", "imIJKBPGhDsomRRAwjEWyqEOTL3sVXVzKpith0qgfjs",
-            "y", "ksYWo8_xyxZuSMQLeUQebDrhhsgB3zpTzUM2NWDfwO0"
+            "kty", "OKP",
+            "crv", "Ed25519",
+            "x", ".. placeholder ..",
+            "y", ".. placeholder .."
     );
 
     @Override
-    public List<ClientKey> getKeys(URI controller, URI url, String type, String purpose) throws RegistrationException {
+    public List<ClientKey> getKeys(URI controller, URI url, String type, String purpose) {
 
         ClientKey clientKey = new ClientKey();
         clientKey.setController(controller);
@@ -33,7 +32,7 @@ public class DummyClientKeyInterface implements ClientKeyInterface {
     }
 
     @Override
-    public ClientKey getKey(URI controller, URI url, String type, String purpose) throws RegistrationException {
+    public ClientKey getKey(URI controller, URI url, String type, String purpose) {
 
         ClientKey clientKey = new ClientKey();
         clientKey.setController(controller);
@@ -46,7 +45,7 @@ public class DummyClientKeyInterface implements ClientKeyInterface {
     }
 
     @Override
-    public ClientKey generateKey(URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
+    public ClientKey generateKey(URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) {
 
         ClientKey clientKey = new ClientKey();
         clientKey.setController(controller);
@@ -59,27 +58,27 @@ public class DummyClientKeyInterface implements ClientKeyInterface {
     }
 
     @Override
-    public void importKey(URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
+    public void importKey(URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) {
         throw new RuntimeException("Not implemented.");
     }
 
     @Override
-    public void updateKey(UUID id, URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) throws RegistrationException {
+    public void updateKey(UUID id, URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) {
         throw new RuntimeException("Not implemented.");
     }
 
     @Override
-    public void deleteKey(UUID id) throws RegistrationException {
+    public void deleteKey(UUID id) {
         throw new RuntimeException("Not implemented.");
     }
 
     @Override
-    public byte[] signWithKey(UUID id, URI url, String algorithm, byte[] content) throws RegistrationException {
+    public byte[] signWithKey(UUID id, URI url, String algorithm, byte[] content) {
         return new byte[] { 0, 0, 0 };
     }
 
     @Override
-    public byte[] decryptWithKey(UUID id, URI url, String algorithm, byte[] content) throws RegistrationException {
+    public byte[] decryptWithKey(UUID id, URI url, String algorithm, byte[] content) {
         return new byte[] { 0, 0, 0 };
     }
 }

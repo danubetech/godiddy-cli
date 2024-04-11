@@ -14,7 +14,8 @@ import java.util.concurrent.Callable;
                 StatePrevCommand.class,
                 StateNextCommand.class,
                 StatePrepareNextCommand.class,
-                StateEditNextCommand.class
+                StateEditNextCommand.class,
+                StateResetCommand.class
         }
 )
 public class StateRootCommand extends GodiddyAbstractCommand implements Callable<Integer> {

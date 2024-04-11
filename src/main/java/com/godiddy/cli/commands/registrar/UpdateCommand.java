@@ -9,17 +9,19 @@ import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Command(
-        name = "create",
-        description = "Create a DID, using the Universal Registrar API.",
+        name = "update",
+        description = "Update a DID, using the Universal Registrar API.",
         mixinStandardHelpOptions = true
 )
-public class CreateCommand extends GodiddyAbstractCommand implements Callable<Integer> {
+public class UpdateCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
-    private static final Logger log = LogManager.getLogger(CreateCommand.class);
+    private static final Logger log = LogManager.getLogger(UpdateCommand.class);
 
     @Option(
             names = {"-j", "--jobId"},
@@ -28,15 +30,16 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
     String jobId;
 
     @Option(
-            names = {"-m", "--method"},
-            description = "The requested DID method for the operation.",
+            names = {"-d", "--did"},
+            description = "The requested DID for the operation.",
             required = true
     )
-    String method;
+    String did;
 
     @Option(
             names = {"-o", "--option"},
-            description = "This input field contains a key/value pair with an option for the DID operation, such as the network where the DID operation should be executed."
+            description = "This input field contains a key/value pair with an option for the DID operation, such as the network where the DID operation should be executed.",
+            defaultValue = "{}"
     )
     Map<String, String> options;
 
@@ -47,12 +50,6 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
     Boolean clientSecretMode;
 
     @Option(
-            names = {"-n", "--network"},
-            description = "The requested network for the operation. Equivalent to setting -o network=<network>."
-    )
-    String network;
-
-    @Option(
             names = {"-s", "--secret"},
             description = "This input field contains an object with DID controller keys and other secrets needed for performing the DID operation.",
             defaultValue = "{}"
@@ -60,15 +57,22 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
     String secret;
 
     @Option(
+            names = "--diddocop",
+            description = "This input field contains the DID document operation to be used for the DID update operation.",
+            defaultValue = "setDidDocument"
+    )
+    String didDocumentOperation;
+
+    @Option(
             names = "--diddoc",
-            description = "This input field contains the DID document to be used for the DID create operation.",
+            description = "This input field contains the DID document to be used for the DID update operation.",
             defaultValue = "{}"
     )
     String didDocument;
 
     @Option(
             names = {"-i", "--interactive"},
-            description = "This enables interactive mode where the request is prepared but not executed. You can then either run \"godiddy-cli state edit-next\" or \"godiddy-cli state continue-next\"."
+            description = "This enables interactive mode where the request is prepared but not executed. You can then either run \"godiddy-cli state edit-next\" or \"godiddy-cli continue\"."
     )
     Boolean interactive;
 
@@ -80,17 +84,19 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
         RequestOptions requestOptions = new RequestOptions();
         if (this.options != null) requestOptions.getAdditionalProperties().putAll(this.options);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
-        if (this.network != null) requestOptions.putAdditionalProperty("network", this.network);
 
         RequestSecret requestSecret = Api.fromJson(this.secret, RequestSecret.class);
 
-        DidDocument didDocument = Api.fromJson(this.didDocument, DidDocument.class);
+        List<String> didDocumentOperation = Collections.singletonList(this.didDocumentOperation);
 
-        String method = this.method;
-        CreateRequest request = new CreateRequest();
+        List<DidDocument> didDocument = Collections.singletonList(Api.fromJson(this.didDocument, DidDocument.class));
+
+        UpdateRequest request = new UpdateRequest();
         request.setJobId(this.jobId);
+        request.setDid(this.did);
         request.setOptions(requestOptions);
         request.setSecret(requestSecret);
+        request.setDidDocumentOperation(didDocumentOperation);
         request.setDidDocument(didDocument);
 
         // interactive?
@@ -106,7 +112,7 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
 
         // execute
 
-        CreateState state = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, request));
+        UpdateState state = Api.execute(() -> Api.universalRegistrarApi().updateWithHttpInfo(request));
 
         // handle state
 
@@ -116,7 +122,7 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
             CLIState.setPrevRequest(null);
             CLIState.setNextRequest(null);
         } else {
-            CLIState.setMethod(method);
+            CLIState.setMethod(null);
             CLIState.setState(state);
             CLIState.setPrevRequest(request);
             CLIState.setNextRequest(null);

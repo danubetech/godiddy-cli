@@ -68,32 +68,26 @@
 
 		<!-- Systems Versions -->
 
-		<javax.servlet.version>4.0.1</javax.servlet.version>
 		<apache.log4j.version>2.23.1</apache.log4j.version>
 
 		<!-- Spring Versions -->
 
 		<springframework.boot.version>3.2.4</springframework.boot.version>
-		<micrometer-registry-prometheus.version>1.11.5</micrometer-registry-prometheus.version>
-		<fasterxml.jackson.version>2.17.0</fasterxml.jackson.version>
 
 		<!-- OpenAPI Versions -->
 
 		<openapi-generator.version>7.4.0</openapi-generator.version>
-		<swagger.version>2.2.21</swagger.version>
-
-		<!-- OpenAPI Server Versions -->
-
-		<!-- OpenAPI Client Versions -->
-
-		<jakarta-annotation.version>3.0.0-M1</jakarta-annotation.version>
+		<fasterxml.jackson.version>2.17.0</fasterxml.jackson.version>
+		<fasterxml.jackson.yaml.version>2.17.0</fasterxml.jackson.yaml.version>
+		<org.openapitools-jackson-databind-nullable.version>0.2.6</org.openapitools-jackson-databind-nullable.version>
+		<jakarta-annotation.version>3.0.0</jakarta-annotation.version>
 		<jakarta-validation.version>3.1.0-M2</jakarta-validation.version>
 
 		<!-- Danube Tech Versions -->
 
 		<wallet-service.version>1.2-SNAPSHOT</wallet-service.version>
 		<key-formats-java.version>1.16.0</key-formats-java.version>
-		<did-common-java.version>1.12.0</did-common-java.version>
+		<did-common-java.version>1.13-SNAPSHOT</did-common-java.version>
 		<danubetech-common-java.version>1.16-SNAPSHOT</danubetech-common-java.version>
 
 		<!-- Other Versions -->
@@ -330,6 +324,7 @@
 								<useBeanValidation>true</useBeanValidation>
 								<dateLibrary>java8</dateLibrary>
 								<hideGenerationTimestamp>true</hideGenerationTimestamp>
+								<documentationProvider>none</documentationProvider>
 								<openApiNullable>false</openApiNullable>
 								<useJakartaEe>true</useJakartaEe>
 							</configOptions>
@@ -450,7 +445,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-slf4j-impl</artifactId>
+				<artifactId>log4j-slf4j2-impl</artifactId>
 				<version>${apache.log4j.version}</version>
 			</dependency>
 
@@ -463,6 +458,9 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
+			<!-- OpenAPI Dependencies -->
+
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-core</artifactId>
@@ -484,28 +482,15 @@
 				<version>${fasterxml.jackson.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.fasterxml.jackson.dataformat</groupId>
+				<artifactId>jackson-dataformat-yaml</artifactId>
+				<version>${fasterxml.jackson.yaml.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.openapitools</groupId>
 				<artifactId>jackson-databind-nullable</artifactId>
-				<version>${fasterxml.jackson.version}</version>
+				<version>${org.openapitools-jackson-databind-nullable.version}</version>
 			</dependency>
-
-			<!-- OpenAPI Dependencies -->
-
-			<dependency>
-				<groupId>io.swagger.core.v3</groupId>
-				<artifactId>swagger-core</artifactId>
-				<version>${swagger.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.swagger.core.v3</groupId>
-				<artifactId>swagger-annotations</artifactId>
-				<version>${swagger.version}</version>
-			</dependency>
-
-			<!-- OpenAPI Server Dependencies -->
-
-			<!-- OpenAPI Client Dependencies -->
-
 			<dependency>
 				<groupId>jakarta.annotation</groupId>
 				<artifactId>jakarta.annotation-api</artifactId>
@@ -592,24 +577,31 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
+			<artifactId>log4j-slf4j2-impl</artifactId>
 		</dependency>
 
 		<!-- OpenAPI Dependencies -->
 
 		<dependency>
-			<groupId>io.swagger.core.v3</groupId>
-			<artifactId>swagger-core</artifactId>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.swagger.core.v3</groupId>
-			<artifactId>swagger-annotations</artifactId>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
 		</dependency>
-
-		<!-- OpenAPI Server Dependencies -->
-
-		<!-- OpenAPI Client Dependencies -->
-
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>jakarta.annotation</groupId>
 			<artifactId>jakarta.annotation-api</artifactId>

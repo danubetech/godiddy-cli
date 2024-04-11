@@ -114,7 +114,15 @@ public class Api {
         }
     }
 
+    public static <T> T convert(Object object, Class<T> cl) {
+        return objectMapper.convertValue(object, cl);
+    }
+
     public static void print(Object object) {
+        if (object == null) {
+            System.out.println("(null)  ");
+            return;
+        }
         String string;
         Formatting.Value formatting = Formatting.getFormatting();
         try {
@@ -134,7 +142,10 @@ public class Api {
         } catch (JsonProcessingException ex) {
             throw new IllegalArgumentException(ex);
         }
-        if (string != null) System.out.println(string);
+        if (string != null) {
+            System.out.println("(" + object.getClass().getName() + ")");
+            System.out.println(string);
+        }
     }
 
     public static void print(HttpHeaders httpHeaders, String prefix) {

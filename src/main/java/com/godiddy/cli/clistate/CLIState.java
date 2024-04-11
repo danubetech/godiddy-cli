@@ -31,8 +31,9 @@ public class CLIState {
             preferences.remove(key + "Class");
         } else {
             try {
+                String valueClass = value.getClass().getName();
                 preferences.put(key, objectMapper.writeValueAsString(value));
-                preferences.put(key + "Class", value.getClass().getName());
+                preferences.put(key + "Class", valueClass);
             } catch (JsonProcessingException ex) {
                 throw new IllegalArgumentException(ex);
             }
@@ -73,14 +74,6 @@ public class CLIState {
 
     public static void setNextRequest(RegistrarRequest nextRequest) {
         setObject("nextRequest", nextRequest);
-    }
-
-    public static Map<String, Object> getClientKeyObject() {
-        return (Map<String, Object>) getObject("clientKeyObject");
-    }
-
-    public static void setClientKeyObject(Map<String, Object> clientKeyObject) {
-        setObject("clientKeyObject", clientKeyObject);
     }
 
     public static Map<String, Object> getClientStateObject() {

@@ -18,10 +18,10 @@ public class WalletServiceBase {
     );
 
     public static String getWalletServiceBase() {
-        String endpoint = Objects.requireNonNullElse(CLIConfig.getEndpoint(), DEFAULT_WALLETSERVICEBASE);
-        if (DEFAULT_WALLETSERVICEBASE.equals(endpoint)) {
+        String walletServiceBase = Objects.requireNonNullElse(CLIConfig.getWalletServiceBase(), DEFAULT_WALLETSERVICEBASE);
+        if (DEFAULT_WALLETSERVICEBASE.equals(walletServiceBase)) {
             log.info("Using default wallet service base: " + DEFAULT_WALLETSERVICEBASE);
         }
-        return endpoint;
+        return walletServiceBase;
     }
 }
