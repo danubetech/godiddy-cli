@@ -69,7 +69,7 @@ public class DeactivateCommand extends GodiddyAbstractCommand implements Callabl
         if (this.options != null) requestOptions.getAdditionalProperties().putAll(this.options);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
 
-        RequestSecret requestSecret = Api.fromJson(this.secret, RequestSecret.class);
+        RequestSecret requestSecret = this.secret.isBlank() ? null : Api.fromJson(this.secret, RequestSecret.class);
 
         DeactivateRequest request = new DeactivateRequest();
         request.setJobId(this.jobId);

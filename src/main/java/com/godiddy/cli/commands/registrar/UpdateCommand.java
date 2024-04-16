@@ -85,7 +85,7 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
         if (this.options != null) requestOptions.getAdditionalProperties().putAll(this.options);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
 
-        RequestSecret requestSecret = Api.fromJson(this.secret, RequestSecret.class);
+        RequestSecret requestSecret = this.secret.isBlank() ? null : Api.fromJson(this.secret, RequestSecret.class);
 
         List<String> didDocumentOperation = Collections.singletonList(this.didDocumentOperation);
 

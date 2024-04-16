@@ -82,9 +82,9 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
         if (this.network != null) requestOptions.putAdditionalProperty("network", this.network);
 
-        RequestSecret requestSecret = Api.fromJson(this.secret, RequestSecret.class);
+        RequestSecret requestSecret = this.secret.isBlank() ? null : Api.fromJson(this.secret, RequestSecret.class);
 
-        DidDocument didDocument = Api.fromJson(this.didDocument, DidDocument.class);
+        DidDocument didDocument = this.didDocument.isBlank() ? null : Api.fromJson(this.didDocument, DidDocument.class);
 
         String method = this.method;
         CreateRequest request = new CreateRequest();
@@ -96,7 +96,7 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
         // interactive?
 
         if (Boolean.TRUE.equals(this.interactive)) {
-            CLIState.setMethod(null);
+            CLIState.setMethod(method);
             CLIState.setState(null);
             CLIState.setPrevRequest(null);
             CLIState.setNextRequest(request);
