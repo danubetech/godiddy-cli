@@ -2,11 +2,11 @@ package com.godiddy.cli.commands.state;
 
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKeyInterface;
 import com.danubetech.uniregistrar.clientstateinterface.ClientStateInterface;
+import com.danubetech.uniregistrar.local.extensions.handlers.HandleStateUpdateTempKeys;
 import com.danubetech.uniregistrar.local.extensions.handlers.HandleStateUpdateVerificationMethods;
 import com.danubetech.uniregistrar.local.extensions.handlers.action.HandleActionState;
 import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretJsonWebKeys;
 import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretVerificationMethods;
-import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateUpdateTempKeys;
 import com.danubetech.walletservice.client.WalletServiceClient;
 import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.GodiddyAbstractCommand;
@@ -78,10 +78,10 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
         uniregistrar.openapi.model.RegistrarState handleState = MappingUtil.map(state);
         uniregistrar.openapi.model.RegistrarRequest handlePrevRequest = MappingUtil.map(prevRequest);
 
+        HandleStateUpdateVerificationMethods.handleState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+        HandleStateUpdateTempKeys.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
         HandleFinishedStateImportSecretJsonWebKeys.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
         HandleFinishedStateImportSecretVerificationMethods.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
-        HandleStateUpdateVerificationMethods.handleState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
-        HandleFinishedStateUpdateTempKeys.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
 
         // prepare next request
 

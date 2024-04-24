@@ -21,8 +21,6 @@ public class StateEditNextCommand extends GodiddyAbstractCommand implements Call
 
     private static final Logger log = LogManager.getLogger(StateEditNextCommand.class);
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
     @Override
     public Integer call() throws Exception {
 
@@ -37,11 +35,11 @@ public class StateEditNextCommand extends GodiddyAbstractCommand implements Call
         // edit next request
 
         File tempFile = File.createTempFile("next-request-", ".json");
-        objectMapper.writerWithDefaultPrettyPrinter().writeValue(tempFile, nextRequest);
+        Api.writeJson(tempFile, nextRequest, true);
         ProcessBuilder processBuilder = new ProcessBuilder("/usr/bin/vi", tempFile.getAbsolutePath());
         processBuilder.inheritIO();
         processBuilder.start().waitFor();
-        nextRequest = objectMapper.readValue(tempFile, nextRequest.getClass());
+        nextRequest = (RegistrarRequest) Api.readJson(tempFile, nextRequest.getClass());
         tempFile.deleteOnExit();
 
         // save and print next reqest

@@ -1,14 +1,19 @@
 package com.godiddy.cli.api;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.godiddy.api.client.ApiClient;
 import com.godiddy.api.client.ApiResponse;
 import com.godiddy.api.client.openapi.api.*;
+import uniregistrar.openapi.RFC3339DateFormat;
 
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -23,7 +28,17 @@ import java.util.function.Consumer;
 
 public class Api {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = JsonMapper.builder()
+            .serializationInclusion(JsonInclude.Include.NON_NULL)
+            .disable(MapperFeature.ALLOW_COERCION_OF_SCALARS)
+            .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .enable(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE)
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
+            .enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
+            .defaultDateFormat(new RFC3339DateFormat())
+            .addModule(new JavaTimeModule())
+            .build();
 
     public static ApiClient apiClient() {
         ApiClient apiClient = new ApiClient();
@@ -100,6 +115,18 @@ public class Api {
         T data = apiResponse.getData();
         Api.print(data);
         return data;
+    }
+
+    public static void writeJson(File file, Object object, boolean pretty) throws IOException {
+        if (pretty) {
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, object);
+        } else {
+            objectMapper.writeValue(file, object);
+        }
+    }
+
+    public static Object readJson(File file, Class cl) throws IOException {
+        return objectMapper.readValue(file, cl);
     }
 
     public static Map<String, Object> fromJson(String json) {

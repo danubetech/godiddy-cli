@@ -36,8 +36,7 @@ public class DeactivateCommand extends GodiddyAbstractCommand implements Callabl
 
     @Option(
             names = {"-o", "--option"},
-            description = "This input field contains a key/value pair with an option for the DID operation, such as the network where the DID operation should be executed.",
-            defaultValue = "{}"
+            description = "This input field contains a key/value pair with an option for the DID operation, such as the network where the DID operation should be executed."
     )
     Map<String, String> options;
 

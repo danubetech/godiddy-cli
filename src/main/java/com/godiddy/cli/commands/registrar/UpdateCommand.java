@@ -38,8 +38,7 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
 
     @Option(
             names = {"-o", "--option"},
-            description = "This input field contains a key/value pair with an option for the DID operation, such as the network where the DID operation should be executed.",
-            defaultValue = "{}"
+            description = "This input field contains a key/value pair with an option for the DID operation, such as the network where the DID operation should be executed."
     )
     Map<String, String> options;
 
@@ -71,6 +70,12 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
     String didDocument;
 
     @Option(
+            names = {"-r", "--resolve"},
+            description = "This resolves the current DID document as a basis for the DID update operation."
+    )
+    Boolean resolve;
+
+    @Option(
             names = {"-i", "--interactive"},
             description = "This enables interactive mode where the request is prepared but not executed. You can then either run \"godiddy-cli state edit-next\" or \"godiddy-cli continue\"."
     )
@@ -90,6 +95,11 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
         List<String> didDocumentOperation = Collections.singletonList(this.didDocumentOperation);
 
         List<DidDocument> didDocument = Collections.singletonList(Api.fromJson(this.didDocument, DidDocument.class));
+
+        if (Boolean.TRUE.equals(this.resolve)) {
+            Object result = Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(this.did, "application/did+ld+json"));
+            didDocument = Collections.singletonList(Api.convert(result, DidDocument.class));
+        }
 
         UpdateRequest request = new UpdateRequest();
         request.setJobId(this.jobId);
