@@ -2,10 +2,7 @@ package com.godiddy.cli;
 
 import com.godiddy.cli.commands.config.ConfigRootCommand;
 import com.godiddy.cli.commands.info.InfoRootCommand;
-import com.godiddy.cli.commands.registrar.ContinueCommand;
-import com.godiddy.cli.commands.registrar.CreateCommand;
-import com.godiddy.cli.commands.registrar.DeactivateCommand;
-import com.godiddy.cli.commands.registrar.UpdateCommand;
+import com.godiddy.cli.commands.registrar.*;
 import com.godiddy.cli.commands.resolver.ResolveCommand;
 import com.godiddy.cli.commands.state.StateRootCommand;
 import com.godiddy.cli.commands.wallet.WalletRootCommand;
@@ -26,6 +23,7 @@ import java.util.concurrent.Callable;
                 CreateCommand.class,
                 UpdateCommand.class,
                 DeactivateCommand.class,
+                ExecuteCommand.class,
                 ContinueCommand.class,
                 StateRootCommand.class,
                 WalletRootCommand.class
