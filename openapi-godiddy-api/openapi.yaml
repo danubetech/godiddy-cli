@@ -138,6 +138,10 @@ paths:
               schema:
                 type: object
                 description: A map of properties.
+                example:
+                  indy:
+                    libIndyPath: /lib
+                    poolConfigs: '...'
   /universal-resolver/methods:
     get:
       summary: Return a list of supported DID methods
@@ -183,6 +187,29 @@ paths:
                     - did:btcr:xkrn-xz7q-qsye-28p
                   indy:
                     - did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
+  /universal-resolver/traits:
+    get:
+      summary: Return a map of DID traits
+      description: <p>This endpoint returns a map of the DID traits of the DID methods
+        supported by the DID Resolver.</p>
+      operationId: universalResolverGetTraits
+      tags:
+        - Universal Resolver
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/did+json:
+              schema:
+                type: object
+                description: A map of DID traits.
+                example:
+                  indy:
+                    updatable: true
+                    deactivatable: true
+                    enumerable: true
+                    historyAvailable: true
+                    humanReadable: false
   /universal-registrar/create:
     post:
       summary: Create a DID
@@ -515,6 +542,10 @@ paths:
               schema:
                 type: object
                 description: A map of properties.
+                example:
+                  indy:
+                    libIndyPath: /lib
+                    poolConfigs: '...'
   /universal-registrar/methods:
     get:
       summary: Return a list of supported DID methods
@@ -539,6 +570,29 @@ paths:
                   - ion
                   - cheqd
                   - key
+  /universal-registrar/traits:
+    get:
+      summary: Return a map of DID traits
+      description: <p>This endpoint returns a map of the DID traits of the DID methods
+        supported by the DID Registrar.</p>
+      operationId: universalRegistrarGetTraits
+      tags:
+        - Universal Registrar
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/did+json:
+              schema:
+                type: object
+                description: A map of DID traits.
+                example:
+                  indy:
+                    updatable: true
+                    deactivatable: true
+                    enumerable: true
+                    historyAvailable: true
+                    humanReadable: false
   /wallet-service/keys:
     get:
       summary: Get key(s)
@@ -1747,6 +1801,7 @@ components:
               description: This input field contains Base64-encoded data that is the
                 content of the resource associated with the DID URL.
               type: string
+              example: SGVsbG8gV29ybGQ=
     UpdateResourceRequest:
       description: Input fields for a DID URL update operation.
       allOf:
@@ -1773,13 +1828,15 @@ components:
               items:
                 type: string
               example:
-                - setResource
+                - setContent
             content:
               description: This input field contains Base64-encoded data that is the
                 content of the resource associated with the DID URL.
               type: array
               items:
                 type: string
+              example:
+                - SGVsbG8gV29ybGQ=
     DeactivateResourceRequest:
       description: Input fields for a DID URL deactivate operation.
       allOf:
@@ -1849,7 +1906,7 @@ components:
       description: The state after a DID URL operation.
       type: object
       required:
-        - didState
+        - didUrlState
       properties:
         jobId:
           type: string
@@ -1938,10 +1995,10 @@ components:
       discriminator:
         propertyName: state
         mapping:
-          finished: '#/components/schemas/DidStateFinished'
-          failed: '#/components/schemas/DidStateFailed'
-          action: '#/components/schemas/DidStateAction'
-          wait: '#/components/schemas/DidStateWait'
+          finished: '#/components/schemas/DidUrlStateFinished'
+          failed: '#/components/schemas/DidUrlStateFailed'
+          action: '#/components/schemas/DidUrlStateAction'
+          wait: '#/components/schemas/DidUrlStateWait'
       properties:
         state:
           $ref: '#/components/schemas/String'
@@ -1955,34 +2012,61 @@ components:
           $ref: '#/components/schemas/String'
       additionalProperties: {}
     DidStateFinished:
+      allOf:
+        - $ref: '#/components/schemas/DidState'
+        - $ref: '#/components/schemas/StateFinished'
+    DidStateFailed:
+      allOf:
+        - $ref: '#/components/schemas/DidState'
+        - $ref: '#/components/schemas/StateFailed'
+    DidStateAction:
+      allOf:
+        - $ref: '#/components/schemas/DidState'
+        - $ref: '#/components/schemas/StateAction'
+    DidStateWait:
+      allOf:
+        - $ref: '#/components/schemas/DidState'
+        - $ref: '#/components/schemas/StateWait'
+    DidUrlStateFinished:
+      allOf:
+        - $ref: '#/components/schemas/DidUrlState'
+        - $ref: '#/components/schemas/StateFinished'
+    DidUrlStateFailed:
+      allOf:
+        - $ref: '#/components/schemas/DidUrlState'
+        - $ref: '#/components/schemas/StateFailed'
+    DidUrlStateAction:
+      allOf:
+        - $ref: '#/components/schemas/DidUrlState'
+        - $ref: '#/components/schemas/StateAction'
+    DidUrlStateWait:
+      allOf:
+        - $ref: '#/components/schemas/DidUrlState'
+        - $ref: '#/components/schemas/StateWait'
+    StateFinished:
       description: This state indicates that the DID operation has been completed.
         See https://identity.foundation/did-registration/#didstatestatefinished.
       allOf:
-        - $ref: '#/components/schemas/DidState'
         - type: object
-    DidStateFailed:
+    StateFailed:
       description: This state indicates that the DID operation has failed. See https://identity.foundation/did-registration/#didstatestatefailed.
       allOf:
-        - $ref: '#/components/schemas/DidState'
         - type: object
           properties:
             error:
-              type: string
+              $ref: '#/components/schemas/String'
             reason:
-              type: string
-    DidStateAction:
+              $ref: '#/components/schemas/String'
+    StateAction:
       description: This state indicates that the client needs to perform an action,
         before the DID operation can be continued. See https://identity.foundation/did-registration/#didstatestateaction.
       allOf:
-        - $ref: '#/components/schemas/DidState'
         - type: object
           properties:
             action:
-              type: string
+              $ref: '#/components/schemas/String'
             verificationMethodTemplate:
-              type: array
-              items:
-                $ref: '#/components/schemas/VerificationMethodTemplate'
+              $ref: '#/components/schemas/StateActionVerificationMethodTemplate'
             signingRequest:
               type:
                 - object
@@ -1995,17 +2079,20 @@ components:
                 - null
               additionalProperties:
                 $ref: '#/components/schemas/DecryptionRequest'
-    DidStateWait:
+    StateActionVerificationMethodTemplate:
+      type: array
+      items:
+        $ref: '#/components/schemas/VerificationMethodTemplate'
+    StateWait:
       description: This state indicates that the client needs to wait, before the
         DID operation can be continued. See https://identity.foundation/did-registration/#didstatestatewait.
       allOf:
-        - $ref: '#/components/schemas/DidState'
         - type: object
           properties:
             wait:
-              type: string
+              $ref: '#/components/schemas/String'
             waittime:
-              type: string
+              $ref: '#/components/schemas/String'
     Secret:
       description: Secrets in requests and states.
       type: object
