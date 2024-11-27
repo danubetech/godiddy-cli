@@ -1821,9 +1821,10 @@ components:
                 target of the DID URL update operation.
               type: string
               example: /resources/123
-            resourceOperation:
+            contentOperation:
               description: This input field indicates which update operation(s) should
-                be applied to a DID URL’s associated resource. See <a href="https://identity.foundation/did-registration/#diddocumentoperation">https://identity.foundation/did-registration/#resourceoperation</a>.
+                be applied to the content of a DID URL’s associated resource. See
+                <a href="https://identity.foundation/did-registration/#diddocumentoperation">https://identity.foundation/did-registration/#resourceoperation</a>.
               type: array
               items:
                 type: string

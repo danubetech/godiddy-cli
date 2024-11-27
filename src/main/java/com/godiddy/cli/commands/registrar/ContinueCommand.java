@@ -36,6 +36,7 @@ public class ContinueCommand extends GodiddyAbstractCommand implements Callable<
             case CreateRequest createRequest -> state = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, createRequest));
             case UpdateRequest updateRequest -> state = Api.execute(() -> Api.universalRegistrarApi().updateWithHttpInfo(updateRequest));
             case DeactivateRequest deactivateRequest -> state = Api.execute(() -> Api.universalRegistrarApi().deactivateWithHttpInfo(deactivateRequest));
+            case ExecuteRequest executeRequest -> state = Api.execute(() -> Api.universalRegistrarApi().executeWithHttpInfo(executeRequest));
             default -> throw new IllegalStateException("Unexpected request class: " + nextRequest.getClass().getName());
         }
 
