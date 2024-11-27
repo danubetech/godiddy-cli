@@ -139,6 +139,7 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
         wallet.add(clientKey);
         CLIWallet.setWallet(wallet);
 
+        clientKey.setKey(removePrivate(clientKey.getKey()));
         return clientKey;
     }
 
