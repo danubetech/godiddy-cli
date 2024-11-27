@@ -2,11 +2,11 @@ package com.godiddy.cli;
 
 import com.godiddy.cli.commands.config.ConfigRootCommand;
 import com.godiddy.cli.commands.info.InfoRootCommand;
-import com.godiddy.cli.commands.wallet.WalletRootCommand;
+import com.godiddy.cli.commands.localwallet.LocalWalletRootCommand;
 import com.godiddy.cli.commands.registrar.*;
 import com.godiddy.cli.commands.resolver.ResolveCommand;
 import com.godiddy.cli.commands.state.StateRootCommand;
-import com.godiddy.cli.commands.localwallet.LocalWalletRootCommand;
+import com.godiddy.cli.commands.wallet.WalletRootCommand;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;

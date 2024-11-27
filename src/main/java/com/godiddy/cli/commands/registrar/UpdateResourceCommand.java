@@ -1,6 +1,9 @@
 package com.godiddy.cli.commands.registrar;
 
-import com.godiddy.api.client.openapi.model.*;
+import com.godiddy.api.client.openapi.model.RequestOptions;
+import com.godiddy.api.client.openapi.model.RequestSecret;
+import com.godiddy.api.client.openapi.model.UpdateResourceRequest;
+import com.godiddy.api.client.openapi.model.UpdateResourceState;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.clidata.clistate.CLIState;

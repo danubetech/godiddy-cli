@@ -9,14 +9,16 @@ import com.danubetech.keyformats.jose.JWK;
 import com.danubetech.keyformats.jose.KeyTypeName;
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKey;
 import com.goterl.lazysodium.interfaces.Sign;
-import org.bitcoinj.core.ECKey;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.Curve;
 import com.nimbusds.jose.jwk.gen.ECKeyGenerator;
+import org.bitcoinj.core.ECKey;
 
-import java.security.*;
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.ECPrivateKey;
-import java.security.spec.ECGenParameterSpec;
 
 
 public class KeyGenerator {
