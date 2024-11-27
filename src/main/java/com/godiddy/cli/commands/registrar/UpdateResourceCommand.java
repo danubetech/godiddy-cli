@@ -59,7 +59,7 @@ public class UpdateResourceCommand extends GodiddyAbstractCommand implements Cal
             description = "This input field contains an object with DID controller keys and other secrets needed for performing the DID operation.",
             defaultValue = "{}"
     )
-    String secret;
+    Map<String, String> secret;
 
     @Option(
             names = "--contentop",
@@ -90,7 +90,8 @@ public class UpdateResourceCommand extends GodiddyAbstractCommand implements Cal
         if (this.options != null) requestOptions.getAdditionalProperties().putAll(this.options);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
 
-        RequestSecret requestSecret = this.secret.isBlank() ? null : Api.fromJson(this.secret, RequestSecret.class);
+        RequestSecret requestSecret = new RequestSecret();
+        if (this.secret != null) requestSecret.getAdditionalProperties().putAll(this.secret);
 
         List<String> contentOperation = this.contentOperation.isBlank() ? Collections.emptyList() : Collections.singletonList(this.contentOperation);
 
