@@ -1,7 +1,6 @@
 package com.godiddy.cli.commands.registrar;
 
 import com.godiddy.api.client.openapi.model.DeactivateRequest;
-import com.godiddy.api.client.openapi.model.DeactivateState;
 import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
@@ -80,30 +79,24 @@ public class DeactivateCommand extends GodiddyAbstractCommand implements Callabl
         request.setOptions(requestOptions);
         request.setSecret(requestSecret);
 
+        // store state
+
+        CLIState.setMethod(null);
+        CLIState.setState(null);
+        CLIState.setPrevRequest(null);
+        CLIState.setNextRequest(request);
+
         // interactive?
 
-        if (Boolean.TRUE.equals(this.interactive)) {
-            CLIState.setMethod(null);
-            CLIState.setState(null);
-            CLIState.setPrevRequest(null);
-            CLIState.setNextRequest(request);
+        boolean interactive = Boolean.TRUE.equals(this.interactive);
+
+        if (interactive) {
             Api.print(request);
             return 0;
         }
 
-        // execute
+        // continue
 
-        DeactivateState state = Api.execute(() -> Api.universalRegistrarApi().deactivateWithHttpInfo(request));
-
-        // store state
-
-        CLIState.setMethod(null);
-        CLIState.setState(state);
-        CLIState.setPrevRequest(request);
-        CLIState.setNextRequest(null);
-
-        // done
-
-        return 0;
+        return ContinueCommand.doContinue(interactive);
     }
 }

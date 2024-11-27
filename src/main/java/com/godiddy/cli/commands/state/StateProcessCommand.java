@@ -11,8 +11,10 @@ import com.danubetech.walletservice.client.WalletServiceClient;
 import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
+import com.godiddy.cli.api.KeyInterface;
 import com.godiddy.cli.api.WalletServiceBase;
 import com.godiddy.cli.clidata.clistate.CLIState;
+import com.godiddy.cli.commands.registrar.ContinueCommand;
 import com.godiddy.cli.commands.state.interfaces.CLIStateClientStateInterface;
 import com.godiddy.cli.commands.state.interfaces.dummy.DummyClientKeyInterface;
 import com.godiddy.cli.commands.state.interfaces.local.LocalClientKeyInterface;
@@ -20,7 +22,6 @@ import com.godiddy.cli.commands.state.interfaces.walletservice.WalletServiceClie
 import com.godiddy.cli.util.MappingUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 import java.util.Map;
@@ -35,24 +36,13 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
 
     private static final Logger log = LogManager.getLogger(StateProcessCommand.class);
 
-    public enum ClientKeyInterfaceType {
-        dummy,
-        wallet,
-        local
-    };
-
-    public static final String DEFAULT_CLIENTKEYINTERFACETYPE = "local";
-
-    @CommandLine.Option(
-            names = {"-k", "--keyinterface"},
-            description = "The type of client key interface to use. Valid values: ${COMPLETION-CANDIDATES}. Default value: " + DEFAULT_CLIENTKEYINTERFACETYPE + ".",
-            arity = "0..1",
-            defaultValue = "local"
-    )
-    ClientKeyInterfaceType clientKeyInterfaceType;
-
     @Override
     public Integer call() throws Exception {
+
+        return doProcess(true);
+    }
+
+    public static Integer doProcess(boolean interactive) throws Exception {
 
         // load state and next request
 
@@ -69,10 +59,13 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
 
         // prepare interfaces
 
-        ClientKeyInterface clientKeyInterface = switch (this.clientKeyInterfaceType) {
+        KeyInterface.Value keyInterface = KeyInterface.getKeyInterface();
+
+        ClientKeyInterface clientKeyInterface = switch (keyInterface) {
             case dummy -> new DummyClientKeyInterface();
             case wallet -> new WalletServiceClientKeyInterface(WalletServiceClient.create(WalletServiceBase.getWalletServiceBase()), "default");
             case local -> new LocalClientKeyInterface();
+            default -> throw new IllegalStateException("Unexpected key interface value: " + keyInterface);
         };
         ClientStateInterface clientStateInterface = new CLIStateClientStateInterface();
 
@@ -113,10 +106,22 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
         // save and print next request
 
         CLIState.setNextRequest(nextRequest);
-        Api.print(nextRequest);
 
-        // done
+        // finished?
 
-        return 0;
+        if (nextRequest == null) {
+            return 0;
+        }
+
+        // interactive?
+
+        if (interactive) {
+            Api.print(nextRequest);
+            return 0;
+        }
+
+        // continue
+
+        return ContinueCommand.doContinue(interactive);
     }
 }

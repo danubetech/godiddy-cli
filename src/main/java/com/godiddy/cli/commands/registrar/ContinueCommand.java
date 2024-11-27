@@ -4,6 +4,7 @@ import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.clidata.clistate.CLIState;
+import com.godiddy.cli.commands.state.StateProcessCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -21,6 +22,11 @@ public class ContinueCommand extends GodiddyAbstractCommand implements Callable<
 
     @Override
     public Integer call() throws Exception {
+
+        return doContinue(true);
+    }
+
+    public static Integer doContinue(boolean interactive) throws Exception {
 
         // request and execute
 
@@ -47,8 +53,15 @@ public class ContinueCommand extends GodiddyAbstractCommand implements Callable<
         CLIState.setPrevRequest(nextRequest);
         CLIState.setNextRequest(null);
 
-        // done
+        // interactive?
 
-        return 0;
+        if (interactive) {
+            Api.print(state);
+            return 0;
+        }
+
+        // process
+
+        return StateProcessCommand.doProcess(interactive);
     }
 }

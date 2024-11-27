@@ -2,6 +2,7 @@ package com.godiddy.cli.clidata.cliconfig;
 
 import com.godiddy.cli.api.Formatting;
 import com.godiddy.cli.api.Headers;
+import com.godiddy.cli.api.KeyInterface;
 import com.godiddy.cli.clidata.CLIData;
 
 public class CLIConfig {
@@ -27,6 +28,18 @@ public class CLIConfig {
             CLIData.remove("endpoint");
         } else {
             CLIData.put("endpoint", endpoint);
+        }
+    }
+
+    public static KeyInterface.Value getKeyInterface() {
+        return CLIData.get("keyInterface") == null ? null : KeyInterface.Value.valueOf(CLIData.get("keyInterface"));
+    }
+
+    public static void setKeyInterface(KeyInterface.Value keyInterface) {
+        if (keyInterface == null) {
+            CLIData.remove("keyInterface");
+        } else {
+            CLIData.put("keyInterface", keyInterface.name());
         }
     }
 

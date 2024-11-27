@@ -1,6 +1,9 @@
 package com.godiddy.cli.commands.registrar;
 
-import com.godiddy.api.client.openapi.model.*;
+import com.godiddy.api.client.openapi.model.CreateRequest;
+import com.godiddy.api.client.openapi.model.DidDocument;
+import com.godiddy.api.client.openapi.model.RequestOptions;
+import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.clidata.clistate.CLIState;
@@ -93,30 +96,24 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
         request.setSecret(requestSecret);
         request.setDidDocument(didDocument);
 
+        // store state
+
+        CLIState.setMethod(method);
+        CLIState.setState(null);
+        CLIState.setPrevRequest(null);
+        CLIState.setNextRequest(request);
+
         // interactive?
 
-        if (Boolean.TRUE.equals(this.interactive)) {
-            CLIState.setMethod(method);
-            CLIState.setState(null);
-            CLIState.setPrevRequest(null);
-            CLIState.setNextRequest(request);
+        boolean interactive = Boolean.TRUE.equals(this.interactive);
+
+        if (interactive) {
             Api.print(request);
             return 0;
         }
 
-        // execute
+        // continue
 
-        CreateState state = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, request));
-
-        // store state
-
-        CLIState.setMethod(method);
-        CLIState.setState(state);
-        CLIState.setPrevRequest(request);
-        CLIState.setNextRequest(null);
-
-        // done
-
-        return 0;
+        return ContinueCommand.doContinue(interactive);
     }
 }

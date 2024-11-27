@@ -3,7 +3,6 @@ package com.godiddy.cli.commands.registrar;
 import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.api.client.openapi.model.UpdateResourceRequest;
-import com.godiddy.api.client.openapi.model.UpdateResourceState;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.clidata.clistate.CLIState;
@@ -109,30 +108,24 @@ public class UpdateResourceCommand extends GodiddyAbstractCommand implements Cal
         request.setContentOperation(contentOperation);
         request.setContent(content);
 
+        // store state
+
+        CLIState.setMethod(null);
+        CLIState.setState(null);
+        CLIState.setPrevRequest(null);
+        CLIState.setNextRequest(request);
+
         // interactive?
 
-        if (Boolean.TRUE.equals(this.interactive)) {
-            CLIState.setMethod(null);
-            CLIState.setState(null);
-            CLIState.setPrevRequest(null);
-            CLIState.setNextRequest(request);
+        boolean interactive = Boolean.TRUE.equals(this.interactive);
+
+        if (interactive) {
             Api.print(request);
             return 0;
         }
 
-        // execute
+        // continue
 
-        UpdateResourceState state = Api.execute(() -> Api.universalRegistrarApi().updateResourceWithHttpInfo(request));
-
-        // store state
-
-        CLIState.setMethod(null);
-        CLIState.setState(null /*state*/);
-        CLIState.setPrevRequest(request);
-        CLIState.setNextRequest(null);
-
-        // done
-
-        return 0;
+        return ContinueCommand.doContinue(interactive);
     }
 }
