@@ -36,7 +36,7 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
         return keys;
     }
 
-    public List<ClientKey> getKeysPrivate(URI controller, URI url, String type, String purpose) {
+    private List<ClientKey> getKeysPrivate(URI controller, URI url, String type, String purpose) {
 
         LinkedList<ClientKey> wallet = CLIWallet.getWallet();
         List<ClientKey> keys = wallet != null ? wallet : Collections.emptyList();
@@ -59,7 +59,7 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
         return key;
     }
 
-    public ClientKey getKeyPrivate(URI controller, URI url, String type, String purpose) {
+    private ClientKey getKeyPrivate(URI controller, URI url, String type, String purpose) {
 
         List<ClientKey> keys = this.getKeysPrivate(controller, url, type, purpose);
 
@@ -79,7 +79,7 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
         return clientKey;
     }
 
-    public ClientKey getKeyPrivate(UUID id) {
+    private ClientKey getKeyPrivate(UUID id) {
 
         if (id == null) throw new IllegalArgumentException("'id' is missing.");
 
