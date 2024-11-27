@@ -2,13 +2,20 @@
 
 A command-line interface for Godiddy.
 
-## Build
+## Run using Docker
+
+```shell
+docker pull godiddy/godiddy-cli
+docker run -it godiddy/godiddy-cli
+```
+
+## Build manually
 
 ```shell
 mvn -s settings.xml clean package
 ```
 
-## Run
+## Run manually
 
 Get command line
 
