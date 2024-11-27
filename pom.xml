@@ -89,12 +89,14 @@
 		<key-formats-java.version>1.16.0</key-formats-java.version>
 		<did-common-java.version>1.14.0</did-common-java.version>
 		<danubetech-common-java.version>1.19.0</danubetech-common-java.version>
+		<com.github.mattrglobal-bbs.signatures.version>2.0</com.github.mattrglobal-bbs.signatures.version>
 
 		<!-- Other Versions -->
 
 		<commons-codec.version>1.17.1</commons-codec.version>
 		<info.picocli-picocli.version>4.7.6</info.picocli-picocli.version>
 		<org.modelmapper-modelmapper.version>3.2.1</org.modelmapper-modelmapper.version>
+
 	</properties>
 
 	<build>
@@ -524,6 +526,11 @@
 				<artifactId>danubetech-common-java</artifactId>
 				<version>${danubetech-common-java.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.github.mattrglobal</groupId>
+				<artifactId>bbs.signatures</artifactId>
+				<version>${com.github.mattrglobal-bbs.signatures.version}</version>
+			</dependency>
 
 			<!-- Other Dependencies -->
 
@@ -628,6 +635,10 @@
 		<dependency>
 			<groupId>com.danubetech</groupId>
 			<artifactId>danubetech-common-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.mattrglobal</groupId>
+			<artifactId>bbs.signatures</artifactId>
 		</dependency>
 
 		<!-- Other Dependencies -->

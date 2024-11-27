@@ -12,7 +12,7 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "controllers",
-        description = "Get controller(s) ",
+        description = "Get controller(s).",
         mixinStandardHelpOptions = true
 )
 public class WalletGetControllersCommand extends GodiddyAbstractCommand implements Callable<Integer> {

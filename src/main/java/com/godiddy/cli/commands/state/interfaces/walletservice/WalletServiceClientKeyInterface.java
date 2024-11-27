@@ -1,4 +1,4 @@
-package com.godiddy.cli.commands.state.interfaces;
+package com.godiddy.cli.commands.state.interfaces.walletservice;
 
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKey;
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKeyInterface;

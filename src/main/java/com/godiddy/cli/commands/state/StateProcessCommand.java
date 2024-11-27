@@ -14,8 +14,9 @@ import com.godiddy.cli.api.Api;
 import com.godiddy.cli.api.WalletServiceBase;
 import com.godiddy.cli.clistate.CLIState;
 import com.godiddy.cli.commands.state.interfaces.CLIStateClientStateInterface;
-import com.godiddy.cli.commands.state.interfaces.DummyClientKeyInterface;
-import com.godiddy.cli.commands.state.interfaces.WalletServiceClientKeyInterface;
+import com.godiddy.cli.commands.state.interfaces.dummy.DummyClientKeyInterface;
+import com.godiddy.cli.commands.state.interfaces.local.LocalClientKeyInterface;
+import com.godiddy.cli.commands.state.interfaces.walletservice.WalletServiceClientKeyInterface;
 import com.godiddy.cli.util.MappingUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,16 +37,17 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
 
     public enum ClientKeyInterfaceType {
         dummy,
-        wallet
+        wallet,
+        local
     };
 
-    public static final String DEFAULT_CLIENTKEYINTERFACETYPE = "dummy";
+    public static final String DEFAULT_CLIENTKEYINTERFACETYPE = "local";
 
     @CommandLine.Option(
             names = {"-k", "--keyinterface"},
             description = "The type of client key interface to use. Valid values: ${COMPLETION-CANDIDATES}. Default value: " + DEFAULT_CLIENTKEYINTERFACETYPE + ".",
             arity = "0..1",
-            defaultValue = "dummy"
+            defaultValue = "local"
     )
     ClientKeyInterfaceType clientKeyInterfaceType;
 
@@ -70,6 +72,7 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
         ClientKeyInterface clientKeyInterface = switch (this.clientKeyInterfaceType) {
             case dummy -> new DummyClientKeyInterface();
             case wallet -> new WalletServiceClientKeyInterface(WalletServiceClient.create(WalletServiceBase.getWalletServiceBase()), "default");
+            case local -> new LocalClientKeyInterface();
         };
         ClientStateInterface clientStateInterface = new CLIStateClientStateInterface();
 

@@ -76,6 +76,14 @@ public class CLIState {
         setObject("nextRequest", nextRequest);
     }
 
+    public static Map<String, Object> getClientKeyObject() {
+        return (Map<String, Object>) getObject("clientKeyObject");
+    }
+
+    public static void setClientKeyObject(Map<String, Object> clientKeyObject) {
+        setObject("clientKeyObject", clientKeyObject);
+    }
+
     public static Map<String, Object> getClientStateObject() {
         return (Map<String, Object>) getObject("clientStateObject");
     }

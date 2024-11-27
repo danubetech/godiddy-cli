@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 
 @Command(
         name = "keys",
-        description = "Get key(s) ",
+        description = "Get key(s).",
         mixinStandardHelpOptions = true
 )
 public class WalletGetKeysCommand extends GodiddyAbstractCommand implements Callable<Integer> {
