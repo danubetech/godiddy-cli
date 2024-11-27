@@ -54,8 +54,7 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
 
     @Option(
             names = {"-s", "--secret"},
-            description = "This input field contains an object with DID controller keys and other secrets needed for performing the DID operation.",
-            defaultValue = "{}"
+            description = "This input field contains an object with DID controller keys and other secrets needed for performing the DID operation."
     )
     Map<String, String> secret;
 
@@ -83,7 +82,11 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
         if (this.network != null) requestOptions.putAdditionalProperty("network", this.network);
 
         RequestSecret requestSecret = new RequestSecret();
-        if (this.secret != null) requestSecret.getAdditionalProperties().putAll(this.secret);
+        if (this.secret != null) {
+            for (Map.Entry<String, String> entry : this.secret.entrySet()) {
+                requestSecret.putAdditionalProperty(entry.getKey(), entry.getValue());
+            }
+        }
 
         DidDocument didDocument = this.didDocument.isBlank() ? null : Api.fromJson(this.didDocument, DidDocument.class);
 
