@@ -9,6 +9,10 @@ ARG DANUBETECH_MAVEN_INTERNAL_USERNAME
 ARG DANUBETECH_MAVEN_INTERNAL_PASSWORD
 ADD ./settings.xml /root/.m2/
 
+USER root
+
+RUN apk add patch
+
 # build godiddy-cli
 
 ADD . /opt/godiddy-cli
