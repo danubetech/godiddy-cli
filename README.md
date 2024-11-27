@@ -5,7 +5,7 @@ A command-line interface for Godiddy.
 ## Build
 
 ```shell
-mvn clean package
+mvn -s settings.xml clean package
 ```
 
 ## Run
