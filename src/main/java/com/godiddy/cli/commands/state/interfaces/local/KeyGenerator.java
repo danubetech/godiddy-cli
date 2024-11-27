@@ -10,6 +10,9 @@ import com.danubetech.keyformats.jose.KeyTypeName;
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKey;
 import com.goterl.lazysodium.interfaces.Sign;
 import org.bitcoinj.core.ECKey;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.jwk.gen.ECKeyGenerator;
 
 import java.security.*;
 import java.security.interfaces.ECPrivateKey;
@@ -90,7 +93,7 @@ public class KeyGenerator {
     }
 
     public static void generateP256(ClientKey key)  {
-        ECPrivateKey privateKey = generateECKeys(new ECGenParameterSpec("P-256"));
+        ECPrivateKey privateKey = generateECKeys(Curve.P_256);
 
         JWK jwk = PrivateKey_to_JWK.P_256PrivateKey_to_JWK(privateKey, null, null);
         key.setKey(jwk.toMap());
@@ -100,7 +103,7 @@ public class KeyGenerator {
 
     public static void generateP384(ClientKey key)  {
 
-        ECPrivateKey privateKey = generateECKeys(new ECGenParameterSpec("P-384"));
+        ECPrivateKey privateKey = generateECKeys(Curve.P_384);
 
         JWK jwk = PrivateKey_to_JWK.P_384PrivateKey_to_JWK(privateKey, null, null);
         key.setKey(jwk.toMap());
@@ -109,26 +112,27 @@ public class KeyGenerator {
 
     public static void generateP521(ClientKey key)  {
 
-        ECPrivateKey privateKey = generateECKeys(new ECGenParameterSpec("P-521"));
+        ECPrivateKey privateKey = generateECKeys(Curve.P_521);
 
         JWK jwk = PrivateKey_to_JWK.P_521PrivateKey_to_JWK(privateKey, null, null);
         key.setKey(jwk.toMap());
         key.setType(KeyTypeName.P_521.name());
     }
 
+    private static ECPrivateKey generateECKeys(Curve curve ){
 
-    private static ECPrivateKey generateECKeys(ECGenParameterSpec ecSpec ){
-        KeyPairGenerator keyPairGenerator = null;
+
+        com.nimbusds.jose.jwk.ECKey ecJWK = null;
         try {
-            keyPairGenerator = KeyPairGenerator.getInstance("EC");
-            keyPairGenerator.initialize(ecSpec, new SecureRandom());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidAlgorithmParameterException e) {
+            ecJWK = new ECKeyGenerator(curve).generate();
+        } catch (JOSEException e) {
             throw new RuntimeException(e);
         }
-        KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
-        return (ECPrivateKey) keyPair.getPrivate();
+        try {
+            return ecJWK.toECPrivateKey();
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

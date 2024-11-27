@@ -96,6 +96,7 @@
 		<commons-codec.version>1.17.1</commons-codec.version>
 		<info.picocli-picocli.version>4.7.6</info.picocli-picocli.version>
 		<org.modelmapper-modelmapper.version>3.2.1</org.modelmapper-modelmapper.version>
+		<nimbus-jose-jwt.version>9.45</nimbus-jose-jwt.version>
 
 	</properties>
 
@@ -549,6 +550,11 @@
 				<artifactId>modelmapper</artifactId>
 				<version>${org.modelmapper-modelmapper.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.nimbusds</groupId>
+				<artifactId>nimbus-jose-jwt</artifactId>
+				<version>${nimbus-jose-jwt.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -654,6 +660,10 @@
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
 		</dependency>
 	</dependencies>
 </project>
