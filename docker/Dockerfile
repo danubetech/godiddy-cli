@@ -23,6 +23,8 @@ RUN cd /opt/godiddy-cli/ && mvn clean package -DskipTests
 FROM eclipse-temurin:21-jre-alpine
 LABEL org.opencontainers.image.authors="markus@danubetech.com"
 
+RUN apk add libsodium
+
 COPY --from=build /opt/godiddy-cli/target/*.jar /opt/godiddy-cli/
 
 # variables
