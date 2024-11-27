@@ -46,7 +46,7 @@ public class ConfigApiKeyCommand extends ConfigAbstractCommand implements Callab
                     apiKey = predefinedApiKey;
                 }
                 CLIConfig.setApiKey(apiKey);
-                System.out.println("API key successfully set.");
+                System.out.println("API key successfully set: " + apiKey);
             }
         }
         return 0;

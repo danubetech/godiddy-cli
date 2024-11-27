@@ -46,7 +46,7 @@ public class ConfigWalletServiceBaseCommand extends ConfigAbstractCommand implem
                     walletServiceBase = predefinedWalletServiceBase;
                 }
                 CLIConfig.setWalletServiceBase(walletServiceBase);
-                System.out.println("Wallet service base successfully set.");
+                System.out.println("Wallet service base successfully set: " + walletServiceBase);
             }
         }
         return 0;

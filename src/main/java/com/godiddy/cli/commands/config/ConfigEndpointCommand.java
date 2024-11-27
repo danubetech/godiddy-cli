@@ -46,7 +46,7 @@ public class ConfigEndpointCommand extends ConfigAbstractCommand implements Call
                     endpoint = predefinedEndpoint;
                 }
                 CLIConfig.setEndpoint(endpoint);
-                System.out.println("Endpoint successfully set.");
+                System.out.println("Endpoint successfully set: " + endpoint);
             }
         }
         return 0;

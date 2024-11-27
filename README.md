@@ -5,8 +5,8 @@ A command-line interface for Godiddy.
 ## Run using Docker
 
 ```shell
-docker pull godiddy/godiddy-cli
-docker run -it godiddy/godiddy-cli
+docker compose pull
+docker compose run --rm godiddy-cli
 ```
 
 ## Build manually

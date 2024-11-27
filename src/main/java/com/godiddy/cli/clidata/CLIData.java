@@ -1,13 +1,9 @@
 package com.godiddy.cli.clidata;
 
-import com.godiddy.cli.GodiddyCLIApplication;
-
 import java.io.*;
-import java.util.prefs.Preferences;
 
 public class CLIData {
 
-    private static final Preferences preferences = Preferences.userNodeForPackage(GodiddyCLIApplication.class);
     private static final String BASE_PATH = "./godiddy-cli-data/";
 
     public static String get(String key) {

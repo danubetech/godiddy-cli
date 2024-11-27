@@ -46,7 +46,7 @@ public class ConfigHeadersCommand extends ConfigAbstractCommand implements Calla
                     headers = predefinedHeaders;
                 }
                 CLIConfig.setHeaders(headers);
-                System.out.println("Headers successfully set.");
+                System.out.println("Headers successfully set: " + headers);
             }
         }
         return 0;

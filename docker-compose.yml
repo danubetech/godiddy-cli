@@ -1,0 +1,10 @@
+name: godiddy-cli
+
+volumes:
+  godiddy-cli-data:
+
+services:
+  godiddy-cli:
+    image: godiddy/godiddy-cli:latest
+    volumes:
+      - godiddy-cli-data:/opt/godiddy-cli/godiddy-cli-data

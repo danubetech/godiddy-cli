@@ -46,7 +46,7 @@ public class ConfigFormattingCommand extends ConfigAbstractCommand implements Ca
                     formatting = predefinedFormatting;
                 }
                 CLIConfig.setFormatting(formatting);
-                System.out.println("Formatting successfully set.");
+                System.out.println("Formatting successfully set: " + formatting);
             }
         }
         return 0;
