@@ -58,8 +58,7 @@ public class UpdateResourceCommand extends GodiddyAbstractCommand implements Cal
 
     @Option(
             names = {"-s", "--secret"},
-            description = "This input field contains an object with DID controller keys and other secrets needed for performing the DID operation.",
-            defaultValue = "{}"
+            description = "This input field contains an object with DID controller keys and other secrets needed for performing the DID operation."
     )
     Map<String, String> secret;
 
