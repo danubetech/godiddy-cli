@@ -7,6 +7,7 @@ import com.godiddy.cli.GodiddyCLIApplication;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.prefs.Preferences;
 
 public class CLIWallet {
@@ -17,7 +18,9 @@ public class CLIWallet {
 
     public static LinkedList<ClientKey> getWallet() {
         try {
-            return preferences.get("wallet", null) == null ? null : objectMapper.readValue(preferences.get("wallet", null), LinkedList.class);
+            LinkedList<Map> walletMap = preferences.get("wallet", null) == null ? null : objectMapper.readValue(preferences.get("wallet", null), LinkedList.class);
+            if (walletMap == null) return null;
+            return new LinkedList(walletMap.stream().map(x -> objectMapper.convertValue(x, ClientKey.class)).toList());
         } catch (JsonProcessingException ex) {
             throw new IllegalArgumentException(ex);
         }
