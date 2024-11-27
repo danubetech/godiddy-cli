@@ -110,6 +110,7 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
         // finished?
 
         if (nextRequest == null) {
+            System.out.println("Finished.");
             return 0;
         }
 
