@@ -33,6 +33,21 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
         if (type != null) keys = keys.stream().filter(clientKey -> type.equals(clientKey.getType())).toList();
         if (purpose != null) keys = keys.stream().filter(clientKey -> clientKey.getPurpose() != null && clientKey.getPurpose().contains(purpose)).toList();
 
+        keys.parallelStream().forEach(k -> k.setKey(removePrivate(k.getKey())));
+
+        return keys;
+    }
+
+    public List<ClientKey> getKeysPrivate(URI controller, URI url, String type, String purpose) {
+
+        LinkedList<ClientKey> wallet = CLIWallet.getWallet();
+        List<ClientKey> keys = wallet != null ? wallet : Collections.emptyList();
+
+        if (controller != null) keys = keys.stream().filter(clientKey -> controller.equals(clientKey.getController())).toList();
+        if (url != null) keys = keys.stream().filter(clientKey -> url.equals(clientKey.getUrl())).toList();
+        if (type != null) keys = keys.stream().filter(clientKey -> type.equals(clientKey.getType())).toList();
+        if (purpose != null) keys = keys.stream().filter(clientKey -> clientKey.getPurpose() != null && clientKey.getPurpose().contains(purpose)).toList();
+
         return keys;
     }
 
@@ -42,10 +57,31 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
         List<ClientKey> keys = this.getKeys(controller, url, type, purpose);
 
         ClientKey key = keys.isEmpty() ? null : keys.getFirst();
+        if (key != null) key.setKey(removePrivate(key.getKey()));
+        return key;
+    }
+
+    public ClientKey getKeyPrivate(URI controller, URI url, String type, String purpose) {
+
+        List<ClientKey> keys = this.getKeysPrivate(controller, url, type, purpose);
+
+        ClientKey key = keys.isEmpty() ? null : keys.getFirst();
         return key;
     }
 
     public ClientKey getKey(UUID id) {
+
+        if (id == null) throw new IllegalArgumentException("'id' is missing.");
+
+        LinkedList<ClientKey> wallet = CLIWallet.getWallet();
+        if (wallet == null) return null;
+
+        ClientKey clientKey = wallet.stream().filter(clientKey1 -> id.equals(clientKey1.getId())).findFirst().orElse(null);
+        if (clientKey != null) clientKey.setKey(removePrivate(clientKey.getKey()));
+        return clientKey;
+    }
+
+    public ClientKey getKeyPrivate(UUID id) {
 
         if (id == null) throw new IllegalArgumentException("'id' is missing.");
 
@@ -171,15 +207,15 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
 
         if (id != null) {
 
-            key = this.getKey(id);
+            key = this.getKeyPrivate(id);
             if (key == null) throw new IllegalArgumentException("No key found for 'id' " + id);
         } else {
 
-            key = this.getKey(null, url, null, null);
+            key = this.getKeyPrivate(null, url, null, null);
         }
 
         if (log.isDebugEnabled())
-            log.debug("Found key with id {} and url {} and type {} and purpose {}'", key.getId(), key.getUrl(), key.getType(), key.getPurpose());
+            log.debug("Found key with id {} and url {} and type {} and purpose {} and key {}", key.getId(), key.getUrl(), key.getType(), key.getPurpose(), key.getKey());
 
         // obtain signer
 
@@ -219,6 +255,16 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
     @Override
     public byte[] decryptWithKey(UUID id, URI url, String algorithm, byte[] content) {
         throw new RuntimeException("Not implemented.");
+    }
+
+    private static Map<String,Object> removePrivate(Map<String, Object> key) {
+        try {
+            key.remove("d");
+            return key;
+        } catch (Exception ex) {
+            log.warn("no private component 'd' in private key",ex);
+            return Collections.emptyMap();
+        }
     }
 
     private static Map<String,Object> removeNullValues(Map<String, Object> key) {
