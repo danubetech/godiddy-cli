@@ -8,15 +8,13 @@ import com.danubetech.keyformats.jose.KeyTypeName;
 import com.danubetech.keyformats.keytypes.KeyTypeName_for_JWK;
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKey;
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKeyInterface;
-import com.godiddy.cli.cliwallet.CLIWallet;
-import com.godiddy.cli.commands.state.interfaces.walletservice.WalletServiceClientKeyInterface;
+import com.godiddy.cli.clidata.cliwallet.CLIWallet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.security.GeneralSecurityException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class LocalClientKeyInterface implements ClientKeyInterface {
 

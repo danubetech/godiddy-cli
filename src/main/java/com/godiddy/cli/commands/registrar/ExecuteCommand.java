@@ -6,7 +6,7 @@ import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
-import com.godiddy.cli.clistate.CLIState;
+import com.godiddy.cli.clidata.clistate.CLIState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -67,10 +67,9 @@ public class ExecuteCommand extends GodiddyAbstractCommand implements Callable<I
 
     @Option(
             names = "--opdata",
-            description = "This input field contains the data to be used for the DID execute operation.",
-            defaultValue = "{}"
+            description = "This input field contains the data to be used for the DID execute operation."
     )
-    Map<String, Object> operationData;
+    Map<String, String> operationData;
 
     @Option(
             names = {"-i", "--interactive"},
@@ -84,15 +83,15 @@ public class ExecuteCommand extends GodiddyAbstractCommand implements Callable<I
         // request
 
         RequestOptions requestOptions = new RequestOptions();
-        if (this.options != null) requestOptions.getAdditionalProperties().putAll(this.options);
+        if (this.options != null) this.options.forEach(requestOptions::putAdditionalProperty);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
 
         RequestSecret requestSecret = new RequestSecret();
-        if (this.secret != null) requestSecret.getAdditionalProperties().putAll(this.secret);
+        if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
 
         List<String> operation = Collections.singletonList(this.operation);
 
-        List<Object> operationData = Collections.singletonList(this.operationData);
+        List<Object> operationData = this.operationData == null ? null : Collections.singletonList(this.operationData);
 
         ExecuteRequest request = new ExecuteRequest();
         request.setJobId(this.jobId);

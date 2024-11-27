@@ -1,7 +1,7 @@
 package com.godiddy.cli.commands.state.interfaces;
 
 import com.danubetech.uniregistrar.clientstateinterface.ClientStateInterface;
-import com.godiddy.cli.clistate.CLIState;
+import com.godiddy.cli.clidata.clistate.CLIState;
 
 import java.net.URI;
 import java.util.LinkedHashMap;

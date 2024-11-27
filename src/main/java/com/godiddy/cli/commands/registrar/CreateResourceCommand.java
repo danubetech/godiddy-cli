@@ -6,7 +6,7 @@ import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
-import com.godiddy.cli.clistate.CLIState;
+import com.godiddy.cli.clidata.clistate.CLIState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -87,12 +87,12 @@ public class CreateResourceCommand extends GodiddyAbstractCommand implements Cal
         // request
 
         RequestOptions requestOptions = new RequestOptions();
-        if (this.options != null) requestOptions.getAdditionalProperties().putAll(this.options);
+        if (this.options != null) this.options.forEach(requestOptions::putAdditionalProperty);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
         if (this.network != null) requestOptions.putAdditionalProperty("network", this.network);
 
         RequestSecret requestSecret = new RequestSecret();
-        if (this.secret != null) requestSecret.getAdditionalProperties().putAll(this.secret);
+        if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
 
         String content = this.content.isBlank() ? null : this.content;
 

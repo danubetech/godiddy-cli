@@ -23,6 +23,8 @@ RUN cd /opt/godiddy-cli && mvn clean package -DskipTests
 FROM eclipse-temurin:21-jre-alpine
 MAINTAINER Markus Sabadello <markus@danubetech.com>
 
+VOLUME /opt/godiddy-cli/godiddy-cli-data/
+
 COPY --from=build /opt/godiddy-cli/target/*.jar /opt/godiddy-cli/
 
 # variables
@@ -31,4 +33,4 @@ ENV godiddy.cli.dummy=dummy
 
 # done
 
-ENTRYPOINT [ "java","-jar", "/opt/godiddy-cli/*.jar" ]
+ENTRYPOINT [ "java", "-jar", "/opt/godiddy-cli/cli-0.1-SNAPSHOT-jar-with-dependencies.jar" ]

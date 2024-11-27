@@ -2,7 +2,7 @@ package com.godiddy.cli.commands.localwallet;
 
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
-import com.godiddy.cli.cliwallet.CLIWallet;
+import com.godiddy.cli.clidata.cliwallet.CLIWallet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;

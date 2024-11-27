@@ -3,7 +3,7 @@ package com.godiddy.cli.commands.registrar;
 import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
-import com.godiddy.cli.clistate.CLIState;
+import com.godiddy.cli.clidata.clistate.CLIState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -77,16 +77,12 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
         // request
 
         RequestOptions requestOptions = new RequestOptions();
-        if (this.options != null) requestOptions.getAdditionalProperties().putAll(this.options);
+        if (this.options != null) this.options.forEach(requestOptions::putAdditionalProperty);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
         if (this.network != null) requestOptions.putAdditionalProperty("network", this.network);
 
         RequestSecret requestSecret = new RequestSecret();
-        if (this.secret != null) {
-            for (Map.Entry<String, String> entry : this.secret.entrySet()) {
-                requestSecret.putAdditionalProperty(entry.getKey(), entry.getValue());
-            }
-        }
+        if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
 
         DidDocument didDocument = this.didDocument.isBlank() ? null : Api.fromJson(this.didDocument, DidDocument.class);
 

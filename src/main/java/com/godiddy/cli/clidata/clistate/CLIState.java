@@ -1,24 +1,21 @@
-package com.godiddy.cli.clistate;
+package com.godiddy.cli.clidata.clistate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.godiddy.api.client.openapi.model.RegistrarRequest;
 import com.godiddy.api.client.openapi.model.RegistrarState;
-import com.godiddy.cli.GodiddyCLIApplication;
+import com.godiddy.cli.clidata.CLIData;
 
 import java.util.Map;
-import java.util.prefs.Preferences;
 
 public class CLIState {
-
-    private static final Preferences preferences = Preferences.userNodeForPackage(GodiddyCLIApplication.class);
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private static Object getObject(String key) {
         try {
-            String value = preferences.get(key, null);
-            String valueClass = preferences.get(key + "Class", null);
+            String value = CLIData.get(key);
+            String valueClass = CLIData.get(key + "Class");
             return value == null ? null : objectMapper.readValue(value, Class.forName(valueClass));
         } catch (JsonProcessingException | ClassNotFoundException ex) {
             throw new IllegalArgumentException(ex);
@@ -27,13 +24,13 @@ public class CLIState {
 
     public static void setObject(String key, Object value) {
         if (value == null) {
-            preferences.remove(key);
-            preferences.remove(key + "Class");
+            CLIData.remove(key);
+            CLIData.remove(key + "Class");
         } else {
             try {
                 String valueClass = value.getClass().getName();
-                preferences.put(key, objectMapper.writeValueAsString(value));
-                preferences.put(key + "Class", valueClass);
+                CLIData.put(key, objectMapper.writeValueAsString(value));
+                CLIData.put(key + "Class", valueClass);
             } catch (JsonProcessingException ex) {
                 throw new IllegalArgumentException(ex);
             }
@@ -41,14 +38,14 @@ public class CLIState {
     }
 
     public static String getMethod() {
-        return preferences.get("method", null);
+        return CLIData.get("method");
     }
 
     public static void setMethod(String method) {
         if (method == null) {
-            preferences.remove("method");
+            CLIData.remove("method");
         } else {
-            preferences.put("method", method);
+            CLIData.put("method", method);
         }
     }
 

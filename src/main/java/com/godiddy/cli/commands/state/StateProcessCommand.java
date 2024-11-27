@@ -12,7 +12,7 @@ import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.api.WalletServiceBase;
-import com.godiddy.cli.clistate.CLIState;
+import com.godiddy.cli.clidata.clistate.CLIState;
 import com.godiddy.cli.commands.state.interfaces.CLIStateClientStateInterface;
 import com.godiddy.cli.commands.state.interfaces.dummy.DummyClientKeyInterface;
 import com.godiddy.cli.commands.state.interfaces.local.LocalClientKeyInterface;
