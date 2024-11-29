@@ -12,6 +12,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -89,7 +90,7 @@ public class ExecuteCommand extends GodiddyAbstractCommand implements Callable<I
 
         List<String> operation = Collections.singletonList(this.operation);
 
-        List<Object> operationData = this.operationData == null ? null : Collections.singletonList(this.operationData);
+        List<Object> operationData = this.operationData == null ? Collections.singletonList(new HashMap<>()) : Collections.singletonList(this.operationData);
 
         ExecuteRequest request = new ExecuteRequest();
         request.setJobId(this.jobId);
