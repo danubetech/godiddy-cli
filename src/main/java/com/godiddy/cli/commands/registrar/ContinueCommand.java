@@ -7,6 +7,7 @@ import com.godiddy.cli.clidata.clistate.CLIState;
 import com.godiddy.cli.commands.state.StateProcessCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 import java.util.concurrent.Callable;
@@ -20,10 +21,22 @@ public class ContinueCommand extends GodiddyAbstractCommand implements Callable<
 
     private static final Logger log = LogManager.getLogger(ContinueCommand.class);
 
+    @CommandLine.Option(
+            names = {"-i", "--interactive"},
+            description = "This enables interactive mode where the request is prepared but not executed. You can then either run \"godiddy-cli state edit-next\" or \"godiddy-cli state continue-next\"."
+    )
+    Boolean interactive;
+
     @Override
     public Integer call() throws Exception {
 
-        return doContinue(true);
+        // interactive?
+
+        boolean interactive = Boolean.TRUE.equals(this.interactive);
+
+        // continue
+
+        return doContinue(interactive);
     }
 
     public static Integer doContinue(boolean interactive) throws Exception {
