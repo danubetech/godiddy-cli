@@ -28,7 +28,7 @@ public class Endpoint {
     public static String getEndpoint() {
         String endpoint = Objects.requireNonNullElse(CLIConfig.getEndpoint(), DEFAULT_ENDPOINT);
         if (DEFAULT_ENDPOINT.equals(endpoint)) {
-            log.info("Using default endpoint: " + DEFAULT_ENDPOINT);
+            log.debug("Using default endpoint: " + DEFAULT_ENDPOINT);
         }
         return endpoint;
     }

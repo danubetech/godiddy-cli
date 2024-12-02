@@ -29,7 +29,7 @@ public class Formatting {
     public static Value getFormatting() {
         Value formatting = Objects.requireNonNullElse(CLIConfig.getFormatting(), Value.valueOf(DEFAULT_FORMATTING));
         if (Value.valueOf(DEFAULT_FORMATTING).equals(formatting)) {
-            log.info("Using default formatting: " + DEFAULT_FORMATTING);
+            log.debug("Using default formatting: " + DEFAULT_FORMATTING);
         }
         return formatting;
     }

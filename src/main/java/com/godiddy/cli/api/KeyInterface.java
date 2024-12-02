@@ -27,7 +27,7 @@ public class KeyInterface {
     public static Value getKeyInterface() {
         Value keyInterface = Objects.requireNonNullElse(CLIConfig.getKeyInterface(), Value.valueOf(DEFAULT_KEYINTERFACE));
         if (Value.valueOf(DEFAULT_KEYINTERFACE).equals(keyInterface)) {
-            log.info("Using default key interface: " + DEFAULT_KEYINTERFACE);
+            log.debug("Using default key interface: " + DEFAULT_KEYINTERFACE);
         }
         return keyInterface;
     }

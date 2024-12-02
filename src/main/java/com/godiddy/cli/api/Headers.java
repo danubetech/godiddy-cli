@@ -13,12 +13,12 @@ public class Headers {
     private static final Logger log = LogManager.getLogger(Headers.class);
 
     public enum Value {
-        on,
         off,
+        on,
         def
     };
 
-    public static final String DEFAULT_HEADERS = "on";
+    public static final String DEFAULT_HEADERS = "off";
     public static final Map<String, Value> PREDEFINED_HEADERS = Map.of(
             "def", Value.valueOf(DEFAULT_HEADERS)
     );
@@ -26,7 +26,7 @@ public class Headers {
     public static Value getHeaders() {
         Value headers = Objects.requireNonNullElse(CLIConfig.getHeaders(), Value.valueOf(DEFAULT_HEADERS));
         if (Value.valueOf(DEFAULT_HEADERS).equals(headers)) {
-            log.info("Using default headers: " + DEFAULT_HEADERS);
+            log.debug("Using default headers: " + DEFAULT_HEADERS);
         }
         return headers;
     }
