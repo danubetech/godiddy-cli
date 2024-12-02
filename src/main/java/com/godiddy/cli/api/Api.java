@@ -11,6 +11,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.godiddy.api.client.ApiClient;
 import com.godiddy.api.client.ApiResponse;
 import com.godiddy.api.client.openapi.api.*;
+import com.godiddy.api.client.openapi.model.CreateRequest;
+import com.godiddy.api.client.openapi.model.DidStateAction;
+import com.godiddy.api.client.openapi.model.RegistrarRequest;
+import com.godiddy.api.client.openapi.model.RegistrarState;
 import uniregistrar.openapi.RFC3339DateFormat;
 
 import java.io.*;
@@ -146,6 +150,31 @@ public class Api {
     }
 
     public static void print(Object object) {
+        if (object instanceof RegistrarRequest registrarRequest) {
+            print(registrarRequest, constructInterpretedString(registrarRequest));
+        } else if (object instanceof RegistrarState registrarState) {
+            print(registrarState, constructInterpretedString(registrarState));
+        } else {
+            print(object, object.getClass().getSimpleName());
+        }
+    }
+
+    private static String constructInterpretedString(RegistrarRequest registrarRequest) {
+        int didDocumentVerificationMethods = ! (registrarRequest instanceof CreateRequest createRequest) ? 0 : createRequest.getDidDocument() == null ? 0 : createRequest.getDidDocument().getVerificationMethod() == null ? 0 : createRequest.getDidDocument().getVerificationMethod().size();
+        int secretVerificationMethods = registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getVerificationMethod() == null ? 0 : registrarRequest.getSecret().getVerificationMethod().size();
+        int signingResponses = registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getSigningResponse() == null ? 0 : registrarRequest.getSecret().getSigningResponse().size();
+        int decryptionResponses = registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getDecryptionResponse() == null ? 0 : registrarRequest.getSecret().getDecryptionResponse().size();
+        return registrarRequest.getClass().getSimpleName() + ": jobId=" + registrarRequest.getJobId() + " / " + didDocumentVerificationMethods + " DID document verification methods / " + secretVerificationMethods + " secret verification methods / " + signingResponses + " signing responses / " + decryptionResponses + " decryption responses";
+    }
+
+    private static String constructInterpretedString(RegistrarState registrarState) {
+        int verificationMethodTemplates = registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getVerificationMethodTemplate() == null ? 0 : didStateAction.getVerificationMethodTemplate().size();
+        int signingRequests = registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getSigningRequest() == null ? 0 : didStateAction.getSigningRequest().size();
+        int decryptionRequests = registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getDecryptionRequest() == null ? 0 : didStateAction.getDecryptionRequest().size();
+        return registrarState.getClass().getSimpleName() + ": jobId=" + registrarState.getJobId() + " / state=" + registrarState.getDidState() + " / " + verificationMethodTemplates + " verification method templates / " + signingRequests + " signing requests / " + decryptionRequests + " decryption requests";
+    }
+
+    private static void print(Object object, String interpretedString) {
         if (object == null) {
             System.out.println("(null)  ");
             return;
@@ -153,7 +182,9 @@ public class Api {
         String string;
         Formatting.Value formatting = Formatting.getFormatting();
         try {
-            if (formatting == Formatting.Value.pretty) {
+            if (formatting == Formatting.Value.interpreted) {
+                string = interpretedString;
+            } else if (formatting == Formatting.Value.pretty) {
                 if (object instanceof String) object = objectMapper.readValue((String) object, Object.class);
                 string = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
             } else if (formatting == Formatting.Value.flat) {

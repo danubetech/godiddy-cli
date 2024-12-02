@@ -13,6 +13,7 @@ public class Formatting {
     private static final Logger log = LogManager.getLogger(Formatting.class);
 
     public enum Value {
+        interpreted,
         pretty,
         flat,
         raw,
@@ -20,7 +21,7 @@ public class Formatting {
         def
     };
 
-    public static final String DEFAULT_FORMATTING = "pretty";
+    public static final String DEFAULT_FORMATTING = "interpreted";
     public static final Map<String, Value> PREDEFINED_FORMATTINGS = Map.of(
             "def", Value.valueOf(DEFAULT_FORMATTING)
     );

@@ -1,5 +1,6 @@
 package com.godiddy.cli.commands.state;
 
+import com.godiddy.api.client.openapi.model.RegistrarRequest;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.clidata.clistate.CLIState;
@@ -28,7 +29,7 @@ public class StatePrevCommand extends GodiddyAbstractCommand implements Callable
 
     @Override
     public Integer call() throws Exception {
-        Object prevRequest = CLIState.getPrevRequest();
+        RegistrarRequest prevRequest = CLIState.getPrevRequest();
         Api.print(prevRequest);
         if (Boolean.TRUE == this.objectNotation) System.out.println(prevRequest);
         return 0;

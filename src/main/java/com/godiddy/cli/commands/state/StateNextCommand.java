@@ -1,5 +1,6 @@
 package com.godiddy.cli.commands.state;
 
+import com.godiddy.api.client.openapi.model.RegistrarRequest;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.clidata.clistate.CLIState;
@@ -28,7 +29,7 @@ public class StateNextCommand extends GodiddyAbstractCommand implements Callable
 
     @Override
     public Integer call() throws Exception {
-        Object nextRequest = CLIState.getNextRequest();
+        RegistrarRequest nextRequest = CLIState.getNextRequest();
         Api.print(nextRequest);
         if (Boolean.TRUE == this.objectNotation) System.out.println(nextRequest);
         return 0;
