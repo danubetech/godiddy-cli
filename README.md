@@ -79,7 +79,7 @@ docker compose run --rm godiddy-cli continue -i
 Also see https://docs.godiddy.com/advanced/universal-registrar-execute/ebsi-execute.
 
 ```
-docker compose run --rm godiddy-cli execute -d did:ebsi:zjUnExsyyweQ9p4cy3nvrVc --op issueOnboardingVC --opdata key=value 
+docker compose run --rm godiddy-cli execute -d did:ebsi:zjUnExsyyweQ9p4cy3nvrVc --op issueOnboardingVC
 
 docker compose run --rm godiddy-cli create -m ebsi -n pilot -c -s VerifiableAuthorisationToOnboard= 
 
