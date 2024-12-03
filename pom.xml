@@ -97,6 +97,7 @@
 		<info.picocli-picocli.version>4.7.6</info.picocli-picocli.version>
 		<org.modelmapper-modelmapper.version>3.2.1</org.modelmapper-modelmapper.version>
 		<nimbus-jose-jwt.version>9.45</nimbus-jose-jwt.version>
+		<org.fusesource.jansi-jansi.version>2.4.1</org.fusesource.jansi-jansi.version>
 
 	</properties>
 
@@ -555,6 +556,11 @@
 				<artifactId>nimbus-jose-jwt</artifactId>
 				<version>${nimbus-jose-jwt.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.fusesource.jansi</groupId>
+				<artifactId>jansi</artifactId>
+				<version>${org.fusesource.jansi-jansi.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -664,6 +670,10 @@
 		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.fusesource.jansi</groupId>
+			<artifactId>jansi</artifactId>
 		</dependency>
 	</dependencies>
 </project>

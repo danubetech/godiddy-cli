@@ -31,6 +31,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Flow;
 import java.util.function.Consumer;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 public class Api {
 
     private static final ObjectMapper objectMapper = JsonMapper.builder()
@@ -103,6 +105,7 @@ public class Api {
         String apiKey = ApiKey.getApiKey();
         builder.header("Authorization", "Bearer " + apiKey);
         HttpRequest httpRequest = builder.build();
+        System.out.println();
         System.out.println(">>> " + httpRequest.method() + " " + httpRequest.uri());
         Api.print(httpRequest.headers(), ">");
         if (httpRequest.bodyPublisher().isPresent()) {
@@ -111,6 +114,7 @@ public class Api {
     };
 
     private static final Consumer<HttpResponse<InputStream>> responseInterceptor = inputStreamHttpResponse -> {
+        System.out.println();
         System.out.println("<<< " + inputStreamHttpResponse.statusCode() + " " + inputStreamHttpResponse.request().uri());
         Api.print(inputStreamHttpResponse.headers(), "<");
     };
@@ -154,37 +158,73 @@ public class Api {
         switch (object) {
             case RegistrarRequest registrarRequest -> print(registrarRequest, constructInterpretedString(registrarRequest));
             case RegistrarState registrarState -> print(registrarState, constructInterpretedString(registrarState));
-            default -> print(object, object.getClass().getSimpleName());
+            default -> print(object, object.getClass().getSimpleName(), Formatting.Value.interpreted.equals(Formatting.getFormatting()) ? Formatting.Value.pretty : Formatting.getFormatting());
         }
     }
 
     private static String constructInterpretedString(RegistrarRequest registrarRequest) {
+        String name = registrarRequest.getClass().getSimpleName();
         String jobId = registrarRequest.getJobId();
-        int didDocumentVerificationMethods = ! (registrarRequest instanceof CreateRequest createRequest) ? 0 : createRequest.getDidDocument() == null ? 0 : createRequest.getDidDocument().getVerificationMethod() == null ? 0 : createRequest.getDidDocument().getVerificationMethod().size();
-        int secretVerificationMethods = registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getVerificationMethod() == null ? 0 : registrarRequest.getSecret().getVerificationMethod().size();
-        int signingResponses = registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getSigningResponse() == null ? 0 : registrarRequest.getSecret().getSigningResponse().size();
-        int decryptionResponses = registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getDecryptionResponse() == null ? 0 : registrarRequest.getSecret().getDecryptionResponse().size();
-        return registrarRequest.getClass().getSimpleName() + ": jobId=" + jobId + " / " + didDocumentVerificationMethods + " DID document verification methods / " + secretVerificationMethods + " secret verification methods / " + signingResponses + " signing responses / " + decryptionResponses + " decryption responses";
+        String didDocumentVerificationMethods = "" + (! (registrarRequest instanceof CreateRequest createRequest) ? 0 : createRequest.getDidDocument() == null ? 0 : createRequest.getDidDocument().getVerificationMethod() == null ? 0 : createRequest.getDidDocument().getVerificationMethod().size()) + " DID document verification methods";
+        String secretVerificationMethods = "" + (registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getVerificationMethod() == null ? 0 : registrarRequest.getSecret().getVerificationMethod().size()) + " secret verification methods";
+        String signingResponses = "" + (registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getSigningResponse() == null ? 0 : registrarRequest.getSecret().getSigningResponse().size()) + " signing responses";
+        String decryptionResponses = "" + (registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getDecryptionResponse() == null ? 0 : registrarRequest.getSecret().getDecryptionResponse().size()) + " decryption responses";
+
+        name = ansi().bold().a(name).boldOff().toString();
+        if (! didDocumentVerificationMethods.startsWith("0")) didDocumentVerificationMethods = ansi().fgBrightYellow().a(didDocumentVerificationMethods).reset().toString();
+        if (! secretVerificationMethods.startsWith("0")) secretVerificationMethods = ansi().fgBrightYellow().a(secretVerificationMethods).reset().toString();
+        if (! signingResponses.startsWith("0")) signingResponses = ansi().fgBrightYellow().a(signingResponses).reset().toString();
+        if (! decryptionResponses.startsWith("0")) decryptionResponses = ansi().fgBrightYellow().a(decryptionResponses).reset().toString();
+
+        return name +
+                ": jobId=" + jobId + " / " +
+                didDocumentVerificationMethods + " / " +
+                secretVerificationMethods + " / " +
+                signingResponses + " / " +
+                decryptionResponses;
     }
 
     private static String constructInterpretedString(RegistrarState registrarState) {
+        String name = registrarState.getClass().getSimpleName();
         String jobId = registrarState.getJobId();
-        String did = registrarState.getDidState() == null ? "null" : registrarState.getDidState().getDid();
         String state = registrarState.getDidState() == null ? "null" : registrarState.getDidState().getState();
-        String action = ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? "null" : didStateAction.getAction();
-        int verificationMethodTemplates = registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getVerificationMethodTemplate() == null ? 0 : didStateAction.getVerificationMethodTemplate().size();
-        int signingRequests = registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getSigningRequest() == null ? 0 : didStateAction.getSigningRequest().size();
-        int decryptionRequests = registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getDecryptionRequest() == null ? 0 : didStateAction.getDecryptionRequest().size();
-        return registrarState.getClass().getSimpleName() + ": jobId=" + jobId + " / did=" + did + " / state=" + state + " / action=" + action + " / " + verificationMethodTemplates + " verification method templates / " + signingRequests + " signing requests / " + decryptionRequests + " decryption requests";
+        String action = ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? "null" : didStateAction.getAction() == null ? "null" : didStateAction.getAction();
+        String did = registrarState.getDidState() == null ? "null" : registrarState.getDidState().getDid();
+        String verificationMethodTemplates = "" + (registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getVerificationMethodTemplate() == null ? 0 : didStateAction.getVerificationMethodTemplate().size()) + " verification method templates";
+        String signingRequests = "" + (registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getSigningRequest() == null ? 0 : didStateAction.getSigningRequest().size()) + " signing requests";
+        String decryptionRequests = "" + (registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getDecryptionRequest() == null ? 0 : didStateAction.getDecryptionRequest().size()) + " decryption requests";
+
+        name = ansi().bold().a(name).boldOff().toString();
+        if ("action".equals(state)) state = ansi().fgBrightGreen().bold().a(state).boldOff().reset().toString();
+        if ("wait".equals(state)) state = ansi().fgBrightYellow().bold().a(state).boldOff().reset().toString();
+        if ("finished".equals(state)) state = ansi().fgBrightBlue().bold().a(state).boldOff().reset().toString();
+        if ("failure".equals(state)) state = ansi().fgBrightRed().bold().a(state).boldOff().reset().toString();
+        if (! action.equals("null")) action = ansi().fgBrightGreen().bold().a(action).boldOff().reset().toString();
+        if (did != null) did = ansi().fgBrightMagenta().a(did).reset().toString();
+        if (! verificationMethodTemplates.startsWith("0")) verificationMethodTemplates = ansi().fgBrightYellow().a(verificationMethodTemplates).reset().toString();
+        if (! signingRequests.startsWith("0")) signingRequests = ansi().fgBrightYellow().a(signingRequests).reset().toString();
+        if (! decryptionRequests.startsWith("0")) decryptionRequests = ansi().fgBrightYellow().a(decryptionRequests).reset().toString();
+
+        return name +
+                ": jobId=" + jobId +
+                " / state=" + state +
+                " / action=" + action +
+                " / did=" + did + " / " +
+                verificationMethodTemplates + " / " +
+                signingRequests + " / " +
+                decryptionRequests;
     }
 
     private static void print(Object object, String interpretedString) {
+        print(object, interpretedString, Formatting.getFormatting());
+    }
+
+    private static void print(Object object, String interpretedString, Formatting.Value formatting) {
         if (object == null) {
             System.out.println("(null)");
             return;
         }
         String string;
-        Formatting.Value formatting = Formatting.getFormatting();
         try {
             if (formatting == Formatting.Value.interpreted) {
                 string = interpretedString;
@@ -205,7 +245,6 @@ public class Api {
             throw new IllegalArgumentException(ex);
         }
         if (string != null) {
-            System.out.println("(" + object.getClass().getName() + ")");
             System.out.println(string);
         }
     }
