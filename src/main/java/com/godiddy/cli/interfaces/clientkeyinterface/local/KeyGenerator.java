@@ -1,4 +1,4 @@
-package com.godiddy.cli.commands.state.interfaces.local;
+package com.godiddy.cli.interfaces.clientkeyinterface.local;
 
 
 import bbs.signatures.Bbs;

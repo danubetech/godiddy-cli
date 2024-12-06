@@ -7,4 +7,4 @@ services:
   godiddy-cli:
     image: godiddy/godiddy-cli:latest
     volumes:
-      - godiddy-cli-data:/opt/godiddy-cli/godiddy-cli-data
+      - godiddy-cli-storage:/opt/godiddy-cli/godiddy-cli-storage

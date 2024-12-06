@@ -1,10 +1,10 @@
-package com.godiddy.cli.clidata.clistate;
+package com.godiddy.cli.clistorage.clistate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.godiddy.api.client.openapi.model.RegistrarRequest;
 import com.godiddy.api.client.openapi.model.RegistrarState;
-import com.godiddy.cli.clidata.CLIData;
+import com.godiddy.cli.clistorage.CLIStorage;
 
 import java.util.Map;
 
@@ -14,8 +14,8 @@ public class CLIState {
 
     private static Object getObject(String key) {
         try {
-            String value = CLIData.get(key);
-            String valueClass = CLIData.get(key + "Class");
+            String value = CLIStorage.get(key);
+            String valueClass = CLIStorage.get(key + "Class");
             return value == null ? null : objectMapper.readValue(value, Class.forName(valueClass));
         } catch (JsonProcessingException | ClassNotFoundException ex) {
             throw new IllegalArgumentException(ex);
@@ -24,13 +24,13 @@ public class CLIState {
 
     public static void setObject(String key, Object value) {
         if (value == null) {
-            CLIData.remove(key);
-            CLIData.remove(key + "Class");
+            CLIStorage.remove(key);
+            CLIStorage.remove(key + "Class");
         } else {
             try {
                 String valueClass = value.getClass().getName();
-                CLIData.put(key, objectMapper.writeValueAsString(value));
-                CLIData.put(key + "Class", valueClass);
+                CLIStorage.put(key, objectMapper.writeValueAsString(value));
+                CLIStorage.put(key + "Class", valueClass);
             } catch (JsonProcessingException ex) {
                 throw new IllegalArgumentException(ex);
             }
@@ -38,14 +38,14 @@ public class CLIState {
     }
 
     public static String getMethod() {
-        return CLIData.get("method");
+        return CLIStorage.get("method");
     }
 
     public static void setMethod(String method) {
         if (method == null) {
-            CLIData.remove("method");
+            CLIStorage.remove("method");
         } else {
-            CLIData.put("method", method);
+            CLIStorage.put("method", method);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.godiddy.cli.commands.state.interfaces.dummy;
+package com.godiddy.cli.interfaces.clientkeyinterface.dummy;
 
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKey;
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKeyInterface;
