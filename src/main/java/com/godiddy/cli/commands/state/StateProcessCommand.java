@@ -8,23 +8,23 @@ import com.danubetech.uniregistrar.local.extensions.handlers.action.HandleAction
 import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretJsonWebKeys;
 import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretVerificationMethods;
 import com.danubetech.walletservice.client.WalletServiceClient;
-import com.godiddy.api.client.openapi.model.*;
+import com.godiddy.api.client.openapi.model.RegistrarRequest;
+import com.godiddy.api.client.openapi.model.RegistrarState;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.api.KeyInterface;
 import com.godiddy.cli.api.WalletServiceBase;
 import com.godiddy.cli.clistorage.clistate.CLIState;
 import com.godiddy.cli.commands.registrar.ContinueCommand;
-import com.godiddy.cli.interfaces.clientstateinterface.CLIStateClientStateInterface;
 import com.godiddy.cli.interfaces.clientkeyinterface.dummy.DummyClientKeyInterface;
 import com.godiddy.cli.interfaces.clientkeyinterface.local.LocalClientKeyInterface;
 import com.godiddy.cli.interfaces.clientkeyinterface.walletservice.WalletServiceClientKeyInterface;
+import com.godiddy.cli.interfaces.clientstateinterface.CLIStateClientStateInterface;
 import com.godiddy.cli.util.MappingUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
 
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Command(
@@ -75,39 +75,20 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
         uniregistrar.openapi.model.RegistrarRequest handlePrevRequest = MappingUtil.map(prevRequest);
 
         HandleStateUpdateVerificationMethods.handleState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
-        HandleStateUpdateTempKeys.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+        HandleStateUpdateTempKeys.handleState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
         HandleFinishedStateImportSecretJsonWebKeys.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
         HandleFinishedStateImportSecretVerificationMethods.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
 
-        // prepare next request
+        // handle state
 
-        RegistrarRequest nextRequest = Api.convert(Api.convert(prevRequest, Map.class), prevRequest.getClass());
-        if (state.getJobId() != null) nextRequest.setJobId(state.getJobId());
-        if (state.getDidState().getDidDocument() != null) {
-            switch (nextRequest) {
-                case CreateRequest createRequest -> createRequest.setDidDocument(state.getDidState().getDidDocument());
-                case UpdateRequest updateRequest -> updateRequest.setDidDocument(updateRequest.getDidDocument().stream().map(x -> state.getDidState().getDidDocument()).toList());
-                case DeactivateRequest ignored -> { }
-                case null -> throw new NullPointerException();
-                default -> throw new IllegalArgumentException("Invalid request type: " + nextRequest.getClass().getSimpleName());
-            }
-        }
+        uniregistrar.openapi.model.RegistrarRequest handleNextRequest = HandleActionState.handleActionState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+        RegistrarRequest nextRequest = MappingUtil.map(handleNextRequest);
 
-        // handle
-
-        uniregistrar.openapi.model.RegistrarRequest handleNextRequest = MappingUtil.map(nextRequest);
-        HandleActionState.handleActionState(handlePrevRequest, handleState, handleNextRequest, clientKeyInterface, clientStateInterface);
-        nextRequest = MappingUtil.map(handleNextRequest);
-
-        if (state.getDidState() instanceof DidStateFinished || state.getDidState() instanceof DidStateFailed) {
-            nextRequest = null;
-        }
-
-        // save and print next request
+        // save next request
 
         CLIState.setNextRequest(nextRequest);
 
-        // finished?
+        // state not handled?
 
         if (nextRequest == null) {
             return 0;
@@ -117,6 +98,7 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
 
         if (interactive) {
             Api.print(nextRequest);
+            System.out.println("Interactive mode on. Execute 'godiddy-cli continue' to send the next request, or execute 'godiddy-cli state edit-next' to edit it.");
             return 0;
         }
 

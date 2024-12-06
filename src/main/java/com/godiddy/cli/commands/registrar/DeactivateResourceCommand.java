@@ -97,6 +97,7 @@ public class DeactivateResourceCommand extends GodiddyAbstractCommand implements
 
         if (interactive) {
             Api.print(request);
+            System.out.println("Interactive mode on. Execute 'godiddy-cli continue' to send the next request, or execute 'godiddy-cli state edit-next' to edit it.");
             return 0;
         }
 
