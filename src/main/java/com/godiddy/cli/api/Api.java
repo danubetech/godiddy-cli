@@ -107,7 +107,7 @@ public class Api {
         HttpRequest httpRequest = builder.build();
         System.out.println();
         System.out.println(">>> " + httpRequest.method() + " " + httpRequest.uri());
-        Api.print(httpRequest.headers(), ">");
+        Api.printHeaders(httpRequest.headers(), ">");
         if (httpRequest.bodyPublisher().isPresent()) {
             httpRequest.bodyPublisher().get().subscribe(loggingSubscriber);
         }
@@ -116,7 +116,7 @@ public class Api {
     private static final Consumer<HttpResponse<InputStream>> responseInterceptor = inputStreamHttpResponse -> {
         System.out.println();
         System.out.println("<<< " + inputStreamHttpResponse.statusCode() + " " + inputStreamHttpResponse.request().uri());
-        Api.print(inputStreamHttpResponse.headers(), "<");
+        Api.printHeaders(inputStreamHttpResponse.headers(), "<");
     };
 
     public static <T> T execute(Callable<ApiResponse<T>> supplier) throws Exception {
@@ -155,11 +155,68 @@ public class Api {
     }
 
     public static void print(Object object) {
+        if (object == null) {
+            print(null, null, null);
+            return;
+        }
         switch (object) {
-            case RegistrarRequest registrarRequest -> print(registrarRequest, constructInterpretedString(registrarRequest));
-            case RegistrarState registrarState -> print(registrarState, constructInterpretedString(registrarState));
+            case RegistrarRequest registrarRequest -> print(registrarRequest, constructInterpretedString(registrarRequest), null);
+            case RegistrarState registrarState -> print(registrarState, constructInterpretedString(registrarState), null);
             default -> print(object, object.getClass().getSimpleName(), Formatting.Value.interpreted.equals(Formatting.getFormatting()) ? Formatting.Value.pretty : Formatting.getFormatting());
         }
+    }
+
+    private static void print(Object object, String interpretedString) {
+        print(object, interpretedString, null);
+    }
+
+    private static void print(Object object, String interpretedString, Formatting.Value formatting) {
+        if (object == null) object = "(null)";
+        if (interpretedString == null) interpretedString = "(null)";
+        if (formatting == null) formatting = Formatting.getFormatting();
+        String string;
+        try {
+            if (formatting == Formatting.Value.interpreted) {
+                string = interpretedString;
+            } else if (formatting == Formatting.Value.pretty) {
+                if (object instanceof String) object = objectMapper.readValue((String) object, Object.class);
+                string = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+            } else if (formatting == Formatting.Value.flat) {
+                if (object instanceof String) object = objectMapper.readValue((String) object, Object.class);
+                string = objectMapper.writeValueAsString(object);
+            } else if (formatting == Formatting.Value.raw) {
+                string = Objects.toString(object);
+            } else if (formatting == Formatting.Value.off) {
+                string = null;
+            } else {
+                throw new IllegalStateException("Unexpected formatting value: " + formatting);
+            }
+        } catch (JsonProcessingException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        if (string != null) {
+            System.out.println(string);
+        }
+    }
+
+    public static void printHeaders(HttpHeaders httpHeaders, String prefix) {
+        String string;
+        Headers.Value headers = Headers.getHeaders();
+        if (headers == Headers.Value.on) {
+            StringWriter stringWriter = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(stringWriter);
+            for (Map.Entry<String, List<String>> headersEntry : httpHeaders.map().entrySet()) {
+                for (String headersValue : headersEntry.getValue()) {
+                    printWriter.println(prefix + headersEntry.getKey() + ": " + headersValue);
+                }
+            }
+            string = stringWriter.toString();
+        } else if (headers == Headers.Value.off) {
+            string = null;
+        } else {
+            throw new IllegalStateException("Unexpected headers value: " + headers);
+        }
+        if (string != null) System.out.println(string);
     }
 
     private static String constructInterpretedString(RegistrarRequest registrarRequest) {
@@ -213,59 +270,5 @@ public class Api {
                 verificationMethodTemplates + " / " +
                 signingRequests + " / " +
                 decryptionRequests;
-    }
-
-    private static void print(Object object, String interpretedString) {
-        print(object, interpretedString, Formatting.getFormatting());
-    }
-
-    private static void print(Object object, String interpretedString, Formatting.Value formatting) {
-        if (object == null) {
-            System.out.println("(null)");
-            return;
-        }
-        String string;
-        try {
-            if (formatting == Formatting.Value.interpreted) {
-                string = interpretedString;
-            } else if (formatting == Formatting.Value.pretty) {
-                if (object instanceof String) object = objectMapper.readValue((String) object, Object.class);
-                string = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
-            } else if (formatting == Formatting.Value.flat) {
-                if (object instanceof String) object = objectMapper.readValue((String) object, Object.class);
-                string = objectMapper.writeValueAsString(object);
-            } else if (formatting == Formatting.Value.raw) {
-                string = Objects.toString(object);
-            } else if (formatting == Formatting.Value.off) {
-                string = null;
-            } else {
-                throw new IllegalStateException("Unexpected formatting value: " + formatting);
-            }
-        } catch (JsonProcessingException ex) {
-            throw new IllegalArgumentException(ex);
-        }
-        if (string != null) {
-            System.out.println(string);
-        }
-    }
-
-    public static void print(HttpHeaders httpHeaders, String prefix) {
-        String string;
-        Headers.Value headers = Headers.getHeaders();
-        if (headers == Headers.Value.on) {
-            StringWriter stringWriter = new StringWriter();
-            PrintWriter printWriter = new PrintWriter(stringWriter);
-            for (Map.Entry<String, List<String>> headersEntry : httpHeaders.map().entrySet()) {
-                for (String headersValue : headersEntry.getValue()) {
-                    printWriter.println(prefix + headersEntry.getKey() + ": " + headersValue);
-                }
-            }
-            string = stringWriter.toString();
-        } else if (headers == Headers.Value.off) {
-            string = null;
-        } else {
-            throw new IllegalStateException("Unexpected headers value: " + headers);
-        }
-        if (string != null) System.out.println(string);
     }
 }

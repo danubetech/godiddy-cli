@@ -40,7 +40,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
             throw new RegistrationException("Cannot get keys from wallet service: " + e.getMessage(), e);
         }
 
-        if (log.isDebugEnabled()) log.debug("For controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose + " and reference " + reference + " found key(s): " + keys);
+        if (log.isInfoEnabled()) log.info("Found " + keys.size() + " key(s) with controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose);
         return keys.stream().map(x -> modelMapper.map(x, ClientKey.class)).toList();
     }
 
@@ -55,10 +55,10 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
             throw new RegistrationException("Cannot get keys from wallet service: " + e.getMessage(), e);
         }
 
-        if (keys.size() > 1) throw new IllegalArgumentException("Unexpected number of keys for controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose + " and reference " + reference + ": " + keys.size());
+        if (keys.size() > 1) throw new IllegalArgumentException("Unexpected number of keys for controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose + ": " + keys.size());
         Key key = keys.isEmpty() ? null : keys.getFirst();
 
-        if (log.isDebugEnabled()) log.debug("For controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose + " and reference " + reference + " found key: " + key);
+        if (log.isInfoEnabled()) log.info("Found key with controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose);
         return key == null ? null : modelMapper.map(key, ClientKey.class);
     }
 
@@ -82,7 +82,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
             throw new RegistrationException("Cannot generate key in wallet service: " + e.getMessage(), e);
         }
 
-        if (log.isDebugEnabled()) log.debug("For controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose + " and key metadata " + keyMetadata + " and reference " + reference + " generated key: " + generatedKey);
+        if (log.isInfoEnabled()) log.info("Generated key with controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose);
         return generatedKey == null ? null : modelMapper.map(generatedKey, ClientKey.class);
     }
 
@@ -105,7 +105,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
             throw new RegistrationException("For URL " + url + " cannot import key: " + ex.getMessage(), ex);
         }
 
-        if (log.isDebugEnabled()) log.debug("For controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose + " and key " + key + " and key metadata " + keyMetadata + " and reference " + reference + " imported key.");
+        if (log.isInfoEnabled()) log.info("Imported key with controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
             throw new RegistrationException("For id " + id + " cannot update key: " + ex.getMessage(), ex);
         }
 
-        if (log.isDebugEnabled()) log.debug("For id " + id + " and controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose + " and key " + key + " and key metadata " + keyMetadata + " and reference " + reference + " updated key.");
+        if (log.isInfoEnabled()) log.info("Updated key with id " + id + " and controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
             throw new RegistrationException("For id " + id + " cannot delete key: " + ex.getMessage(), ex);
         }
 
-        if (log.isDebugEnabled()) log.debug("For id " + id + " deleted key.");
+        if (log.isInfoEnabled()) log.info("Deleted key with id " + id);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
             throw new RegistrationException("For id " + id + " and url " + url + " and algorithm " + algorithm + " cannot sign with key: " + ex.getMessage(), ex);
         }
 
-        if (log.isDebugEnabled()) log.debug("For id " + id + " and url " + url + " and algorithm " + algorithm + " signed with key.");
+        if (log.isInfoEnabled()) log.info("Signed " + content.length + " bytes with key id " + id + " and url " + url + " and algorithm " + algorithm);
         return signature;
     }
 
@@ -168,7 +168,7 @@ public class WalletServiceClientKeyInterface implements ClientKeyInterface {
             throw new RegistrationException("For id " + id + " and url " + url + " and algorithm " + algorithm + " cannot decrypt with key: " + ex.getMessage(), ex);
         }
 
-        if (log.isDebugEnabled()) log.debug("For id " + id + " and url " + url + " and algorithm " + algorithm + " decrypted with key.");
+        if (log.isInfoEnabled()) log.info("Decrypted " + content.length + " bytes with key id " + id + " and url " + url + " and algorithm " + algorithm);
         return decryptedPayload;
     }
 }

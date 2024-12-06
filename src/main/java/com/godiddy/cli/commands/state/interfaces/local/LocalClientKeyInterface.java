@@ -138,6 +138,8 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
         CLIWallet.setWallet(wallet);
 
         clientKey.setKey(removePrivate(clientKey.getKey()));
+
+        if (log.isDebugEnabled()) log.debug("Generated key with controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose);
         return clientKey;
     }
 
@@ -248,6 +250,7 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
 
         // done
 
+        if (log.isDebugEnabled()) log.debug("Signed " + content.length + " bytes with key id " + id + " and controller " + key.getController() + " and url " + url + " and algorithm " + algorithm);
         return signature;
     }
 
