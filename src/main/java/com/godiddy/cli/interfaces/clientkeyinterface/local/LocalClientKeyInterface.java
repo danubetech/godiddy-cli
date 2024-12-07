@@ -16,15 +16,14 @@ import java.net.URI;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
-public class LocalClientKeyInterface implements ClientKeyInterface {
+public class LocalClientKeyInterface implements ClientKeyInterface<LocalClientKey> {
 
     private static final Logger log = LoggerFactory.getLogger(LocalClientKeyInterface.class);
 
     @Override
-    public List<ClientKey> getKeys(URI controller, URI url, String type, String purpose) {
+    public List<LocalClientKey> getKeys(URI controller, URI url, String type, String purpose) {
 
-        LinkedList<ClientKey> wallet = CLIWallet.getWallet();
-        List<ClientKey> keys = wallet != null ? wallet : Collections.emptyList();
+        List<LocalClientKey> keys = getKeysPrivate(controller, url, type, purpose);
 
         if (controller != null) keys = keys.stream().filter(clientKey -> controller.equals(clientKey.getController())).toList();
         if (url != null) keys = keys.stream().filter(clientKey -> url.equals(clientKey.getUrl())).toList();
@@ -36,10 +35,10 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
         return keys;
     }
 
-    private List<ClientKey> getKeysPrivate(URI controller, URI url, String type, String purpose) {
+    private static List<LocalClientKey> getKeysPrivate(URI controller, URI url, String type, String purpose) {
 
-        LinkedList<ClientKey> wallet = CLIWallet.getWallet();
-        List<ClientKey> keys = wallet != null ? wallet : Collections.emptyList();
+        LinkedList<LocalClientKey> wallet = CLIWallet.getWallet();
+        List<LocalClientKey> keys = wallet != null ? wallet : Collections.emptyList();
 
         if (controller != null) keys = keys.stream().filter(clientKey -> controller.equals(clientKey.getController())).toList();
         if (url != null) keys = keys.stream().filter(clientKey -> url.equals(clientKey.getUrl())).toList();
@@ -50,28 +49,29 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
     }
 
     @Override
-    public ClientKey getKey(URI controller, URI url, String type, String purpose) {
+    public LocalClientKey getKey(URI controller, URI url, String type, String purpose) {
 
-        List<ClientKey> keys = this.getKeys(controller, url, type, purpose);
+        List<LocalClientKey> keys = this.getKeys(controller, url, type, purpose);
 
-        ClientKey key = keys.isEmpty() ? null : keys.getFirst();
+        LocalClientKey key = keys.isEmpty() ? null : keys.getFirst();
         if (key != null) key.setKey(removePrivate(key.getKey()));
+
         return key;
     }
 
-    private ClientKey getKeyPrivate(URI controller, URI url, String type, String purpose) {
+    private LocalClientKey getKeyPrivate(URI controller, URI url, String type, String purpose) {
 
-        List<ClientKey> keys = this.getKeysPrivate(controller, url, type, purpose);
+        List<LocalClientKey> keys = this.getKeysPrivate(controller, url, type, purpose);
 
         ClientKey key = keys.isEmpty() ? null : keys.getFirst();
         return key;
     }
 
-    public ClientKey getKey(UUID id) {
+    public LocalClientKey getKey(UUID id) {
 
         if (id == null) throw new IllegalArgumentException("'id' is missing.");
 
-        LinkedList<ClientKey> wallet = CLIWallet.getWallet();
+        LinkedList<LocalClientKey> wallet = CLIWallet.getWallet();
         if (wallet == null) return null;
 
         ClientKey clientKey = wallet.stream().filter(clientKey1 -> id.equals(clientKey1.getId())).findFirst().orElse(null);
@@ -83,7 +83,7 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
 
         if (id == null) throw new IllegalArgumentException("'id' is missing.");
 
-        LinkedList<ClientKey> wallet = CLIWallet.getWallet();
+        LinkedList<LocalClientKey> wallet = CLIWallet.getWallet();
         if (wallet == null) return null;
 
         ClientKey clientKey = wallet.stream().filter(clientKey1 -> id.equals(clientKey1.getId())).findFirst().orElse(null);
@@ -91,67 +91,24 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
     }
 
     @Override
-    public ClientKey generateKey(URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) {
+    public LocalClientKey generateKey(URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) {
 
-        ClientKey clientKey = new ClientKey();
-
-        clientKey.setId(UUID.randomUUID());
-        clientKey.setTimestamp(System.currentTimeMillis());
-        clientKey.setController(controller);
-        clientKey.setUrl(url);
-        clientKey.setType(type);
-        clientKey.setPurpose(purpose);
-
-        // generate key based on type
-
-        if (KeyTypeName.RSA.equals(KeyTypeName.from(type))) {
-            KeyGenerator.generateRsa(clientKey);
-            removeNullValues(clientKey.getKey());
-        } else if (KeyTypeName.Bls12381G1.equals(KeyTypeName.from(type))) {
-            KeyGenerator.generateBls12381G1(clientKey);
-            removeNullValues(clientKey.getKey());
-        } else if (KeyTypeName.Bls12381G2.equals(KeyTypeName.from(type))) {
-            KeyGenerator.generateBls12381G2(clientKey);
-            removeNullValues(clientKey.getKey());
-        } else if (KeyTypeName.secp256k1.equals(KeyTypeName.from(type))) {
-            KeyGenerator.generateEcdsaSecp256k1(clientKey);
-            removeNullValues(clientKey.getKey());
-        } else if (KeyTypeName.Ed25519.equals(KeyTypeName.from(type))) {
-            KeyGenerator.generateEd25519(clientKey);
-            removeNullValues(clientKey.getKey());
-        } else if(KeyTypeName.P_256.equals(KeyTypeName.from(type))){
-            KeyGenerator.generateP256(clientKey);
-            removeNullValues(clientKey.getKey());
-        } else if(KeyTypeName.P_384.equals(KeyTypeName.from(type))){
-            KeyGenerator.generateP384(clientKey);
-            removeNullValues(clientKey.getKey());
-        } else if(KeyTypeName.P_521.equals(KeyTypeName.from(type))){
-            KeyGenerator.generateP521(clientKey);
-            removeNullValues(clientKey.getKey());
-        } else {
-            throw new IllegalArgumentException("Unsupported key type: " + type);
-        }
-
-        LinkedList<ClientKey> wallet = CLIWallet.getWallet();
-        if (wallet == null) wallet = new LinkedList<>();
-        wallet.add(clientKey);
-        CLIWallet.setWallet(wallet);
+        LocalClientKey clientKey = generateKeyPrivate(controller, url, type, purpose, key, keyMetadata);
 
         clientKey.setKey(removePrivate(clientKey.getKey()));
 
-        if (log.isDebugEnabled()) log.debug("Generated key with controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose);
+        if (log.isDebugEnabled()) log.debug("Generated key with id controller " + controller + " and url " + url + " and type " + type + " and purpose " + purpose);
         return clientKey;
     }
 
     @Override
     public void importKey(URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) {
 
-        if (key == null) throw new IllegalArgumentException("Key materials is missing.");
+        if (key == null) throw new IllegalArgumentException("Key materials are missing.");
 
-        ClientKey clientKey = new ClientKey();
+        LocalClientKey clientKey = new LocalClientKey();
 
         clientKey.setId(UUID.randomUUID());
-        clientKey.setTimestamp(System.currentTimeMillis());
         clientKey.setController(controller);
         clientKey.setUrl(url);
         clientKey.setType(type);
@@ -159,7 +116,7 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
         clientKey.setKey(key);
         clientKey.setKeyMetadata(keyMetadata);
 
-        LinkedList<ClientKey> wallet = CLIWallet.getWallet();
+        LinkedList<LocalClientKey> wallet = CLIWallet.getWallet();
         if (wallet == null) wallet = new LinkedList<>();
 
         wallet.add(clientKey);
@@ -167,56 +124,49 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
     }
 
     @Override
-    public void updateKey(UUID id, URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) {
+    public void updateKey(LocalClientKey clientKey, URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) {
 
-        if (id == null) throw new IllegalArgumentException("'id' is missing.");
+        if (clientKey == null) throw new NullPointerException();
 
-        LinkedList<ClientKey> wallet = CLIWallet.getWallet();
-        if (wallet == null) throw new IllegalArgumentException("No key found for 'id' " + id);
+        LinkedList<LocalClientKey> wallet = CLIWallet.getWallet();
+        if (wallet == null) throw new IllegalArgumentException("No key found for 'id' " + clientKey.getId());
 
-        ClientKey clientKey = wallet.stream().filter(clientKey1 -> id.equals(clientKey1.getId())).findFirst().orElse(null);
-        if (clientKey == null) throw new IllegalArgumentException("No key found for 'id' " + id);
+        LocalClientKey updateClientKey = wallet.stream().filter(c -> clientKey.getId().equals(c.getId())).findFirst().orElse(null);
+        if (updateClientKey == null) throw new IllegalArgumentException("No key found for 'id' " + clientKey.getId());
 
-        if (controller != null) clientKey.setController(controller);
-        if (url != null) clientKey.setUrl(url);
-        if (type != null) clientKey.setType(type);
-        if (purpose != null) clientKey.setPurpose(purpose);
-        if (key != null) clientKey.setKey(key);
-        if (keyMetadata != null) clientKey.setKeyMetadata(keyMetadata);
+        if (controller != null) updateClientKey.setController(controller);
+        if (url != null) updateClientKey.setUrl(url);
+        if (type != null) updateClientKey.setType(type);
+        if (purpose != null) updateClientKey.setPurpose(purpose);
+        if (key != null) updateClientKey.setKey(key);
+        if (keyMetadata != null) updateClientKey.setKeyMetadata(keyMetadata);
 
         CLIWallet.setWallet(wallet);
     }
 
     @Override
-    public void deleteKey(UUID id) {
+    public void deleteKey(LocalClientKey clientKey) {
 
-        if (id == null) throw new IllegalArgumentException("'id' is missing.");
+        if (clientKey == null) throw new NullPointerException();
 
-        LinkedList<ClientKey> wallet = CLIWallet.getWallet();
-        if (wallet == null) throw new IllegalArgumentException("No key found for 'id' " + id);
+        LinkedList<LocalClientKey> wallet = CLIWallet.getWallet();
+        if (wallet == null) throw new IllegalArgumentException("No key found for 'id' " + clientKey.getId());
 
-        boolean removed = wallet.removeIf(clientKey -> id.equals(clientKey.getId()));
+        boolean removed = wallet.removeIf(c -> clientKey.getId().equals(c.getId()));
         CLIWallet.setWallet(wallet);
 
-        if (! removed) throw new IllegalArgumentException("No key found for 'id' " + id);
+        if (! removed) throw new IllegalArgumentException("No key found for 'id' " + clientKey.getId());
     }
 
     @Override
-    public byte[] signWithKey(UUID id, URI url, String algorithm, byte[] content) {
+    public byte[] signWithKey(LocalClientKey clientKey, String algorithm, byte[] content) {
 
-        ClientKey key;
+        if (clientKey == null) throw new NullPointerException();
 
-        if (id != null) {
+        clientKey = this.getKeyPrivate(clientKey.getId());
+        if (clientKey == null) throw new IllegalArgumentException("No key found for 'id' " + clientKey.getId());
 
-            key = this.getKeyPrivate(id);
-            if (key == null) throw new IllegalArgumentException("No key found for 'id' " + id);
-        } else {
-
-            key = this.getKeyPrivate(null, url, null, null);
-        }
-
-        if (log.isDebugEnabled())
-            log.debug("Found key with id {} and url {} and type {} and purpose {} and key {}", key.getId(), key.getUrl(), key.getType(), key.getPurpose(), key.getKey());
+        if (log.isDebugEnabled()) log.debug("Found key with id {}: ", clientKey.getKey());
 
         // obtain signer
 
@@ -255,9 +205,65 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
     }
 
     @Override
-    public byte[] decryptWithKey(UUID id, URI url, String algorithm, byte[] content) {
+    public byte[] decryptWithKey(LocalClientKey clientKey, String algorithm, byte[] content) {
         throw new RuntimeException("Not implemented.");
     }
+
+    /*
+     * Private key methods
+     */
+
+    private static LocalClientKey generateKeyPrivate(URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, Map<String, Object> keyMetadata) {
+
+        LocalClientKey clientKey = new LocalClientKey();
+
+        clientKey.setId(UUID.randomUUID());
+        clientKey.setController(controller);
+        clientKey.setUrl(url);
+        clientKey.setType(type);
+        clientKey.setPurpose(purpose);
+
+        // generate key based on type
+
+        if (KeyTypeName.RSA.equals(KeyTypeName.from(type))) {
+            KeyGenerator.generateRsa(clientKey);
+            removeNullValues(clientKey.getKey());
+        } else if (KeyTypeName.Bls12381G1.equals(KeyTypeName.from(type))) {
+            KeyGenerator.generateBls12381G1(clientKey);
+            removeNullValues(clientKey.getKey());
+        } else if (KeyTypeName.Bls12381G2.equals(KeyTypeName.from(type))) {
+            KeyGenerator.generateBls12381G2(clientKey);
+            removeNullValues(clientKey.getKey());
+        } else if (KeyTypeName.secp256k1.equals(KeyTypeName.from(type))) {
+            KeyGenerator.generateEcdsaSecp256k1(clientKey);
+            removeNullValues(clientKey.getKey());
+        } else if (KeyTypeName.Ed25519.equals(KeyTypeName.from(type))) {
+            KeyGenerator.generateEd25519(clientKey);
+            removeNullValues(clientKey.getKey());
+        } else if(KeyTypeName.P_256.equals(KeyTypeName.from(type))){
+            KeyGenerator.generateP256(clientKey);
+            removeNullValues(clientKey.getKey());
+        } else if(KeyTypeName.P_384.equals(KeyTypeName.from(type))){
+            KeyGenerator.generateP384(clientKey);
+            removeNullValues(clientKey.getKey());
+        } else if(KeyTypeName.P_521.equals(KeyTypeName.from(type))){
+            KeyGenerator.generateP521(clientKey);
+            removeNullValues(clientKey.getKey());
+        } else {
+            throw new IllegalArgumentException("Unsupported key type: " + type);
+        }
+
+        LinkedList<LocalClientKey> wallet = CLIWallet.getWallet();
+        if (wallet == null) wallet = new LinkedList<>();
+        wallet.add(clientKey);
+        CLIWallet.setWallet(wallet);
+
+        return clientKey;
+    }
+
+    /*
+     * Helper methods
+     */
 
     private static Map<String,Object> removePrivate(Map<String, Object> key) {
         try {
@@ -269,10 +275,9 @@ public class LocalClientKeyInterface implements ClientKeyInterface {
         }
     }
 
-    private static Map<String,Object> removeNullValues(Map<String, Object> key) {
+    private static void removeNullValues(Map<String, Object> key) {
         try {
             key.values().removeAll(Collections.singleton(null));
-            return key;
         } catch (Exception ex) {
             log.error("Invalid key ",ex);
             throw new IllegalArgumentException("Invalid key",ex);

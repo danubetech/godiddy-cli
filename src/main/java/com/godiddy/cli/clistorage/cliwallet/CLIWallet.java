@@ -4,6 +4,7 @@ import com.danubetech.uniregistrar.clientkeyinterface.ClientKey;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.godiddy.cli.clistorage.CLIStorage;
+import com.godiddy.cli.interfaces.clientkeyinterface.local.LocalClientKey;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class CLIWallet {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static LinkedList<ClientKey> getWallet() {
+    public static LinkedList<LocalClientKey> getWallet() {
         try {
             LinkedList<Map> walletMap = CLIStorage.get("wallet") == null ? null : objectMapper.readValue(CLIStorage.get("wallet"), LinkedList.class);
             if (walletMap == null) return null;
@@ -23,7 +24,7 @@ public class CLIWallet {
         }
     }
 
-    public static void setWallet(List<ClientKey> wallet) {
+    public static void setWallet(List<LocalClientKey> wallet) {
         if (wallet == null) {
             CLIStorage.remove("wallet");
         } else {
