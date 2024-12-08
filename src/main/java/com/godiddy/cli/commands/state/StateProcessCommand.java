@@ -88,6 +88,7 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
                 case CreateRequest createRequest -> createRequest.setDidDocument(state.getDidState().getDidDocument());
                 case UpdateRequest updateRequest -> updateRequest.setDidDocument(updateRequest.getDidDocument().stream().map(x -> state.getDidState().getDidDocument()).toList());
                 case DeactivateRequest ignored -> { }
+                case ExecuteRequest ignored -> { }
                 case null -> throw new NullPointerException();
                 default -> throw new IllegalArgumentException("Invalid request type: " + nextRequest.getClass().getSimpleName());
             }
