@@ -1,11 +1,11 @@
-package com.godiddy.cli.interfaces.clientkeyinterface.local;
+package com.godiddy.cli.interfaces.clientkeyinterface.dummy;
 
 import com.danubetech.uniregistrar.clientkeyinterface.ClientKey;
 
 import java.net.URI;
 import java.util.*;
 
-public class LocalClientKey implements ClientKey {
+public class DummyClientKey implements ClientKey {
 
     private UUID id;
     private URI controller;
@@ -15,10 +15,10 @@ public class LocalClientKey implements ClientKey {
     private Map<String, Object> privateKey;
     private String verificationMethodType;
 
-    public LocalClientKey() {
+    public DummyClientKey() {
     }
 
-    public LocalClientKey(UUID id, URI controller, URI url, String type, List<String> purpose, Map<String, Object> privateKey, String verificationMethodType) {
+    public DummyClientKey(UUID id, URI controller, URI url, String type, List<String> purpose, Map<String, Object> privateKey, String verificationMethodType) {
         this.id = id;
         this.controller = controller;
         this.url = url;
@@ -94,10 +94,19 @@ public class LocalClientKey implements ClientKey {
         return removePrivate(new HashMap<>(this.getPrivateKey()));
     }
 
+    private static Map<String,Object> removePrivate(Map<String, Object> key) {
+        try {
+            key.remove("d");
+            return key;
+        } catch (Exception ex) {
+            return Collections.emptyMap();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        LocalClientKey that = (LocalClientKey) o;
+        DummyClientKey that = (DummyClientKey) o;
         return Objects.equals(id, that.id) && Objects.equals(controller, that.controller) && Objects.equals(url, that.url) && Objects.equals(type, that.type) && Objects.equals(purpose, that.purpose) && Objects.equals(privateKey, that.privateKey) && Objects.equals(verificationMethodType, that.verificationMethodType);
     }
 
@@ -117,14 +126,5 @@ public class LocalClientKey implements ClientKey {
                 ", privateKey=" + privateKey +
                 ", verificationMethodType='" + verificationMethodType + '\'' +
                 '}';
-    }
-
-    private static Map<String,Object> removePrivate(Map<String, Object> key) {
-        try {
-            key.remove("d");
-            return key;
-        } catch (Exception ex) {
-            return Collections.emptyMap();
-        }
     }
 }

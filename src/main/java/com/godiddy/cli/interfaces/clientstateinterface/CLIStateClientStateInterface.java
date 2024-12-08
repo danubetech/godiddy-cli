@@ -11,16 +11,16 @@ import java.util.Objects;
 public class CLIStateClientStateInterface implements ClientStateInterface {
 
     @Override
-    public void putTempKeyController(URI tempKeyController) {
+    public void putTempController(URI tempController) {
         Map<String, Object> clientStateObject = Objects.requireNonNullElse(CLIState.getClientStateObject(), new LinkedHashMap<>());
-        clientStateObject.put("tempKeyController", tempKeyController);
+        clientStateObject.put("tempController", tempController);
         CLIState.setClientStateObject(clientStateObject);
     }
 
     @Override
-    public URI getTempKeyController() {
+    public URI getTempController() {
         Map<String, Object> clientStateObject = Objects.requireNonNullElse(CLIState.getClientStateObject(), new LinkedHashMap<>());
-        String tempKeyController = (String) clientStateObject.get("tempKeyController");
-        return tempKeyController == null ? null : URI.create(tempKeyController);
+        String tempController = (String) clientStateObject.get("tempController");
+        return tempController == null ? null : URI.create(tempController);
     }
 }
