@@ -58,6 +58,7 @@ public class LocalClientKeyInterface implements ClientKeyInterface<LocalClientKe
 
         LocalClientKey localClientKey = new LocalClientKey();
 
+        localClientKey.setId(UUID.randomUUID());
         localClientKey.setController(controller);
         localClientKey.setUrl(url);
         localClientKey.setType(type);
@@ -118,38 +119,34 @@ public class LocalClientKeyInterface implements ClientKeyInterface<LocalClientKe
     }
 
     @Override
-    public void updateKey(LocalClientKey clientKey, URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, String verificationMethodType) {
+    public void updateKey(LocalClientKey localClientKey, URI controller, URI url, String type, List<String> purpose, Map<String, Object> key, String verificationMethodType) {
 
-        if (clientKey == null) throw new NullPointerException();
+        if (localClientKey == null) throw new NullPointerException();
 
         LinkedList<LocalClientKey> wallet = CLIWallet.getWallet();
-        if (wallet == null) throw new IllegalArgumentException("No key found for 'id' " + clientKey.getId());
 
-        LocalClientKey updateClientKey = wallet.stream().filter(c -> clientKey.getId().equals(c.getId())).findFirst().orElse(null);
-        if (updateClientKey == null) throw new IllegalArgumentException("No key found for 'id' " + clientKey.getId());
-
-        if (controller != null) updateClientKey.setController(controller);
-        if (url != null) updateClientKey.setUrl(url);
-        if (type != null) updateClientKey.setType(type);
-        if (purpose != null) updateClientKey.setPurpose(purpose);
-        if (key != null) updateClientKey.setPrivateKey(key);
-        if (verificationMethodType != null) updateClientKey.setVerificationMethodType(verificationMethodType);
+        if (controller != null) localClientKey.setController(controller);
+        if (url != null) localClientKey.setUrl(url);
+        if (type != null) localClientKey.setType(type);
+        if (purpose != null) localClientKey.setPurpose(purpose);
+        if (key != null) localClientKey.setPrivateKey(key);
+        if (verificationMethodType != null) localClientKey.setVerificationMethodType(verificationMethodType);
 
         CLIWallet.setWallet(wallet);
     }
 
     @Override
-    public void deleteKey(LocalClientKey clientKey) {
+    public void deleteKey(LocalClientKey localClientKey) {
 
-        if (clientKey == null) throw new NullPointerException();
+        if (localClientKey == null) throw new NullPointerException();
 
         LinkedList<LocalClientKey> wallet = CLIWallet.getWallet();
-        if (wallet == null) throw new IllegalArgumentException("No key found for 'id' " + clientKey.getId());
+        if (wallet == null) throw new IllegalArgumentException("No key found for 'id' " + localClientKey.getId());
 
-        boolean removed = wallet.removeIf(c -> clientKey.getId().equals(c.getId()));
+        boolean removed = wallet.removeIf(c -> localClientKey.getId().equals(c.getId()));
         CLIWallet.setWallet(wallet);
 
-        if (! removed) throw new IllegalArgumentException("No key found for 'id' " + clientKey.getId());
+        if (! removed) throw new IllegalArgumentException("No key found for 'id' " + localClientKey.getId());
     }
 
     @Override

@@ -91,6 +91,7 @@ public class DeactivateCommand extends GodiddyAbstractCommand implements Callabl
 
         if (interactive) {
             Api.print(request);
+            System.out.println();
             System.out.println("Interactive mode on. Execute 'godiddy-cli continue' to send the next request, or execute 'godiddy-cli state edit-next' to edit it.");
             return 0;
         }

@@ -18,7 +18,7 @@ public class CLIWallet {
         try {
             LinkedList<Map> walletMap = CLIStorage.get("wallet") == null ? null : objectMapper.readValue(CLIStorage.get("wallet"), LinkedList.class);
             if (walletMap == null) return null;
-            return new LinkedList(walletMap.stream().map(x -> objectMapper.convertValue(x, ClientKey.class)).toList());
+            return new LinkedList<>(walletMap.stream().map(x -> objectMapper.convertValue(x, LocalClientKey.class)).toList());
         } catch (JsonProcessingException ex) {
             throw new IllegalArgumentException(ex);
         }

@@ -98,6 +98,7 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
 
         if (interactive) {
             Api.print(nextRequest);
+            System.out.println();
             System.out.println("Interactive mode on. Execute 'godiddy-cli continue' to send the next request, or execute 'godiddy-cli state edit-next' to edit it.");
             return 0;
         }
