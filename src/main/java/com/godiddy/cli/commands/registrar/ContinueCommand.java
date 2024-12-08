@@ -3,7 +3,7 @@ package com.godiddy.cli.commands.registrar;
 import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
-import com.godiddy.cli.clidata.clistate.CLIState;
+import com.godiddy.cli.clistorage.clistate.CLIState;
 import com.godiddy.cli.commands.state.StateProcessCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -70,10 +70,12 @@ public class ContinueCommand extends GodiddyAbstractCommand implements Callable<
 
         if (interactive) {
             Api.print(state);
+            System.out.println();
+            System.out.println("Interactive mode on. Execute 'godiddy-cli state process' to process the state and prepare the next request.");
             return 0;
         }
 
-        // process
+        // process state
 
         return StateProcessCommand.doProcess(interactive);
     }

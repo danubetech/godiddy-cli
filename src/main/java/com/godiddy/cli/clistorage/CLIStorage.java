@@ -1,10 +1,10 @@
-package com.godiddy.cli.clidata;
+package com.godiddy.cli.clistorage;
 
 import java.io.*;
 
-public class CLIData {
+public class CLIStorage {
 
-    private static final String BASE_PATH = "./godiddy-cli-data/";
+    private static final String BASE_PATH = "./godiddy-cli-storage/";
 
     public static String get(String key) {
         File file = new File(BASE_PATH, key);

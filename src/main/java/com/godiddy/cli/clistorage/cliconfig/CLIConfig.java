@@ -1,81 +1,81 @@
-package com.godiddy.cli.clidata.cliconfig;
+package com.godiddy.cli.clistorage.cliconfig;
 
 import com.godiddy.cli.api.Formatting;
 import com.godiddy.cli.api.Headers;
 import com.godiddy.cli.api.KeyInterface;
-import com.godiddy.cli.clidata.CLIData;
+import com.godiddy.cli.clistorage.CLIStorage;
 
 public class CLIConfig {
 
     public static String getApiKey() {
-        return CLIData.get("apiKey");
+        return CLIStorage.get("apiKey");
     }
 
     public static void setApiKey(String apiKey) {
         if (apiKey == null) {
-            CLIData.remove("apiKey");
+            CLIStorage.remove("apiKey");
         } else {
-            CLIData.put("apiKey", apiKey);
+            CLIStorage.put("apiKey", apiKey);
         }
     }
 
     public static String getEndpoint() {
-        return CLIData.get("endpoint");
+        return CLIStorage.get("endpoint");
     }
 
     public static void setEndpoint(String endpoint) {
         if (endpoint == null) {
-            CLIData.remove("endpoint");
+            CLIStorage.remove("endpoint");
         } else {
-            CLIData.put("endpoint", endpoint);
+            CLIStorage.put("endpoint", endpoint);
         }
     }
 
     public static KeyInterface.Value getKeyInterface() {
-        return CLIData.get("keyInterface") == null ? null : KeyInterface.Value.valueOf(CLIData.get("keyInterface"));
+        return CLIStorage.get("keyInterface") == null ? null : KeyInterface.Value.valueOf(CLIStorage.get("keyInterface"));
     }
 
     public static void setKeyInterface(KeyInterface.Value keyInterface) {
         if (keyInterface == null) {
-            CLIData.remove("keyInterface");
+            CLIStorage.remove("keyInterface");
         } else {
-            CLIData.put("keyInterface", keyInterface.name());
+            CLIStorage.put("keyInterface", keyInterface.name());
         }
     }
 
     public static String getWalletServiceBase() {
-        return CLIData.get("walletServiceBase");
+        return CLIStorage.get("walletServiceBase");
     }
 
     public static void setWalletServiceBase(String walletServiceBase) {
         if (walletServiceBase == null) {
-            CLIData.remove("walletServiceBase");
+            CLIStorage.remove("walletServiceBase");
         } else {
-            CLIData.put("walletServiceBase", walletServiceBase);
+            CLIStorage.put("walletServiceBase", walletServiceBase);
         }
     }
 
     public static Formatting.Value getFormatting() {
-        return CLIData.get("formatting") == null ? null : Formatting.Value.valueOf(CLIData.get("formatting"));
+        return CLIStorage.get("formatting") == null ? null : Formatting.Value.valueOf(CLIStorage.get("formatting"));
     }
 
     public static void setFormatting(Formatting.Value formatting) {
         if (formatting == null) {
-            CLIData.remove("formatting");
+            CLIStorage.remove("formatting");
         } else {
-            CLIData.put("formatting", formatting.name());
+            CLIStorage.put("formatting", formatting.name());
         }
     }
 
     public static Headers.Value getHeaders() {
-        return CLIData.get("headers") == null ? null : Headers.Value.valueOf(CLIData.get("headers"));
+        return CLIStorage.get("headers") == null ? null : Headers.Value.valueOf(CLIStorage.get("headers"));
     }
 
     public static void setHeaders(Headers.Value headers) {
         if (headers == null) {
-            CLIData.remove("headers");
+            CLIStorage.remove("headers");
         } else {
-            CLIData.put("headers", headers.name());
+            CLIStorage.put("headers", headers.name());
         }
     }
 }

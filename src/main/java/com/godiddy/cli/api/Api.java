@@ -15,7 +15,7 @@ import com.godiddy.api.client.openapi.model.CreateRequest;
 import com.godiddy.api.client.openapi.model.DidStateAction;
 import com.godiddy.api.client.openapi.model.RegistrarRequest;
 import com.godiddy.api.client.openapi.model.RegistrarState;
-import com.godiddy.cli.clidata.clistate.CLIState;
+import com.godiddy.cli.clistorage.clistate.CLIState;
 import uniregistrar.openapi.RFC3339DateFormat;
 
 import java.io.*;
@@ -23,7 +23,6 @@ import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;

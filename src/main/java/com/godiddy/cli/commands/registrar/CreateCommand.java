@@ -6,7 +6,7 @@ import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
-import com.godiddy.cli.clidata.clistate.CLIState;
+import com.godiddy.cli.clistorage.clistate.CLIState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -109,6 +109,8 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
 
         if (interactive) {
             Api.print(request);
+            System.out.println();
+            System.out.println("Interactive mode on. Execute 'godiddy-cli continue' to send the next request, or execute 'godiddy-cli state edit-next' to edit it.");
             return 0;
         }
 

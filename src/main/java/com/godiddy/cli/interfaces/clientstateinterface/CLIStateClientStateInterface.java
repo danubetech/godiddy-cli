@@ -1,7 +1,7 @@
-package com.godiddy.cli.commands.state.interfaces;
+package com.godiddy.cli.interfaces.clientstateinterface;
 
 import com.danubetech.uniregistrar.clientstateinterface.ClientStateInterface;
-import com.godiddy.cli.clidata.clistate.CLIState;
+import com.godiddy.cli.clistorage.clistate.CLIState;
 
 import java.net.URI;
 import java.util.LinkedHashMap;
@@ -11,16 +11,16 @@ import java.util.Objects;
 public class CLIStateClientStateInterface implements ClientStateInterface {
 
     @Override
-    public void putTempKeyController(URI tempKeyController) {
+    public void putTempController(URI tempController) {
         Map<String, Object> clientStateObject = Objects.requireNonNullElse(CLIState.getClientStateObject(), new LinkedHashMap<>());
-        clientStateObject.put("tempKeyController", tempKeyController);
+        clientStateObject.put("tempController", tempController);
         CLIState.setClientStateObject(clientStateObject);
     }
 
     @Override
-    public URI getTempKeyController() {
+    public URI getTempController() {
         Map<String, Object> clientStateObject = Objects.requireNonNullElse(CLIState.getClientStateObject(), new LinkedHashMap<>());
-        String tempKeyController = (String) clientStateObject.get("tempKeyController");
-        return tempKeyController == null ? null : URI.create(tempKeyController);
+        String tempController = (String) clientStateObject.get("tempController");
+        return tempController == null ? null : URI.create(tempController);
     }
 }
