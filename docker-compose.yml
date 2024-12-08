@@ -1,7 +1,7 @@
 name: godiddy-cli
 
 volumes:
-  godiddy-cli-data:
+  godiddy-cli-storage:
 
 services:
   godiddy-cli:
