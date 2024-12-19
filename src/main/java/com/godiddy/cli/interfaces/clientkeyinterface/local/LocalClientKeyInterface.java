@@ -124,13 +124,17 @@ public class LocalClientKeyInterface implements ClientKeyInterface<LocalClientKe
         if (localClientKey == null) throw new NullPointerException();
 
         LinkedList<LocalClientKey> wallet = CLIWallet.getWallet();
+        if (wallet == null) wallet = new LinkedList<>();
 
-        if (controller != null) localClientKey.setController(controller);
-        if (url != null) localClientKey.setUrl(url);
-        if (type != null) localClientKey.setType(type);
-        if (purpose != null) localClientKey.setPurpose(purpose);
-        if (key != null) localClientKey.setPrivateKey(key);
-        if (verificationMethodType != null) localClientKey.setVerificationMethodType(verificationMethodType);
+        LocalClientKey updateLocalClientKey = wallet.stream().filter(k -> k.getId().equals(localClientKey.getId())).findFirst().orElse(null);
+        if (updateLocalClientKey == null) throw new IllegalArgumentException("Key " + localClientKey.getId() + " not found in local wallet.");
+
+        if (controller != null) updateLocalClientKey.setController(controller);
+        if (url != null) updateLocalClientKey.setUrl(url);
+        if (type != null) updateLocalClientKey.setType(type);
+        if (purpose != null) updateLocalClientKey.setPurpose(purpose);
+        if (key != null) updateLocalClientKey.setPrivateKey(key);
+        if (verificationMethodType != null) updateLocalClientKey.setVerificationMethodType(verificationMethodType);
 
         CLIWallet.setWallet(wallet);
     }
