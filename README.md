@@ -70,6 +70,11 @@ The `-rvmi`, `-rvmt`, `-rvmp` options can be used to add additional keys to a DI
 docker compose run --rm godiddy-cli create -m web -rvmi '#key-1' -rvmt 'Ed25519VerificationKey2020' -rvmp '["authentication", "assertionMethod"]'
 ```
 
+```
+# Update a DID with an additional key
+docker compose run --rm godiddy-cli update -d did:example:123 --diddocop 'addToDidDocument' -rvmi '#key-3' -rvmt 'Ed25519VerificationKey2020' -rvmp '["authentication", "assertionMethod"]'
+```
+
 ### Interactive
 
 If the `-i` option is given in various commands, responses from the API (especially "action" states in client-managed secret mode) have
