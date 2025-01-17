@@ -61,6 +61,15 @@ If the `-c` option is given in various commands, client-managed secret mode is u
 docker compose run --rm godiddy-cli localwallet show
 ```
 
+### Additional key generation
+
+The `-rvmi`, `-rvmt`, `-rvmp` options can be used to add additional keys to a DID document, i.e. keys that are not required by the DID method itself.
+
+```
+# Create a DID with an additional key
+docker compose run --rm godiddy-cli create -m web -rvmi '#key-1' -rvmt 'Ed25519VerificationKey2020' -rvmp '["authentication", "assertionMethod"]'
+```
+
 ### Interactive
 
 If the `-i` option is given in various commands, responses from the API (especially "action" states in client-managed secret mode) have

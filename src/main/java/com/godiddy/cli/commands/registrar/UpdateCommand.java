@@ -12,9 +12,7 @@ import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 @Command(
@@ -50,6 +48,24 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
             description = "Enables client-managed secret mode. Equivalent to setting -o clientSecretMode=true."
     )
     Boolean clientSecretMode;
+
+    @Option(
+            names = {"-rvmi", "--requestVerificationMethodId"},
+            description = "An 'id' property for a verification method to generate."
+    )
+    List<String> requestVerificationMethodId;
+
+    @Option(
+            names = {"-rvmt", "--requestVerificationMethodType"},
+            description = "A 'type' property for a verification method to generate."
+    )
+    List<String> requestVerificationMethodType;
+
+    @Option(
+            names = {"-rvmp", "--requestVerificationMethodPurpose"},
+            description = "A 'type' property for a verification method to generate."
+    )
+    List<String> requestVerificationMethodPurpose;
 
     @Option(
             names = {"-s", "--secret"},
@@ -91,6 +107,20 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
         RequestOptions requestOptions = new RequestOptions();
         if (this.options != null) this.options.forEach(requestOptions::putAdditionalProperty);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
+        if (this.requestVerificationMethodId != null) {
+            List<Map<String, Object>> requestVerificationMethods = new ArrayList<>();
+            for (int i=0; i<this.requestVerificationMethodId.size(); i++) {
+                String requestVerificationMethodId = this.requestVerificationMethodId.get(i);
+                String requestVerificationMethodType = this.requestVerificationMethodType == null ? null : this.requestVerificationMethodType.get(i);
+                String requestVerificationMethodPurpose = this.requestVerificationMethodPurpose == null ? null : this.requestVerificationMethodPurpose.get(i);
+                Map<String, Object> requestVerificationMethod = new HashMap<>();
+                requestVerificationMethod.put("id", requestVerificationMethodId);
+                if (requestVerificationMethodType != null) requestVerificationMethod.put("type", requestVerificationMethodType);
+                if (requestVerificationMethodPurpose != null) requestVerificationMethod.put("purpose", Api.fromJson(requestVerificationMethodPurpose, List.class));
+                requestVerificationMethods.add(requestVerificationMethod);
+            }
+            requestOptions.putAdditionalProperty("requestVerificationMethod", requestVerificationMethods);
+        }
 
         RequestSecret requestSecret = new RequestSecret();
         if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
