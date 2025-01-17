@@ -23,7 +23,7 @@ public class ContinueCommand extends GodiddyAbstractCommand implements Callable<
 
     @CommandLine.Option(
             names = {"-i", "--interactive"},
-            description = "This enables interactive mode where the request is prepared but not executed. You can then either run \"godiddy-cli state edit-next\" or \"godiddy-cli state continue-next\"."
+            description = "This enables interactive mode where the request is prepared but not executed. You can then either run \"godiddy-cli state edit-next\" or \"godiddy-cli state continue\"."
     )
     Boolean interactive;
 
