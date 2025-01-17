@@ -93,8 +93,8 @@ public class DeactivateCommand extends GodiddyAbstractCommand implements Callabl
             List<Map<String, Object>> requestVerificationMethods = new ArrayList<>();
             for (int i=0; i<this.requestVerificationMethodId.size(); i++) {
                 String requestVerificationMethodId = this.requestVerificationMethodId.get(i);
-                String requestVerificationMethodType = this.requestVerificationMethodType == null ? null : this.requestVerificationMethodType.get(i);
-                String requestVerificationMethodPurpose = this.requestVerificationMethodPurpose == null ? null : this.requestVerificationMethodPurpose.get(i);
+                String requestVerificationMethodType = (this.requestVerificationMethodType == null || this.requestVerificationMethodType.size() < (i+1)) ? null : this.requestVerificationMethodType.get(i);
+                String requestVerificationMethodPurpose = (this.requestVerificationMethodPurpose == null || this.requestVerificationMethodPurpose.size() < (i+1)) ? null : this.requestVerificationMethodPurpose.get(i);
                 Map<String, Object> requestVerificationMethod = new HashMap<>();
                 requestVerificationMethod.put("id", requestVerificationMethodId);
                 if (requestVerificationMethodType != null) requestVerificationMethod.put("type", requestVerificationMethodType);
