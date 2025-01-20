@@ -15,7 +15,7 @@ docker compose run --rm godiddy-cli
 
 ```
 # Set either "godiddy" or "godiddy-dev" API endpoint
-docker compose run --rm godiddy-cli config endpoint godiddy-dev
+docker compose run --rm godiddy-cli config endpoint godiddy
 
 # Set your API key
 docker compose run --rm godiddy-cli config apikey b082c420-df67-4b06-899c-b7c51d75fba0
