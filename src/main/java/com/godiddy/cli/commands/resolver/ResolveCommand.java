@@ -2,6 +2,9 @@ package com.godiddy.cli.commands.resolver;
 
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
+import foundation.identity.did.representations.consumption.RepresentationConsumerDIDJSON;
+import foundation.identity.did.representations.production.RepresentationProducerDID;
+import foundation.identity.did.representations.production.RepresentationProducerDIDJSONLD;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -38,11 +41,11 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
         // request
 
         String identifier = this.identifier;
-        String accept = Boolean.TRUE.equals(this.metadata) ? "application/ld+json;profile=\"https://w3id.org/did-resolution\"": "application/did+json";
+        String accept = Boolean.TRUE.equals(this.metadata) ? "application/ld+json;profile=\"https://w3id.org/did-resolution\"": "" + RepresentationProducerDID.MEDIA_TYPE + "," + RepresentationProducerDIDJSONLD.MEDIA_TYPE + "," + RepresentationConsumerDIDJSON.MEDIA_TYPE;
 
         // execute
 
-        Object result = Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(identifier, accept));
+        Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(identifier, accept));
 
         // done
 
