@@ -50,12 +50,15 @@ public class ContinueCommand extends GodiddyAbstractCommand implements Callable<
             return 1;
         }
 
-        RegistrarState state;
+        Object state;
         switch (nextRequest) {
             case CreateRequest createRequest -> state = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, createRequest));
             case UpdateRequest updateRequest -> state = Api.execute(() -> Api.universalRegistrarApi().updateWithHttpInfo(updateRequest));
             case DeactivateRequest deactivateRequest -> state = Api.execute(() -> Api.universalRegistrarApi().deactivateWithHttpInfo(deactivateRequest));
             case ExecuteRequest executeRequest -> state = Api.execute(() -> Api.universalRegistrarApi().executeWithHttpInfo(executeRequest));
+            case CreateResourceRequest createResourceRequest -> state = Api.execute(() -> Api.universalRegistrarApi().createResourceWithHttpInfo(createResourceRequest));
+            case UpdateResourceRequest updateResourceRequest -> state = Api.execute(() -> Api.universalRegistrarApi().updateResourceWithHttpInfo(updateResourceRequest));
+            case DeactivateResourceRequest deactivateResourceRequest -> state = Api.execute(() -> Api.universalRegistrarApi().deactivateResourceWithHttpInfo(deactivateResourceRequest));
             default -> throw new IllegalStateException("Unexpected request class: " + nextRequest.getClass().getName());
         }
 

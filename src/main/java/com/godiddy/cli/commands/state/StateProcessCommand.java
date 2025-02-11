@@ -9,6 +9,7 @@ import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFini
 import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretVerificationMethods;
 import com.danubetech.walletservice.client.WalletServiceClient;
 import com.godiddy.api.client.openapi.model.RegistrarRequest;
+import com.godiddy.api.client.openapi.model.RegistrarResourceState;
 import com.godiddy.api.client.openapi.model.RegistrarState;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
@@ -46,7 +47,7 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
 
         // load state and next request
 
-        RegistrarState state = CLIState.getState();
+        Object state = CLIState.getState();
         if (state == null) {
             System.err.println("No current state for preparing next command.");
             return 1;
@@ -71,18 +72,31 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
 
         // handle
 
-        uniregistrar.openapi.model.RegistrarState handleState = MappingUtil.map(state);
-        uniregistrar.openapi.model.RegistrarRequest handlePrevRequest = MappingUtil.map(prevRequest);
+        RegistrarRequest nextRequest = null;
 
-        HandleStateUpdateVerificationMethods.handleState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
-        HandleStateUpdateTempKeys.handleState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
-        HandleFinishedStateImportSecretJsonWebKeys.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
-        HandleFinishedStateImportSecretVerificationMethods.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+        if (state instanceof RegistrarState registrarState) {
+            uniregistrar.openapi.model.RegistrarState handleState = MappingUtil.map(registrarState);
+            uniregistrar.openapi.model.RegistrarRequest handlePrevRequest = MappingUtil.map(prevRequest);
 
-        // handle state
+            HandleStateUpdateVerificationMethods.handleState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+            HandleStateUpdateTempKeys.handleState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+            HandleFinishedStateImportSecretJsonWebKeys.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+            HandleFinishedStateImportSecretVerificationMethods.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+            uniregistrar.openapi.model.RegistrarRequest handleNextRequest = HandleActionState.handleActionState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
 
-        uniregistrar.openapi.model.RegistrarRequest handleNextRequest = HandleActionState.handleActionState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
-        RegistrarRequest nextRequest = MappingUtil.map(handleNextRequest);
+            nextRequest = MappingUtil.map(handleNextRequest);
+        } else if (state instanceof RegistrarResourceState registrarResourceState) {
+            uniregistrar.openapi.model.RegistrarResourceState handleState = MappingUtil.map(registrarResourceState);
+            uniregistrar.openapi.model.RegistrarRequest handlePrevRequest = MappingUtil.map(prevRequest);
+
+            HandleStateUpdateVerificationMethods.handleState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+            HandleStateUpdateTempKeys.handleState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+            HandleFinishedStateImportSecretJsonWebKeys.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+            HandleFinishedStateImportSecretVerificationMethods.handleFinishedState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+            uniregistrar.openapi.model.RegistrarRequest handleNextRequest = HandleActionState.handleActionState(handlePrevRequest, handleState, clientKeyInterface, clientStateInterface);
+
+            nextRequest = MappingUtil.map(handleNextRequest);
+        }
 
         // save next request
 

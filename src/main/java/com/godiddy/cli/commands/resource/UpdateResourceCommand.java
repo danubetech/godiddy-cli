@@ -1,27 +1,30 @@
-package com.godiddy.cli.commands.registrar;
+package com.godiddy.cli.commands.resource;
 
-import com.godiddy.api.client.openapi.model.DeactivateResourceRequest;
 import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
+import com.godiddy.api.client.openapi.model.UpdateResourceRequest;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.clistorage.clistate.CLIState;
+import com.godiddy.cli.commands.registrar.ContinueCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Command(
-        name = "deactivate",
-        description = "Deactivate a DID URL and associated resource, using the Universal Registrar API.",
+        name = "update",
+        description = "Update a DID URL and associated resource, using the Universal Registrar API.",
         mixinStandardHelpOptions = true
 )
-public class DeactivateResourceCommand extends GodiddyAbstractCommand implements Callable<Integer> {
+public class UpdateResourceCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
-    private static final Logger log = LogManager.getLogger(DeactivateResourceCommand.class);
+    private static final Logger log = LogManager.getLogger(UpdateResourceCommand.class);
 
     @Option(
             names = {"-j", "--jobId"},
@@ -61,6 +64,20 @@ public class DeactivateResourceCommand extends GodiddyAbstractCommand implements
     Map<String, String> secret;
 
     @Option(
+            names = "--contentop",
+            description = "This input field contains the content operation to be used for the DID update resource operation.",
+            defaultValue = "setContent"
+    )
+    String contentOperation;
+
+    @Option(
+            names = "--content",
+            description = "This input field contains the content to be used for the DID update resource operation.",
+            defaultValue = "{}"
+    )
+    String content;
+
+    @Option(
             names = {"-i", "--interactive"},
             description = "This enables interactive mode where the request is prepared but not executed. You can then either run \"godiddy-cli state edit-next\" or \"godiddy-cli continue\"."
     )
@@ -78,11 +95,18 @@ public class DeactivateResourceCommand extends GodiddyAbstractCommand implements
         RequestSecret requestSecret = new RequestSecret();
         if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
 
-        DeactivateResourceRequest request = new DeactivateResourceRequest();
+        List<String> contentOperation = this.contentOperation.isBlank() ? Collections.emptyList() : Collections.singletonList(this.contentOperation);
+
+        List<String> content = this.content.isBlank() ? Collections.emptyList() : Collections.singletonList(this.content);
+
+        UpdateResourceRequest request = new UpdateResourceRequest();
         request.setJobId(this.jobId);
         request.setDid(this.did);
+        request.setRelativeDidUrl(this.relativeDidUrl);
         request.setOptions(requestOptions);
         request.setSecret(requestSecret);
+        request.setContentOperation(contentOperation);
+        request.setContent(content);
 
         // store state
 

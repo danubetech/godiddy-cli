@@ -5,6 +5,7 @@ import com.godiddy.cli.commands.info.InfoRootCommand;
 import com.godiddy.cli.commands.localwallet.LocalWalletRootCommand;
 import com.godiddy.cli.commands.registrar.*;
 import com.godiddy.cli.commands.resolver.ResolveCommand;
+import com.godiddy.cli.commands.resource.ResourceRootCommand;
 import com.godiddy.cli.commands.state.StateRootCommand;
 import com.godiddy.cli.commands.wallet.WalletRootCommand;
 import picocli.CommandLine;
@@ -25,6 +26,7 @@ import java.util.concurrent.Callable;
                 UpdateCommand.class,
                 DeactivateCommand.class,
                 ExecuteCommand.class,
+                ResourceRootCommand.class,
                 ContinueCommand.class,
                 StateRootCommand.class,
                 WalletRootCommand.class,

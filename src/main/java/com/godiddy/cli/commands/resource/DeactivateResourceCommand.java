@@ -1,11 +1,12 @@
-package com.godiddy.cli.commands.registrar;
+package com.godiddy.cli.commands.resource;
 
-import com.godiddy.api.client.openapi.model.CreateResourceRequest;
+import com.godiddy.api.client.openapi.model.DeactivateResourceRequest;
 import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.clistorage.clistate.CLIState;
+import com.godiddy.cli.commands.registrar.ContinueCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -15,13 +16,13 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Command(
-        name = "createResource",
-        description = "Create a DID URL and associated resource, using the Universal Registrar API.",
+        name = "deactivate",
+        description = "Deactivate a DID URL and associated resource, using the Universal Registrar API.",
         mixinStandardHelpOptions = true
 )
-public class CreateResourceCommand extends GodiddyAbstractCommand implements Callable<Integer> {
+public class DeactivateResourceCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
-    private static final Logger log = LogManager.getLogger(CreateResourceCommand.class);
+    private static final Logger log = LogManager.getLogger(DeactivateResourceCommand.class);
 
     @Option(
             names = {"-j", "--jobId"},
@@ -55,27 +56,14 @@ public class CreateResourceCommand extends GodiddyAbstractCommand implements Cal
     Boolean clientSecretMode;
 
     @Option(
-            names = {"-n", "--network"},
-            description = "The requested network for the operation. Equivalent to setting -o network=<network>."
-    )
-    String network;
-
-    @Option(
             names = {"-s", "--secret"},
             description = "This input field contains an object with DID controller keys and other secrets needed for performing the DID operation."
     )
     Map<String, String> secret;
 
     @Option(
-            names = "--content",
-            description = "This input field contains the content to be used for the DID create resource operation.",
-            defaultValue = "{}"
-    )
-    String content;
-
-    @Option(
             names = {"-i", "--interactive"},
-            description = "This enables interactive mode where the request is prepared but not executed. You can then either run \"godiddy-cli state edit-next\" or \"godiddy-cli state continue\"."
+            description = "This enables interactive mode where the request is prepared but not executed. You can then either run \"godiddy-cli state edit-next\" or \"godiddy-cli continue\"."
     )
     Boolean interactive;
 
@@ -87,20 +75,15 @@ public class CreateResourceCommand extends GodiddyAbstractCommand implements Cal
         RequestOptions requestOptions = new RequestOptions();
         if (this.options != null) this.options.forEach(requestOptions::putAdditionalProperty);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
-        if (this.network != null) requestOptions.putAdditionalProperty("network", this.network);
 
         RequestSecret requestSecret = new RequestSecret();
         if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
 
-        String content = this.content.isBlank() ? null : this.content;
-
-        CreateResourceRequest request = new CreateResourceRequest();
+        DeactivateResourceRequest request = new DeactivateResourceRequest();
         request.setJobId(this.jobId);
         request.setDid(this.did);
-        request.setRelativeDidUrl(this.relativeDidUrl);
         request.setOptions(requestOptions);
         request.setSecret(requestSecret);
-        request.setContent(content);
 
         // store state
 

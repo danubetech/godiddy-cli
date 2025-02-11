@@ -3,7 +3,6 @@ package com.godiddy.cli.clistorage.clistate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.godiddy.api.client.openapi.model.RegistrarRequest;
-import com.godiddy.api.client.openapi.model.RegistrarState;
 import com.godiddy.cli.clistorage.CLIStorage;
 
 import java.util.Map;
@@ -49,11 +48,11 @@ public class CLIState {
         }
     }
 
-    public static RegistrarState getState() {
-        return (RegistrarState) getObject("state");
+    public static Object getState() {
+        return getObject("state");
     }
 
-    public static void setState(RegistrarState state) {
+    public static void setState(Object state) {
         setObject("state", state);
     }
 

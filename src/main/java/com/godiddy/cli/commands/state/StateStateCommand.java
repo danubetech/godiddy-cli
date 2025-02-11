@@ -1,6 +1,5 @@
 package com.godiddy.cli.commands.state;
 
-import com.godiddy.api.client.openapi.model.RegistrarState;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
 import com.godiddy.cli.clistorage.clistate.CLIState;
@@ -29,7 +28,7 @@ public class StateStateCommand extends GodiddyAbstractCommand implements Callabl
 
     @Override
     public Integer call() throws Exception {
-        RegistrarState state = CLIState.getState();
+        Object state = CLIState.getState();
         Api.print(state);
         if (Boolean.TRUE == this.objectNotation) System.out.println(state);
         return 0;

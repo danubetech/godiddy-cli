@@ -13,6 +13,9 @@ public class MappingUtil {
             case UpdateRequest ignored -> objectMapper.convertValue(registrarRequest, uniregistrar.openapi.model.UpdateRequest.class);
             case DeactivateRequest ignored -> objectMapper.convertValue(registrarRequest, uniregistrar.openapi.model.DeactivateRequest.class);
             case ExecuteRequest ignored -> objectMapper.convertValue(registrarRequest, uniregistrar.openapi.model.ExecuteRequest.class);
+            case CreateResourceRequest ignored -> objectMapper.convertValue(registrarRequest, uniregistrar.openapi.model.CreateResourceRequest.class);
+            case UpdateResourceRequest ignored -> objectMapper.convertValue(registrarRequest, uniregistrar.openapi.model.UpdateResourceRequest.class);
+            case DeactivateResourceRequest ignored -> objectMapper.convertValue(registrarRequest, uniregistrar.openapi.model.DeactivateResourceRequest.class);
             case null -> null;
             default -> objectMapper.convertValue(registrarRequest, uniregistrar.openapi.model.RegistrarRequest.class);
         };
@@ -24,6 +27,9 @@ public class MappingUtil {
             case uniregistrar.openapi.model.UpdateRequest ignored -> objectMapper.convertValue(registrarRequest, UpdateRequest.class);
             case uniregistrar.openapi.model.DeactivateRequest ignored -> objectMapper.convertValue(registrarRequest, DeactivateRequest.class);
             case uniregistrar.openapi.model.ExecuteRequest ignored -> objectMapper.convertValue(registrarRequest, ExecuteRequest.class);
+            case uniregistrar.openapi.model.CreateResourceRequest ignored -> objectMapper.convertValue(registrarRequest, CreateResourceRequest.class);
+            case uniregistrar.openapi.model.UpdateResourceRequest ignored -> objectMapper.convertValue(registrarRequest, UpdateResourceRequest.class);
+            case uniregistrar.openapi.model.DeactivateResourceRequest ignored -> objectMapper.convertValue(registrarRequest, DeactivateResourceRequest.class);
             case null -> null;
             default -> objectMapper.convertValue(registrarRequest, RegistrarRequest.class);
         };
@@ -48,6 +54,26 @@ public class MappingUtil {
             case uniregistrar.openapi.model.ExecuteState ignored -> objectMapper.convertValue(registrarState, ExecuteState.class);
             case null -> null;
             default -> objectMapper.convertValue(registrarState, RegistrarState.class);
+        };
+    }
+
+    public static uniregistrar.openapi.model.RegistrarResourceState map(RegistrarResourceState registrarResourceState) {
+        return switch (registrarResourceState) {
+            case CreateResourceState ignored -> objectMapper.convertValue(registrarResourceState, uniregistrar.openapi.model.CreateResourceState.class);
+            case UpdateResourceState ignored -> objectMapper.convertValue(registrarResourceState, uniregistrar.openapi.model.UpdateResourceState.class);
+            case DeactivateResourceState ignored -> objectMapper.convertValue(registrarResourceState, uniregistrar.openapi.model.DeactivateResourceState.class);
+            case null -> null;
+            default -> objectMapper.convertValue(registrarResourceState, uniregistrar.openapi.model.RegistrarResourceState.class);
+        };
+    }
+
+    public static RegistrarResourceState map(uniregistrar.openapi.model.RegistrarResourceState registrarResourceState) {
+        return switch (registrarResourceState) {
+            case uniregistrar.openapi.model.CreateResourceState ignored -> objectMapper.convertValue(registrarResourceState, CreateResourceState.class);
+            case uniregistrar.openapi.model.UpdateResourceState ignored -> objectMapper.convertValue(registrarResourceState, UpdateResourceState.class);
+            case uniregistrar.openapi.model.DeactivateResourceState ignored -> objectMapper.convertValue(registrarResourceState, DeactivateResourceState.class);
+            case null -> null;
+            default -> objectMapper.convertValue(registrarResourceState, RegistrarResourceState.class);
         };
     }
 }
