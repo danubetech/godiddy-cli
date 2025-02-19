@@ -1,10 +1,9 @@
 package com.godiddy.cli.clistorage.cliwallet;
 
-import com.danubetech.uniregistrar.clientkeyinterface.ClientKey;
+import com.danubetech.kms.clientkeyinterface.impl.local.LocalClientKey;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.godiddy.cli.clistorage.CLIStorage;
-import com.godiddy.cli.interfaces.clientkeyinterface.local.LocalClientKey;
 
 import java.util.LinkedList;
 import java.util.List;

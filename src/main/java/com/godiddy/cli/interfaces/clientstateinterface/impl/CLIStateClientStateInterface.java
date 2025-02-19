@@ -1,6 +1,6 @@
-package com.godiddy.cli.interfaces.clientstateinterface;
+package com.godiddy.cli.interfaces.clientstateinterface.impl;
 
-import com.danubetech.uniregistrar.clientstateinterface.ClientStateInterface;
+import com.danubetech.kms.clientstateinterface.ClientStateInterface;
 import com.godiddy.cli.clistorage.clistate.CLIState;
 
 import java.net.URI;

@@ -89,6 +89,7 @@
 		<key-formats-java.version>1.20.0</key-formats-java.version>
 		<did-common-java.version>1.15.0</did-common-java.version>
 		<danubetech-common-java.version>1.25-SNAPSHOT</danubetech-common-java.version>
+		<danubetech-kms-java.version>0.1-SNAPSHOT</danubetech-kms-java.version>
 		<com.github.mattrglobal-bbs.signatures.version>2.0</com.github.mattrglobal-bbs.signatures.version>
 
 		<!-- Other Versions -->
@@ -529,6 +530,11 @@
 				<version>${danubetech-common-java.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.danubetech</groupId>
+				<artifactId>danubetech-kms-java</artifactId>
+				<version>${danubetech-kms-java.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.github.mattrglobal</groupId>
 				<artifactId>bbs.signatures</artifactId>
 				<version>${com.github.mattrglobal-bbs.signatures.version}</version>
@@ -647,6 +653,10 @@
 		<dependency>
 			<groupId>com.danubetech</groupId>
 			<artifactId>danubetech-common-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.danubetech</groupId>
+			<artifactId>danubetech-kms-java</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.github.mattrglobal</groupId>
