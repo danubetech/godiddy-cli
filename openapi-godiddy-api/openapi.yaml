@@ -15,6 +15,7 @@ tags:
   - name: Universal Verifier
   - name: Wallet Service
   - name: Version Service
+  - name: Revocation Service
 paths:
   /universal-resolver/identifiers/{identifier}:
     get:
@@ -1652,6 +1653,38 @@ paths:
           description: Request rate limit exceeded.
         '500':
           description: Internal Server Error
+  /revocation-service/revocation/revoke:
+    post:
+      tags:
+        - Revocation Service
+      summary: Revoke a credential.
+      operationId: revoke
+      parameters:
+        - in: query
+          required: true
+          name: credentialFormat
+          schema:
+            type: string
+          description: A string that identifies the format of the credential; this
+            is used to parse the credential and to look up the type of credential
+            status mechanism, which in turn will determine which driver will be used.
+          example: jsonld
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevokeRequest'
+      responses:
+        '200':
+          description: successfully revoked!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevokeResponse'
+        '400':
+          description: invalid input!
+        '500':
+          description: error!
 components:
   schemas:
     ResolutionResult:
@@ -2622,3 +2655,57 @@ components:
           $ref: '#/components/schemas/VerifyOptions'
     VerifyPresentationResponse:
       $ref: '#/components/schemas/VerificationResult'
+    InitializeRequest:
+      type: object
+      required:
+        - credential
+      properties:
+        credential:
+          type: object
+        options:
+          type: object
+    InitializeResponse:
+      type: object
+      required:
+        - credential
+      properties:
+        credential:
+          type: object
+        metadata:
+          type: object
+    RevokeRequest:
+      type: object
+      required:
+        - credential
+      properties:
+        credential:
+          type: object
+        options:
+          type: object
+    RevokeResponse:
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+        metadata:
+          type: object
+    CheckRequest:
+      type: object
+      required:
+        - credential
+      properties:
+        credential:
+          type: object
+        options:
+          type: object
+    CheckResponse:
+      type: object
+      required:
+        - revoked
+      properties:
+        revoked:
+          type: boolean
+        metadata:
+          type: object
