@@ -1,7 +1,7 @@
 package com.godiddy.cli.commands.resolver;
 
 import com.godiddy.cli.GodiddyAbstractCommand;
-import com.godiddy.cli.api.Api;
+import com.godiddy.cli.config.Api;
 import foundation.identity.did.representations.consumption.RepresentationConsumerDIDJSON;
 import foundation.identity.did.representations.production.RepresentationProducerDID;
 import foundation.identity.did.representations.production.RepresentationProducerDIDJSONLD;

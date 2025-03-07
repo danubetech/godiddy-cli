@@ -2,7 +2,7 @@ package com.godiddy.cli.commands.state;
 
 import com.godiddy.api.client.openapi.model.RegistrarRequest;
 import com.godiddy.cli.GodiddyAbstractCommand;
-import com.godiddy.cli.api.Api;
+import com.godiddy.cli.config.Api;
 import com.godiddy.cli.clistorage.clistate.CLIState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

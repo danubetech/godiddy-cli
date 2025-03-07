@@ -3,7 +3,7 @@ package com.godiddy.cli.commands.kms;
 import com.danubetech.kms.clientkeyinterface.ClientKey;
 import com.danubetech.kms.clientkeyinterface.ClientKeyInterface;
 import com.godiddy.cli.GodiddyAbstractCommand;
-import com.godiddy.cli.api.Api;
+import com.godiddy.cli.config.Api;
 import com.godiddy.cli.interfaces.Interfaces;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

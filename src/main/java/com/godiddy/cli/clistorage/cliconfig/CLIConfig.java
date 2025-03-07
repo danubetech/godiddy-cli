@@ -1,8 +1,8 @@
 package com.godiddy.cli.clistorage.cliconfig;
 
-import com.godiddy.cli.api.Formatting;
-import com.godiddy.cli.api.Headers;
-import com.godiddy.cli.api.Kms;
+import com.godiddy.cli.config.Formatting;
+import com.godiddy.cli.config.Headers;
+import com.godiddy.cli.config.Kms;
 import com.godiddy.cli.clistorage.CLIStorage;
 
 public class CLIConfig {

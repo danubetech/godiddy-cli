@@ -11,7 +11,7 @@ import com.godiddy.api.client.openapi.model.RegistrarRequest;
 import com.godiddy.api.client.openapi.model.RegistrarResourceState;
 import com.godiddy.api.client.openapi.model.RegistrarState;
 import com.godiddy.cli.GodiddyAbstractCommand;
-import com.godiddy.cli.api.Api;
+import com.godiddy.cli.config.Api;
 import com.godiddy.cli.clistorage.clistate.CLIState;
 import com.godiddy.cli.commands.registrar.ContinueCommand;
 import com.godiddy.cli.interfaces.Interfaces;

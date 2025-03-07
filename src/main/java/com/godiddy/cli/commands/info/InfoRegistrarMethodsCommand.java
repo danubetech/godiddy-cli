@@ -1,7 +1,7 @@
 package com.godiddy.cli.commands.info;
 
 import com.godiddy.cli.GodiddyAbstractCommand;
-import com.godiddy.cli.api.Api;
+import com.godiddy.cli.config.Api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;

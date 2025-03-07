@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.config;
 
-import com.godiddy.cli.api.Endpoint;
+import com.godiddy.cli.config.Endpoint;
 import com.godiddy.cli.clistorage.cliconfig.CLIConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

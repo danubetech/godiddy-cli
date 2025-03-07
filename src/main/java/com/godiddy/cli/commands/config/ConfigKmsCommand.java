@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.config;
 
-import com.godiddy.cli.api.Kms;
+import com.godiddy.cli.config.Kms;
 import com.godiddy.cli.clistorage.cliconfig.CLIConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

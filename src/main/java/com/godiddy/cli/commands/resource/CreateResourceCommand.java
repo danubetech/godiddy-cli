@@ -4,7 +4,7 @@ import com.godiddy.api.client.openapi.model.CreateResourceRequest;
 import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
-import com.godiddy.cli.api.Api;
+import com.godiddy.cli.config.Api;
 import com.godiddy.cli.clistorage.clistate.CLIState;
 import com.godiddy.cli.commands.registrar.ContinueCommand;
 import org.apache.logging.log4j.LogManager;

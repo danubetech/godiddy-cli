@@ -1,4 +1,4 @@
-package com.godiddy.cli.api;
+package com.godiddy.cli.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
