@@ -61,10 +61,10 @@
 		<!-- Testing Versions -->
 
 		<junit.version>4.13.2</junit.version>
-		<junit-jupiter.version>5.11.4</junit-jupiter.version>
+		<junit-jupiter.version>5.12.0</junit-jupiter.version>
 		<junit-platform.version>1.10.2</junit-platform.version>
-		<junit-platform-commons.version>1.11.4</junit-platform-commons.version>
-		<mockito-core.version>5.15.2</mockito-core.version>
+		<junit-platform-commons.version>1.12.0</junit-platform-commons.version>
+		<mockito-core.version>5.16.0</mockito-core.version>
 
 		<!-- Systems Versions -->
 
@@ -72,20 +72,20 @@
 
 		<!-- Spring Versions -->
 
-		<springframework.boot.version>3.4.1</springframework.boot.version>
+		<springframework.boot.version>3.4.3</springframework.boot.version>
 
 		<!-- OpenAPI Versions -->
 
 		<openapi-generator.version>7.4.0</openapi-generator.version>
-		<fasterxml.jackson.version>2.18.2</fasterxml.jackson.version>
-		<fasterxml.jackson.yaml.version>2.18.2</fasterxml.jackson.yaml.version>
+		<fasterxml.jackson.version>2.18.3</fasterxml.jackson.version>
+		<fasterxml.jackson.yaml.version>2.18.3</fasterxml.jackson.yaml.version>
 		<org.openapitools-jackson-databind-nullable.version>0.2.6</org.openapitools-jackson-databind-nullable.version>
 		<jakarta-annotation.version>3.0.0</jakarta-annotation.version>
-		<jakarta-validation.version>3.1.0</jakarta-validation.version>
+		<jakarta-validation.version>3.1.1</jakarta-validation.version>
 
 		<!-- Danube Tech Versions -->
 
-		<wallet-service.version>1.6.0</wallet-service.version>
+		<wallet-service.version>1.7.0</wallet-service.version>
 		<key-formats-java.version>1.20.0</key-formats-java.version>
 		<did-common-java.version>1.15.0</did-common-java.version>
 		<danubetech-common-java.version>1.25-SNAPSHOT</danubetech-common-java.version>
@@ -94,10 +94,10 @@
 
 		<!-- Other Versions -->
 
-		<commons-codec.version>1.17.2</commons-codec.version>
+		<commons-codec.version>1.18.0</commons-codec.version>
 		<info.picocli-picocli.version>4.7.6</info.picocli-picocli.version>
 		<org.modelmapper-modelmapper.version>3.2.2</org.modelmapper-modelmapper.version>
-		<nimbus-jose-jwt.version>10.0.1</nimbus-jose-jwt.version>
+		<nimbus-jose-jwt.version>10.0.2</nimbus-jose-jwt.version>
 		<org.fusesource.jansi-jansi.version>2.4.1</org.fusesource.jansi-jansi.version>
 
 	</properties>
