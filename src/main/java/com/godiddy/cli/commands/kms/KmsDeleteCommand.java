@@ -3,7 +3,6 @@ package com.godiddy.cli.commands.kms;
 import com.danubetech.kms.clientkeyinterface.ClientKey;
 import com.danubetech.kms.clientkeyinterface.ClientKeyInterface;
 import com.godiddy.cli.GodiddyAbstractCommand;
-import com.godiddy.cli.config.Api;
 import com.godiddy.cli.interfaces.Interfaces;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -13,11 +12,11 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 @Command(
-        name = "keys",
-        description = "Get key(s).",
+        name = "delete",
+        description = "Delete key(s).",
         mixinStandardHelpOptions = true
 )
-public class KmsGetKeysCommand extends GodiddyAbstractCommand implements Callable<Integer> {
+public class KmsDeleteCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
     @Option(
             names = {"-c", "--controller"},
@@ -55,15 +54,15 @@ public class KmsGetKeysCommand extends GodiddyAbstractCommand implements Callabl
 
         // instantiate client key interface
 
-        ClientKeyInterface<?> clientKeyInterface = Interfaces.instantiateClientKeyInterface();
+        final ClientKeyInterface<? extends ClientKey> clientKeyInterface = Interfaces.instantiateClientKeyInterface();
 
         // execute
 
         List<? extends ClientKey> clientKeys = clientKeyInterface.getKeys(controller, url, type, purpose);
+        for (ClientKey clientKey : clientKeys) clientKeyInterface.deleteKey(clientKey);
 
         // done
 
-        Api.print(clientKeys);
         return 0;
     }
 }

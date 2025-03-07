@@ -5,8 +5,6 @@ import com.danubetech.kms.clientkeyinterface.ClientKeyInterface;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.config.Api;
 import com.godiddy.cli.interfaces.Interfaces;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -15,13 +13,11 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 @Command(
-        name = "keys",
-        description = "Get key(s).",
+        name = "controllers",
+        description = "Get controller(s).",
         mixinStandardHelpOptions = true
 )
 public class KmsGetControllersCommand extends GodiddyAbstractCommand implements Callable<Integer> {
-
-    private static final Logger log = LogManager.getLogger(KmsGetControllersCommand.class);
 
     @Option(
             names = {"-c", "--controller"},
@@ -47,13 +43,6 @@ public class KmsGetControllersCommand extends GodiddyAbstractCommand implements 
     )
     String purpose;
 
-    @Option(
-            names = {"-l", "--limit"},
-            description = "The limit (total number) of keys to retrieve.",
-            defaultValue = "10"
-    )
-    Long limit;
-
     @Override
     public Integer call() throws Exception {
 
@@ -72,9 +61,13 @@ public class KmsGetControllersCommand extends GodiddyAbstractCommand implements 
 
         List<? extends ClientKey> clientKeys = clientKeyInterface.getKeys(controller, url, type, purpose);
 
+        // filter controllers
+
+        List<URI> clientKeyControllers = clientKeys.stream().map(ClientKey::getController).toList();
+
         // done
 
-        Api.print(clientKeys);
+        Api.print(clientKeyControllers);
         return 0;
     }
 }
