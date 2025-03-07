@@ -2,7 +2,7 @@ package com.godiddy.cli.clistorage.cliconfig;
 
 import com.godiddy.cli.api.Formatting;
 import com.godiddy.cli.api.Headers;
-import com.godiddy.cli.api.KeyInterface;
+import com.godiddy.cli.api.Kms;
 import com.godiddy.cli.clistorage.CLIStorage;
 
 public class CLIConfig {
@@ -31,15 +31,15 @@ public class CLIConfig {
         }
     }
 
-    public static KeyInterface.Value getKeyInterface() {
-        return CLIStorage.get("keyInterface") == null ? null : KeyInterface.Value.valueOf(CLIStorage.get("keyInterface"));
+    public static Kms.Value getKms() {
+        return CLIStorage.get("kms") == null ? null : Kms.Value.valueOf(CLIStorage.get("kms"));
     }
 
-    public static void setKeyInterface(KeyInterface.Value keyInterface) {
-        if (keyInterface == null) {
-            CLIStorage.remove("keyInterface");
+    public static void setKms(Kms.Value kms) {
+        if (kms == null) {
+            CLIStorage.remove("kms");
         } else {
-            CLIStorage.put("keyInterface", keyInterface.name());
+            CLIStorage.put("kms", kms.name());
         }
     }
 

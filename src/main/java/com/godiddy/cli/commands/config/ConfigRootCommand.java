@@ -12,7 +12,7 @@ import java.util.concurrent.Callable;
         subcommands = {
                 ConfigApiKeyCommand.class,
                 ConfigEndpointCommand.class,
-                ConfigKeyInterfaceCommand.class,
+                ConfigKmsCommand.class,
                 ConfigWalletServiceBaseCommand.class,
                 ConfigFormattingCommand.class,
                 ConfigHeadersCommand.class

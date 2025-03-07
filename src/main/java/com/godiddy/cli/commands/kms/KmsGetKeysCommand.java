@@ -1,8 +1,10 @@
-package com.godiddy.cli.commands.wallet;
+package com.godiddy.cli.commands.kms;
 
-import com.godiddy.api.client.openapi.model.Key;
+import com.danubetech.kms.clientkeyinterface.ClientKey;
+import com.danubetech.kms.clientkeyinterface.ClientKeyInterface;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
+import com.godiddy.cli.interfaces.Interfaces;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -17,9 +19,9 @@ import java.util.concurrent.Callable;
         description = "Get key(s).",
         mixinStandardHelpOptions = true
 )
-public class WalletGetKeysCommand extends GodiddyAbstractCommand implements Callable<Integer> {
+public class KmsGetKeysCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
-    private static final Logger log = LogManager.getLogger(WalletGetKeysCommand.class);
+    private static final Logger log = LogManager.getLogger(KmsGetKeysCommand.class);
 
     @Option(
             names = {"-c", "--controller"},
@@ -61,14 +63,18 @@ public class WalletGetKeysCommand extends GodiddyAbstractCommand implements Call
         URI url = this.url == null ? null : URI.create(this.url);
         String type = this.type;
         String purpose = this.purpose;
-        Long limit = this.limit;
+
+        // instantiate client key interface
+
+        ClientKeyInterface<?> clientKeyInterface = Interfaces.instantiateClientKeyInterface();
 
         // execute
 
-        List<Key> result = Api.execute(() -> Api.walletServiceApi().getKeysWithHttpInfo(controller, url, type, purpose, limit));
+        List<? extends ClientKey> clientKeys = clientKeyInterface.getKeys(controller, url, type, purpose);
 
         // done
 
+        Api.print(clientKeys);
         return 0;
     }
 }

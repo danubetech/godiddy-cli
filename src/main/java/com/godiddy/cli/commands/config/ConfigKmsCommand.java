@@ -1,6 +1,6 @@
 package com.godiddy.cli.commands.config;
 
-import com.godiddy.cli.api.KeyInterface;
+import com.godiddy.cli.api.Kms;
 import com.godiddy.cli.clistorage.cliconfig.CLIConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,43 +9,43 @@ import picocli.CommandLine;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
-        name = "keyinterface",
-        description = "Get or set the key interface for client-managed secret mode. Default value: " + KeyInterface.DEFAULT_KEYINTERFACE + ".",
+        name = "kms",
+        description = "Get or set the key interface for client-managed secret mode. Default value: " + Kms.DEFAULT_KMS + ".",
         mixinStandardHelpOptions = true
 )
-public class ConfigKeyInterfaceCommand extends ConfigAbstractCommand implements Callable<Integer> {
+public class ConfigKmsCommand extends ConfigAbstractCommand implements Callable<Integer> {
 
-    private static final Logger log = LogManager.getLogger(ConfigKeyInterfaceCommand.class);
+    private static final Logger log = LogManager.getLogger(ConfigKmsCommand.class);
 
     @CommandLine.Parameters(
             index = "0",
-            description = "The key interface for client-managed secret mode. Valid values: ${COMPLETION-CANDIDATES}. Default value: " + KeyInterface.DEFAULT_KEYINTERFACE + ".",
+            description = "The key interface for client-managed secret mode. Valid values: ${COMPLETION-CANDIDATES}. Default value: " + Kms.DEFAULT_KMS + ".",
             arity = "0..1"
     )
-    KeyInterface.Value keyInterface;
+    Kms.Value keyInterface;
 
     @Override
     public Integer call() throws Exception {
         log.trace("Parameter 'keyInterface': " + this.keyInterface);
         if (Boolean.TRUE.equals(this.delete)) {
-            CLIConfig.setKeyInterface(null);
+            CLIConfig.setKms(null);
             System.out.println("Key interface setting successfully deleted.");
         } else {
             if (this.keyInterface == null) {
-                KeyInterface.Value keyInterface = CLIConfig.getKeyInterface();
+                Kms.Value keyInterface = CLIConfig.getKms();
                 if (keyInterface == null) {
                     System.out.println("No key interface set.");
                 } else {
                     System.out.println("Key interface: " + keyInterface);
                 }
             } else {
-                KeyInterface.Value keyInterface = this.keyInterface;
-                KeyInterface.Value predefinedKeyInterface = KeyInterface.PREDEFINED_KEYINTERFACE.get(keyInterface.name());
+                Kms.Value keyInterface = this.keyInterface;
+                Kms.Value predefinedKeyInterface = Kms.PREDEFINED_KMS.get(keyInterface.name());
                 if (predefinedKeyInterface != null) {
                     System.out.println("Using predefined key interface value '" + predefinedKeyInterface + "' for parameter value '" + keyInterface + "'.");
                     keyInterface = predefinedKeyInterface;
                 }
-                CLIConfig.setKeyInterface(keyInterface);
+                CLIConfig.setKms(keyInterface);
                 System.out.println("Key interface successfully set: " + keyInterface);
             }
         }

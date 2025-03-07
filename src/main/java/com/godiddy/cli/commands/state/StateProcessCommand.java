@@ -1,27 +1,20 @@
 package com.godiddy.cli.commands.state;
 
 import com.danubetech.kms.clientkeyinterface.ClientKeyInterface;
-import com.danubetech.kms.clientkeyinterface.impl.dummy.DummyClientKeyInterface;
-import com.danubetech.kms.clientkeyinterface.impl.local.LocalClientKeyInterface;
-import com.danubetech.kms.clientkeyinterface.impl.walletservice.WalletServiceClientKeyInterface;
 import com.danubetech.kms.clientstateinterface.ClientStateInterface;
 import com.danubetech.uniregistrar.local.extensions.handlers.HandleStateUpdateTempKeys;
 import com.danubetech.uniregistrar.local.extensions.handlers.HandleStateUpdateVerificationMethods;
 import com.danubetech.uniregistrar.local.extensions.handlers.action.HandleActionState;
 import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretJsonWebKeys;
 import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretVerificationMethods;
-import com.danubetech.walletservice.client.WalletServiceClient;
 import com.godiddy.api.client.openapi.model.RegistrarRequest;
 import com.godiddy.api.client.openapi.model.RegistrarResourceState;
 import com.godiddy.api.client.openapi.model.RegistrarState;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.api.Api;
-import com.godiddy.cli.api.KeyInterface;
-import com.godiddy.cli.api.WalletServiceBase;
 import com.godiddy.cli.clistorage.clistate.CLIState;
-import com.godiddy.cli.clistorage.cliwallet.CLIWallet;
 import com.godiddy.cli.commands.registrar.ContinueCommand;
-import com.godiddy.cli.interfaces.clientstateinterface.impl.CLIStateClientStateInterface;
+import com.godiddy.cli.interfaces.Interfaces;
 import com.godiddy.cli.util.MappingUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,17 +52,10 @@ public class StateProcessCommand extends GodiddyAbstractCommand implements Calla
             return 1;
         }
 
-        // prepare interfaces
+        // instantiate client interfaces
 
-        KeyInterface.Value keyInterface = KeyInterface.getKeyInterface();
-
-        ClientKeyInterface clientKeyInterface = switch (keyInterface) {
-            case dummy -> new DummyClientKeyInterface();
-            case wallet -> new WalletServiceClientKeyInterface(WalletServiceClient.create(WalletServiceBase.getWalletServiceBase()), null);
-            case local -> new LocalClientKeyInterface(CLIWallet::getWallet, CLIWallet::setWallet);
-            default -> throw new IllegalStateException("Unexpected key interface value: " + keyInterface);
-        };
-        ClientStateInterface clientStateInterface = new CLIStateClientStateInterface();
+        ClientKeyInterface<?> clientKeyInterface = Interfaces.instantiateClientKeyInterface();
+        ClientStateInterface clientStateInterface = Interfaces.instantiateClientStateInterface();
 
         // handle
 

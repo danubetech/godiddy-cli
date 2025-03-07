@@ -2,12 +2,11 @@ package com.godiddy.cli;
 
 import com.godiddy.cli.commands.config.ConfigRootCommand;
 import com.godiddy.cli.commands.info.InfoRootCommand;
-import com.godiddy.cli.commands.localwallet.LocalWalletRootCommand;
+import com.godiddy.cli.commands.kms.KmsRootCommand;
 import com.godiddy.cli.commands.registrar.*;
 import com.godiddy.cli.commands.resolver.ResolveCommand;
 import com.godiddy.cli.commands.resource.ResourceRootCommand;
 import com.godiddy.cli.commands.state.StateRootCommand;
-import com.godiddy.cli.commands.wallet.WalletRootCommand;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -29,8 +28,7 @@ import java.util.concurrent.Callable;
                 ResourceRootCommand.class,
                 ContinueCommand.class,
                 StateRootCommand.class,
-                WalletRootCommand.class,
-                LocalWalletRootCommand.class
+                KmsRootCommand.class
         }
 )
 public class GodiddyRootCommand extends GodiddyAbstractCommand implements Callable<Integer> {
