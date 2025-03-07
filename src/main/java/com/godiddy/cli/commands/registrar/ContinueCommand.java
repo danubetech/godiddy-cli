@@ -72,7 +72,6 @@ public class ContinueCommand extends GodiddyAbstractCommand implements Callable<
         // interactive?
 
         if (interactive) {
-            Api.print(state);
             System.out.println();
             System.out.println("Interactive mode on. Execute 'godiddy-cli state process' to process the state and prepare the next request.");
             return 0;
