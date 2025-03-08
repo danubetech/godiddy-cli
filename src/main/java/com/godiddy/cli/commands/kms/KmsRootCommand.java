@@ -10,8 +10,9 @@ import java.util.concurrent.Callable;
         description = "KMS commands.",
         mixinStandardHelpOptions = true,
         subcommands = {
+                KmsGetControllersCommand.class,
                 KmsGetKeysCommand.class,
-                KmsGetControllersCommand.class
+                KmsDeleteCommand.class,
         }
 )
 public class KmsRootCommand extends GodiddyAbstractCommand implements Callable<Integer> {
