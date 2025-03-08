@@ -63,7 +63,7 @@ public class KmsGetControllersCommand extends GodiddyAbstractCommand implements 
 
         // filter controllers
 
-        List<URI> clientKeyControllers = clientKeys.stream().map(ClientKey::getController).toList();
+        List<URI> clientKeyControllers = clientKeys.stream().map(ClientKey::getController).distinct().toList();
 
         // done
 
