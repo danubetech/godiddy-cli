@@ -14,7 +14,7 @@ public class Kms {
 
     public enum Value {
         dummy,
-        wallet,
+        walletservice,
         local,
         def
     };

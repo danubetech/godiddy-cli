@@ -14,7 +14,13 @@ public class WalletServiceBase {
 
     public static final String DEFAULT_WALLETSERVICEBASE = "http://localhost:12080/wallet-service/1.0.0";
     public static final Map<String, String> PREDEFINED_WALLETSERVICEBASES = Map.of(
-            "def", DEFAULT_WALLETSERVICEBASE
+            "def", DEFAULT_WALLETSERVICEBASE,
+            "godiddy", "https://api.godiddy.com/1.0.0/wallet-service/",
+            "godiddy-dev", "https://api.dev.godiddy.com/1.0.0/wallet-service/",
+            "godiddy-1.0.0", "https://api.godiddy.com/1.0.0/wallet-service/",
+            "godiddy-dev-1.0.0", "https://api.dev.godiddy.com/1.0.0/wallet-service/",
+            "godiddy-0.1.0", "https://api.godiddy.com/0.1.0/wallet-service/",
+            "godiddy-dev-0.1.0", "https://api.dev.godiddy.com/0.1.0/wallet-service/"
     );
 
     public static String getWalletServiceBase() {

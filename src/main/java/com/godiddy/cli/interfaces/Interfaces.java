@@ -26,7 +26,7 @@ public class Interfaces {
 
         ClientKeyInterface<? extends ClientKey> clientKeyInterface = switch (kms) {
             case dummy -> new DummyClientKeyInterface();
-            case wallet -> new WalletServiceClientKeyInterface(WalletServiceClient.create(WalletServiceBase.getWalletServiceBase()), null);
+            case walletservice -> new WalletServiceClientKeyInterface(WalletServiceClient.create(WalletServiceBase.getWalletServiceBase()), null);
             case local -> new LocalClientKeyInterface(CLIWallet::getWallet, CLIWallet::setWallet);
             default -> throw new IllegalStateException("Unexpected KMS value: " + kms);
         };
