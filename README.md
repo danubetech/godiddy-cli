@@ -40,25 +40,22 @@ docker compose run --rm godiddy-cli create -m key -c
 docker compose run --rm godiddy-cli create -m key -c -i
 ```
 
-### Internal secret mode
+### Key Management (KMS)
 
 By default, internal secret mode is used, i.e. the Godiddy wallet service.
-
-```
-# Show controllers in the wallet service
-docker compose run --rm godiddy-cli wallet controllers
-
-# Show keys in the wallet service
-docker compose run --rm godiddy-cli wallet keys
-```
-
-### Client-managed secret mode
 
 If the `-c` option is given in various commands, client-managed secret mode is used. The `-c` option is equivalent to `-o clientSecretMode=true`.
 
 ```
-# Show the contents of the local wallet
-docker compose run --rm godiddy-cli localwallet show
+# Comfingure KMS (wallet or local)
+docker compose run --rm godiddy-cli config kms wallet
+docker compose run --rm godiddy-cli config kms local
+
+# Show controllers in the KMS
+docker compose run --rm godiddy-cli kms controllers
+
+# Show keys in the wallet service
+docker compose run --rm godiddy-cli kms keys
 ```
 
 ### Additional key generation
