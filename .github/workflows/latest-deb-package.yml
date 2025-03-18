@@ -1,8 +1,22 @@
 name: Latest Deb Package
-id: latest-deb-package
 
 on:
   workflow_call:
+    inputs:
+      JAVA_VERSION:
+        required: false
+        type: string
+        default: '21'
+        description: 'Java version to use for build'
+    secrets:
+      VAULT_ADDR:
+        required: true
+      CI_SECRET_READER_PERIODIC_TOKEN:
+        required: true
+      VAULTCA:
+        required: true
+      SLACK_WEBHOOK_URL:
+        required: true
 
 jobs:
   build:
@@ -24,6 +38,51 @@ jobs:
 
       - name: Set latest version
         run: echo "VERSION=latest-${{ env.CURRENT_DATE }}" >> $GITHUB_ENV
+
+      - name: Fetch Vault Secrets
+        uses: hashicorp/vault-action@v3
+        with:
+          url: ${{ secrets.VAULT_ADDR }}
+          token: ${{ secrets.CI_SECRET_READER_PERIODIC_TOKEN }}
+          caCertificate: ${{ secrets.VAULTCA }}
+          secrets: |
+            ci/data/gh-workflows/maven-danubetech-nexus username | MAVEN_USERNAME ;
+            ci/data/gh-workflows/maven-danubetech-nexus password | MAVEN_PASSWORD
+
+      - name: Configure Maven Settings
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml << 'EOF'
+          <settings>
+            <servers>
+              <server>
+                <id>danubetech-maven-snapshots</id>
+                <username>${{ env.MAVEN_USERNAME }}</username>
+                <password>${{ env.MAVEN_PASSWORD }}</password>
+              </server>
+              <server>
+                <id>danubetech-maven-releases</id>
+                <username>${{ env.MAVEN_USERNAME }}</username>
+                <password>${{ env.MAVEN_PASSWORD }}</password>
+              </server>
+              <server>
+                <id>danubetech-maven-internal</id>
+                <username>${{ env.MAVEN_USERNAME }}</username>
+                <password>${{ env.MAVEN_PASSWORD }}</password>
+              </server>
+              <server>
+                <id>danubetech-maven-internal-releases</id>
+                <username>${{ env.MAVEN_USERNAME }}</username>
+                <password>${{ env.MAVEN_PASSWORD }}</password>
+              </server>
+              <server>
+                <id>danubetech-maven-internal-snapshots</id>
+                <username>${{ env.MAVEN_USERNAME }}</username>
+                <password>${{ env.MAVEN_PASSWORD }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
 
       - name: Build with Maven
         run: mvn clean package
@@ -75,3 +134,12 @@ jobs:
             godiddy-cli_${{ env.VERSION }}_amd64.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Slack notification
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,commit,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
