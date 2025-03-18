@@ -27,3 +27,19 @@ jobs:
       CI_SECRET_READER_PERIODIC_TOKEN: ${{ secrets.CI_SECRET_READER_PERIODIC_TOKEN }}
       VAULTCA: ${{ secrets.VAULTCA }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  release-deb-package:
+    needs: [ docker-release ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release deb package
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'release-deb-package',
+              ref: 'main'
+            })

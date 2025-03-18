@@ -1,0 +1,77 @@
+name: Latest Deb Package
+id: latest-deb-package
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Get current date for version
+        id: date
+        run: echo "CURRENT_DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+
+      - name: Set latest version
+        run: echo "VERSION=latest-${{ env.CURRENT_DATE }}" >> $GITHUB_ENV
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Install required dependencies for jpackage
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fakeroot
+
+      - name: Package with jpackage
+        run: |
+          jpackage \
+          --type deb \
+          --input target/ \
+          --name godiddy-cli \
+          --main-jar cli-0.1-SNAPSHOT-jar-with-dependencies.jar \
+          --main-class com.godiddy.cli.GodiddyCLIApplication \
+          --java-options '--enable-preview' \
+          --app-version ${{ env.VERSION }} \
+          --vendor "DanubeTech" \
+          --linux-package-name "godiddy-cli" \
+          --linux-app-category "Utility" \
+          --verbose
+
+      - name: Delete existing latest release
+        run: |
+          gh release delete latest --cleanup-tag --yes || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create or update latest tag
+        run: |
+          git tag -f latest
+          git push origin latest -f
+
+      - name: Create/Update Latest Release
+        run: |
+          # Create release notes
+          echo "This is the latest build from the main branch." > release_notes.md
+          echo "Build date: ${{ env.CURRENT_DATE }}" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "⚠️ This is an unstable development build and may contain bugs." >> release_notes.md
+          
+          # Create the release with GitHub CLI
+          gh release create latest \
+            --title "Latest Build" \
+            --notes-file release_notes.md \
+            --prerelease \
+            godiddy-cli_${{ env.VERSION }}_amd64.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

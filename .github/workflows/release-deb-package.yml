@@ -1,0 +1,57 @@
+name: Release deb package
+id: release-deb-package
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'  # Use Temurin distribution (previously AdoptOpenJDK)
+          java-version: '21'  # Adjust based on your project requirements
+
+      - name: Extract version from tag
+        id: extract_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Install required dependencies for jpackage
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fakeroot
+
+      - name: Package with jpackage
+        run: |
+          jpackage \
+          --type deb \
+          --input target/ \
+          --name godiddy-cli \
+          --main-jar cli-0.1-SNAPSHOT-jar-with-dependencies.jar \
+          --main-class com.godiddy.cli.GodiddyCLIApplication \
+          --java-options '--enable-preview' \
+          --app-version ${{ env.VERSION }} \
+          --vendor "DanubeTech" \
+          --linux-package-name "godiddy-cli" \
+          --linux-app-category "Utility" \
+          --verbose
+
+      - name: Create Release
+        id: create_release
+        run: |
+          # Create the release with GitHub CLI
+          gh release create v${{ env.VERSION }} \
+            --title "Release ${{ env.VERSION }}" \
+            --notes "Release version ${{ env.VERSION }}" \
+            godiddy-cli_${{ env.VERSION }}_amd64.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
