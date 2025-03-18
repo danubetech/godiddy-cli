@@ -28,7 +28,7 @@ jobs:
     needs: [ docker-latest ]
     runs-on: ubuntu-latest
     steps:
-      - name: Release deb package
+      - name: Latest deb package
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
