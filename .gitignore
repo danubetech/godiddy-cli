@@ -7,3 +7,6 @@ docker-compose.override.yml
 /.idea/
 /logs/
 *.iml
+*.deb
+*.dmg
+/build/

@@ -30,7 +30,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: ${{ inputs.JAVA_VERSION }}
 
       - name: Get current date for version
         id: date
@@ -87,25 +87,21 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
-      - name: Install required dependencies for jpackage
+      - name: Install required dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y fakeroot
 
-      - name: Package with jpackage
+      - name: Make packaging script executable
         run: |
-          jpackage \
-          --type deb \
-          --input target/ \
-          --name godiddy-cli \
-          --main-jar cli-0.1-SNAPSHOT-jar-with-dependencies.jar \
-          --main-class com.godiddy.cli.GodiddyCLIApplication \
-          --java-options '--enable-preview' \
-          --app-version ${{ env.VERSION }} \
-          --vendor "DanubeTech" \
-          --linux-package-name "godiddy-cli" \
-          --linux-app-category "Utility" \
-          --verbose
+          chmod +x ./godiddy-cli-package.sh
+
+      - name: Package using bash script
+        run: |
+          ./godiddy-cli-package.sh --version ${{ env.VERSION }} --java-version ${{ inputs.JAVA_VERSION }} --compress 9
+          # Move the output file to the expected location for the GitHub release
+          mkdir -p build/output
+          cp build/output/godiddy-cli_${{ env.VERSION }}_amd64.deb ./godiddy-cli_${{ env.VERSION }}_amd64.deb
 
       - name: Delete existing latest release
         run: |
