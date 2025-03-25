@@ -28,15 +28,17 @@ jobs:
         with:
           fetch-depth: 0  # Get all history for git operations
 
+      - name: Get Version for Triggered Build
+        run: |
+          # Get the latest version tag from git
+          RELEASE_VERSION=$(git tag --sort=-creatordate | head -n 1)
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: ${{ inputs.JAVA_VERSION }}
-
-      - name: Extract version from tag
-        id: extract_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       - name: Fetch Vault Secrets
         uses: hashicorp/vault-action@v3
@@ -85,7 +87,7 @@ jobs:
         run: chmod +x ./godiddy-cli-package.sh
 
       - name: Build Debian package
-        run: ./godiddy-cli-package.sh --version ${{ env.VERSION }} --java-version ${{ inputs.JAVA_VERSION }}
+        run: ./godiddy-cli-package.sh --version ${{ env.RELEASE_VERSION }} --java-version ${{ inputs.JAVA_VERSION }}
 
       - name: Generate Release Notes
         run: |
@@ -94,14 +96,14 @@ jobs:
           PREVIOUS_TAG=$(git tag --sort=-version:refname | grep -v "latest" | sed -n 2p)
           
           # Start release notes with header
-          echo "# Release v${{ env.VERSION }}" > release_notes.md
+          echo "# Release v${{ env.RELEASE_VERSION }}" > release_notes.md
           echo "Released on $(date +'%Y-%m-%d')" >> release_notes.md
           echo "" >> release_notes.md
           
           # Add installation instructions
           echo "## Installation" >> release_notes.md
           echo "```bash" >> release_notes.md
-          echo "sudo dpkg -i godiddy-cli_${{ env.VERSION }}_amd64.deb" >> release_notes.md
+          echo "sudo dpkg -i godiddy-cli_${{ env.RELEASE_VERSION }}_amd64.deb" >> release_notes.md
           echo "# Or if you have dependencies issues:" >> release_notes.md
           echo "sudo apt install -f" >> release_notes.md
           echo "```" >> release_notes.md
@@ -132,7 +134,7 @@ jobs:
           
           # Add build information
           echo "## Build Information" >> release_notes.md
-          echo "* Version: ${{ env.VERSION }}" >> release_notes.md
+          echo "* Version: ${{ env.RELEASE_VERSION }}" >> release_notes.md
           echo "* Git commit: $(git rev-parse HEAD)" >> release_notes.md
           echo "* Build date: $(date +'%Y-%m-%d %H:%M:%S')" >> release_notes.md
           
@@ -141,10 +143,10 @@ jobs:
       - name: Create Release
         run: |
           # Create the release with GitHub CLI
-          gh release create v${{ env.VERSION }} \
-            --title "Release v${{ env.VERSION }}" \
+          gh release create v${{ env.RELEASE_VERSION }} \
+            --title "Release v${{ env.RELEASE_VERSION }}" \
             --notes-file release_notes.md \
-            ./build/output/godiddy-cli_${{ env.VERSION }}_amd64.deb
+            ./build/output/godiddy-cli_${{ env.RELEASE_VERSION }}_amd64.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

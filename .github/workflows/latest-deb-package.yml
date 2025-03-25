@@ -39,12 +39,11 @@ jobs:
         id: git_hash
         run: echo "GIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: Extract version from tag
-        id: extract_version
-        run: echo "TAG=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
-
-      - name: Set version based on Git commit
-        run: echo "VERSION=${{ env.TAG }}~git_${{ env.GIT_HASH }}" >> $GITHUB_ENV
+      - name: Get Version for Triggered Build
+        run: |
+          # Get the latest version tag from git
+          LAST_RELEASE_VERSION=$(git tag --sort=-creatordate | head -n 1)
+          echo "LAST_RELEASE_VERSION=$LAST_RELEASE_VERSION" >> $GITHUB_ENV
 
       - name: Fetch Vault Secrets
         uses: hashicorp/vault-action@v3
@@ -103,7 +102,7 @@ jobs:
         run: chmod +x ./godiddy-cli-package.sh
 
       - name: Package using bash script
-        run: ./godiddy-cli-package.sh --version ${{ env.VERSION }} --java-version ${{ inputs.JAVA_VERSION }}
+        run: ./godiddy-cli-package.sh --version ${{ env.LAST_RELEASE_VERSION }} --java-version ${{ inputs.JAVA_VERSION }}
 
       - name: Delete existing latest release
         run: |
@@ -130,7 +129,7 @@ jobs:
             --title "Latest Build (git-${{ env.GIT_HASH }})" \
             --notes-file release_notes.md \
             --prerelease \
-            ./build/output/godiddy-cli_${{ env.VERSION }}_amd64.deb
+            ./build/output/godiddy-cli_${{ env.LAST_RELEASE_VERSION }}_amd64.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
