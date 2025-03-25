@@ -6,10 +6,9 @@
 set -e
 
 # Parse command line arguments
-VERSION="latest"
+VERSION="latest"  # Back to original setting
 JAVA_VERSION="21"
 STRIP_BINARIES=false
-COMPRESS_LEVEL="9"
 
 print_usage() {
     echo "Usage: $0 [OPTIONS]"
@@ -17,7 +16,6 @@ print_usage() {
     echo "  -v, --version VERSION     Package version (default: latest)"
     echo "  -j, --java-version VER    Java version to depend on (default: 21)"
     echo "  -s, --strip               Strip debug symbols to reduce size"
-    echo "  -c, --compress LEVEL      Compression level (1-9, default: 9)"
     echo "  -h, --help                Show this help message"
 }
 
@@ -34,10 +32,6 @@ while [[ $# -gt 0 ]]; do
         -s|--strip)
             STRIP_BINARIES=true
             shift
-            ;;
-        -c|--compress)
-            COMPRESS_LEVEL="$2"
-            shift 2
             ;;
         -h|--help)
             print_usage
@@ -143,18 +137,11 @@ EOF
 chmod +x "${TEMP_DIR}/${PACKAGE_NAME}/usr/bin/${PACKAGE_NAME}"
 
 # Build the package with appropriate compression options
-echo "=== Building Debian package with compression level ${COMPRESS_LEVEL} ==="
+echo "=== Building Debian package ==="
 
-# Check dpkg-deb version to determine correct compression syntax
-DPKG_VERSION=$(dpkg-deb --version | head -n1 | awk '{print $3}' | cut -d. -f1)
-
-if [ "$DPKG_VERSION" -ge 1 ]; then
-    # For newer versions of dpkg-deb
-    dpkg-deb --build --compression=xz --compression-level="${COMPRESS_LEVEL}" "${TEMP_DIR}/${PACKAGE_NAME}" "${OUTPUT_DIR}/${FINAL_PACKAGE}"
-else
-    # For older versions of dpkg-deb
-    dpkg-deb -z"${COMPRESS_LEVEL}" --build "${TEMP_DIR}/${PACKAGE_NAME}" "${OUTPUT_DIR}/${FINAL_PACKAGE}"
-fi
+# Use simple build command without compression options
+echo "=== Building Debian package (standard compression) ==="
+dpkg-deb --build "${TEMP_DIR}/${PACKAGE_NAME}" "${OUTPUT_DIR}/${FINAL_PACKAGE}"
 
 # Clean up
 echo "=== Cleaning up temporary files ==="
