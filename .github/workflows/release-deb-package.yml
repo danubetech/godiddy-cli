@@ -1,8 +1,22 @@
 name: Release deb package
-id: release-deb-package
 
 on:
   workflow_call:
+    inputs:
+      JAVA_VERSION:
+        required: false
+        type: string
+        default: '21'
+        description: 'Java version to use for build'
+    secrets:
+      VAULT_ADDR:
+        required: true
+      CI_SECRET_READER_PERIODIC_TOKEN:
+        required: true
+      VAULTCA:
+        required: true
+      SLACK_WEBHOOK_URL:
+        required: true
 
 jobs:
   build:
@@ -11,47 +25,134 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Get all history for git operations
 
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'  # Use Temurin distribution (previously AdoptOpenJDK)
-          java-version: '21'  # Adjust based on your project requirements
+          distribution: 'temurin'
+          java-version: ${{ inputs.JAVA_VERSION }}
 
       - name: Extract version from tag
         id: extract_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
+      - name: Fetch Vault Secrets
+        uses: hashicorp/vault-action@v3
+        with:
+          url: ${{ secrets.VAULT_ADDR }}
+          token: ${{ secrets.CI_SECRET_READER_PERIODIC_TOKEN }}
+          caCertificate: ${{ secrets.VAULTCA }}
+          secrets: |
+            ci/data/gh-workflows/maven-danubetech-nexus username | MAVEN_USERNAME ;
+            ci/data/gh-workflows/maven-danubetech-nexus password | MAVEN_PASSWORD
+
+      - name: Configure Maven Settings
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml << 'EOF'
+          <settings>
+            <servers>
+              <server>
+                <id>danubetech-maven-releases</id>
+                <username>${{ env.MAVEN_USERNAME }}</username>
+                <password>${{ env.MAVEN_PASSWORD }}</password>
+              </server>
+              <server>
+                <id>danubetech-maven-internal</id>
+                <username>${{ env.MAVEN_USERNAME }}</username>
+                <password>${{ env.MAVEN_PASSWORD }}</password>
+              </server>
+              <server>
+                <id>danubetech-maven-internal-releases</id>
+                <username>${{ env.MAVEN_USERNAME }}</username>
+                <password>${{ env.MAVEN_PASSWORD }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
       - name: Build with Maven
         run: mvn clean package
 
-      - name: Install required dependencies for jpackage
+      - name: Install required dependencies for package building
         run: |
           sudo apt-get update
           sudo apt-get install -y fakeroot
 
-      - name: Package with jpackage
+      - name: Make packaging script executable
+        run: chmod +x ./godiddy-cli-package.sh
+
+      - name: Build Debian package
+        run: ./godiddy-cli-package.sh --version ${{ env.VERSION }} --java-version ${{ inputs.JAVA_VERSION }}
+
+      - name: Generate Release Notes
         run: |
-          jpackage \
-          --type deb \
-          --input target/ \
-          --name godiddy-cli \
-          --main-jar cli-0.1-SNAPSHOT-jar-with-dependencies.jar \
-          --main-class com.godiddy.cli.GodiddyCLIApplication \
-          --java-options '--enable-preview' \
-          --app-version ${{ env.VERSION }} \
-          --vendor "DanubeTech" \
-          --linux-package-name "godiddy-cli" \
-          --linux-app-category "Utility" \
-          --verbose
+          # Get previous tag to generate changelog
+          git fetch --tags
+          PREVIOUS_TAG=$(git tag --sort=-version:refname | grep -v "latest" | sed -n 2p)
+          
+          # Start release notes with header
+          echo "# Release v${{ env.VERSION }}" > release_notes.md
+          echo "Released on $(date +'%Y-%m-%d')" >> release_notes.md
+          echo "" >> release_notes.md
+          
+          # Add installation instructions
+          echo "## Installation" >> release_notes.md
+          echo "```bash" >> release_notes.md
+          echo "sudo dpkg -i godiddy-cli_${{ env.VERSION }}_amd64.deb" >> release_notes.md
+          echo "# Or if you have dependencies issues:" >> release_notes.md
+          echo "sudo apt install -f" >> release_notes.md
+          echo "```" >> release_notes.md
+          echo "" >> release_notes.md
+          
+          # Add changelog if previous tag exists, filtering for feat: and fix: commits
+          if [ ! -z "$PREVIOUS_TAG" ]; then
+            echo "## What's Changed" >> release_notes.md
+          
+            # Feature additions
+            echo "### New Features" >> release_notes.md
+            if git log --pretty=format:"* %s (%h)" $PREVIOUS_TAG..HEAD --grep="^feat:" | grep -q .; then
+              git log --pretty=format:"* %s (%h)" $PREVIOUS_TAG..HEAD --grep="^feat:" >> release_notes.md
+            else
+              echo "* No new features in this release" >> release_notes.md
+            fi
+            echo "" >> release_notes.md
+          
+            # Bug fixes
+            echo "### Bug Fixes" >> release_notes.md
+            if git log --pretty=format:"* %s (%h)" $PREVIOUS_TAG..HEAD --grep="^fix:" | grep -q .; then
+              git log --pretty=format:"* %s (%h)" $PREVIOUS_TAG..HEAD --grep="^fix:" >> release_notes.md
+            else
+              echo "* No bug fixes in this release" >> release_notes.md
+            fi
+            echo "" >> release_notes.md
+          fi
+          
+          # Add build information
+          echo "## Build Information" >> release_notes.md
+          echo "* Version: ${{ env.VERSION }}" >> release_notes.md
+          echo "* Git commit: $(git rev-parse HEAD)" >> release_notes.md
+          echo "* Build date: $(date +'%Y-%m-%d %H:%M:%S')" >> release_notes.md
+          
+          cat release_notes.md
 
       - name: Create Release
-        id: create_release
         run: |
           # Create the release with GitHub CLI
           gh release create v${{ env.VERSION }} \
-            --title "Release ${{ env.VERSION }}" \
-            --notes "Release version ${{ env.VERSION }}" \
-            godiddy-cli_${{ env.VERSION }}_amd64.deb
+            --title "Release v${{ env.VERSION }}" \
+            --notes-file release_notes.md \
+            ./build/output/godiddy-cli_${{ env.VERSION }}_amd64.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Slack notification
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,commit,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -39,8 +39,12 @@ jobs:
         id: git_hash
         run: echo "GIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
+      - name: Extract version from tag
+        id: extract_version
+        run: echo "TAG=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
       - name: Set version based on Git commit
-        run: echo "VERSION=0.0.0~git${{ env.GIT_HASH }}" >> $GITHUB_ENV
+        run: echo "VERSION=${{ env.TAG }}~git_${{ env.GIT_HASH }}" >> $GITHUB_ENV
 
       - name: Fetch Vault Secrets
         uses: hashicorp/vault-action@v3
@@ -96,15 +100,10 @@ jobs:
           sudo apt-get install -y fakeroot
 
       - name: Make packaging script executable
-        run: |
-          chmod +x ./godiddy-cli-package.sh
+        run: chmod +x ./godiddy-cli-package.sh
 
       - name: Package using bash script
-        run: |
-          ./godiddy-cli-package.sh --version ${{ env.VERSION }} --java-version ${{ inputs.JAVA_VERSION }}
-          # Move the output file to the expected location for the GitHub release
-          mkdir -p build/output
-          cp build/output/godiddy-cli_${{ env.VERSION }}_amd64.deb ./godiddy-cli_${{ env.VERSION }}_amd64.deb
+        run: ./godiddy-cli-package.sh --version ${{ env.VERSION }} --java-version ${{ inputs.JAVA_VERSION }}
 
       - name: Delete existing latest release
         run: |
@@ -131,7 +130,7 @@ jobs:
             --title "Latest Build (git-${{ env.GIT_HASH }})" \
             --notes-file release_notes.md \
             --prerelease \
-            godiddy-cli_${{ env.VERSION }}_amd64.deb
+            ./build/output/godiddy-cli_${{ env.VERSION }}_amd64.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
