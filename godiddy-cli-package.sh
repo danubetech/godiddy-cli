@@ -51,7 +51,7 @@ TEMP_DIR="${BUILD_DIR}/temp"
 OUTPUT_DIR="${BUILD_DIR}/output"
 PACKAGE_NAME="godiddy-cli"
 FINAL_PACKAGE="${PACKAGE_NAME}_${VERSION}_amd64.deb"
-JAR_FILE="cli-0.1-SNAPSHOT-jar-with-dependencies.jar"
+JAR_FILE=$(find . -name "godiddy-cli-*-jar-with-dependencies.jar" | head -n 1)
 MAINTAINER="DanubeTech <admin@danubetech.com>"
 
 echo "Building package version: ${VERSION}"
