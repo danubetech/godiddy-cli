@@ -6,14 +6,14 @@
 set -e
 
 # Parse command line arguments
-VERSION="latest"  # Back to original setting
 JAVA_VERSION="21"
+VERSION="0.0-SNAPSHOT"
 STRIP_BINARIES=false
 
 print_usage() {
     echo "Usage: $0 [OPTIONS]"
     echo "Options:"
-    echo "  -v, --version VERSION     Package version (default: latest)"
+    echo "  -v, --version VERSION     Package version (default: 0.0-SNAPSHOT)"
     echo "  -j, --java-version VER    Java version to depend on (default: 21)"
     echo "  -s, --strip               Strip debug symbols to reduce size"
     echo "  -h, --help                Show this help message"
