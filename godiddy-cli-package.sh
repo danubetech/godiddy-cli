@@ -118,7 +118,9 @@ echo "${PACKAGE_NAME} (${VERSION}) stable; urgency=low
 echo "=== Copying application files ==="
 JAR_FILE=$(find . -name "godiddy-cli-*-jar-with-dependencies.jar" | head -n 1)
 echo "Found JAR file: ${JAR_FILE}"
-echo ls -al target
+CMD="ls -al target"
+echo "Running: $CMD"
+$CMD
 if [ -f "target/${JAR_FILE}" ]; then
     echo "=== Copying JAR file (no optimization) ==="
     cp "target/${JAR_FILE}" "${TEMP_DIR}/${PACKAGE_NAME}/usr/share/${PACKAGE_NAME}/"
