@@ -50,7 +50,6 @@ BUILD_DIR="./build"
 TEMP_DIR="${BUILD_DIR}/temp"
 OUTPUT_DIR="${BUILD_DIR}/output"
 PACKAGE_NAME="godiddy-cli"
-JAR_FILE=$(find . -name "godiddy-cli-*-jar-with-dependencies.jar" | head -n 1)
 FINAL_PACKAGE="${PACKAGE_NAME}_${VERSION}_amd64.deb"
 MAINTAINER="DanubeTech <admin@danubetech.com>"
 
@@ -117,7 +116,12 @@ echo "${PACKAGE_NAME} (${VERSION}) stable; urgency=low
 
 # Copy JAR file without optimization
 echo "=== Copying application files ==="
-if [ -f "target/${JAR_FILE}" ]; then
+JAR_FILE=$(find . -name "godiddy-cli-*-jar-with-dependencies.jar" | head -n 1)
+echo "Found JAR file: ${JAR_FILE}"
+CMD="ls -al target"
+echo "Running: $CMD"
+$CMD
+if [ -f "${JAR_FILE}" ]; then
     echo "=== Copying JAR file (no optimization) ==="
     cp "${JAR_FILE}" "${TEMP_DIR}/${PACKAGE_NAME}/usr/share/${PACKAGE_NAME}/"
 else
