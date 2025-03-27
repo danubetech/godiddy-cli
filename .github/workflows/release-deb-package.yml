@@ -28,17 +28,32 @@ jobs:
         with:
           fetch-depth: 0  # Get all history for git operations
 
-      - name: Get Version for Triggered Build
+      - name: Get latest non-'latest' tag
         run: |
-          # Get the latest version tag from git
-          RELEASE_VERSION=$(git tag --sort=-creatordate | head -n 1)
+          # Get all tags, sort them by creation date, filter out 'latest', and get the last one
+          RELEASE_VERSION=$(git tag --sort=-creatordate | grep -v "latest" | head -n 1)
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+          
+          # Output for debugging purposes
+          echo "Latest tag: $RELEASE_VERSION"
+
+      - name: Checkout latest tag
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.RELEASE_VERSION }}
 
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: ${{ inputs.JAVA_VERSION }}
+
+      - name: Update project version in pom.xml
+        run: |
+          # Remove the 'v' prefix if your tags are in the format v1.2.3
+          VERSION_NUMBER=${RELEASE_VERSION#v}
+          mvn versions:set -DnewVersion=$VERSION_NUMBER -DgenerateBackupPoms=false
+          echo "Updated pom.xml project version to $VERSION_NUMBER"
 
       - name: Fetch Vault Secrets
         uses: hashicorp/vault-action@v3

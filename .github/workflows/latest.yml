@@ -26,7 +26,7 @@ jobs:
 
   latest-deb-package:
     needs: [ docker-latest ]
-    uses: danubetech/godiddy-cli/.github/workflows/latest-deb-package.yml@main
+    uses: danubetech/godiddy-cli/.github/workflows/latest-deb-package.yml@fix-version-number-issue
     secrets:
       VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
       CI_SECRET_READER_PERIODIC_TOKEN: ${{ secrets.CI_SECRET_READER_PERIODIC_TOKEN }}
