@@ -1,4 +1,4 @@
-name: Latest Deb Package
+name: Latest deb Package
 
 on:
   workflow_call:

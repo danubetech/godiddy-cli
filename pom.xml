@@ -4,10 +4,10 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.godiddy</groupId>
-	<artifactId>cli</artifactId>
+	<artifactId>godiddy-cli</artifactId>
 	<version>0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>cli</name>
+	<name>godiddy-cli</name>
 
 	<distributionManagement>
 		<snapshotRepository>
