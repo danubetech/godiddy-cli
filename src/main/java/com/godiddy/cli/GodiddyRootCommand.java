@@ -15,7 +15,7 @@ import java.util.concurrent.Callable;
         name = "godiddy-cli",
         description = "Godiddy Universal DID Operations",
         footer = "See https://docs.godiddy.com/ for more information.",
-        version = "1.0.0",
+        versionProvider = GodiddyRootCommand.GodiddyVersionProvider.class,
         mixinStandardHelpOptions = true,
         subcommands = {
                 ConfigRootCommand.class,
@@ -32,4 +32,17 @@ import java.util.concurrent.Callable;
         }
 )
 public class GodiddyRootCommand extends GodiddyAbstractCommand implements Callable<Integer> {
+
+        static class GodiddyVersionProvider implements CommandLine.IVersionProvider {
+                @Override
+                public String[] getVersion() {
+                        return new String[] { Version.VERSION };
+                }
+        }
+
+        @Override
+        public Integer call() {
+                // Your existing implementation
+                return 0;
+        }
 }
