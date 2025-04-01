@@ -15,7 +15,7 @@ import java.util.concurrent.Callable;
         name = "godiddy-cli",
         description = "Godiddy Universal DID Operations",
         footer = "See https://docs.godiddy.com/ for more information.",
-        version = "1.0.0",
+        version = "${VERSION}",
         mixinStandardHelpOptions = true,
         subcommands = {
                 ConfigRootCommand.class,
@@ -32,4 +32,13 @@ import java.util.concurrent.Callable;
         }
 )
 public class GodiddyRootCommand extends GodiddyAbstractCommand implements Callable<Integer> {
+        // Use static initializer to set the version at class loading time
+        static {
+                System.setProperty("VERSION", Version.VERSION);
+        }
+
+        @Override
+        public Integer call() {
+                return 0;
+        }
 }
