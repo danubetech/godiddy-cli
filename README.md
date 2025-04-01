@@ -2,6 +2,39 @@
 
 A command-line interface for Godiddy.
 
+## Installing on Ubuntu/Debian (via `.deb` package)
+
+To install the latest version of `godiddy-cli` on your Ubuntu server:
+
+1. **Download the latest `.deb` package**
+
+   Visit the [Releases page](https://github.com/danubetech/godiddy-cli/releases) and download the `.deb` file for the latest version, or use the command line:
+
+   ```bash
+   VERSION=$(curl -s https://api.github.com/repos/danubetech/godiddy-cli/releases/latest | grep "tag_name" | cut -d '"' -f 4)
+   curl -LO "https://github.com/danubetech/godiddy-cli/releases/download/${VERSION}/godiddy-cli_${VERSION}_amd64.deb"
+   ```
+
+2. **Install the package**
+
+   ```bash
+   sudo dpkg -i godiddy-cli_${VERSION}_amd64.deb
+   ```
+
+3. **Fix missing dependencies if needed**
+
+   If you see any dependency issues:
+
+   ```bash
+   sudo apt-get install -f
+   ```
+
+4. **Verify installation**
+
+   ```bash
+   godiddy-cli --version
+   ```
+
 ## Run using Docker
 
 ```shell
