@@ -26,6 +26,7 @@ LABEL org.opencontainers.image.authors="markus@danubetech.com"
 RUN apk add libsodium
 
 COPY --from=build /opt/godiddy-cli/target/*.jar /opt/godiddy-cli/
+RUN ln -s /opt/godiddy-cli/godiddy-cli-*-jar-with-dependencies.jar /opt/godiddy-cli/godiddy-cli.jar
 
 # variables
 
@@ -35,4 +36,4 @@ ENV godiddy.cli.dummy=dummy
 
 WORKDIR /opt/godiddy-cli/
 VOLUME godiddy-cli-storage:/opt/godiddy-cli/godiddy-cli-storage/
-ENTRYPOINT [ "java", "-jar", "/opt/godiddy-cli/godiddy-cli-*-jar-with-dependencies.jar" ]
+ENTRYPOINT [ "java", "-jar", "/opt/godiddy-cli/godiddy-cli.jar" ]
