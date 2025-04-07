@@ -35,4 +35,4 @@ ENV godiddy.cli.dummy=dummy
 
 WORKDIR /opt/godiddy-cli/
 VOLUME godiddy-cli-storage:/opt/godiddy-cli/godiddy-cli-storage/
-ENTRYPOINT [ "java", "-jar", "/opt/godiddy-cli/cli-0.1-SNAPSHOT-jar-with-dependencies.jar" ]
+ENTRYPOINT [ "java", "-jar", "/opt/godiddy-cli/godiddy-cli-*-jar-with-dependencies.jar" ]
