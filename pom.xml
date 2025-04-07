@@ -61,10 +61,10 @@
 		<!-- Testing Versions -->
 
 		<junit.version>4.13.2</junit.version>
-		<junit-jupiter.version>5.12.0</junit-jupiter.version>
-		<junit-platform.version>1.10.2</junit-platform.version>
-		<junit-platform-commons.version>1.12.0</junit-platform-commons.version>
-		<mockito-core.version>5.16.0</mockito-core.version>
+		<junit-jupiter.version>5.12.1</junit-jupiter.version>
+		<junit-platform.version>1.12.1</junit-platform.version>
+		<junit-platform-commons.version>1.12.1</junit-platform-commons.version>
+		<mockito-core.version>5.17.0</mockito-core.version>
 
 		<!-- Systems Versions -->
 
@@ -72,7 +72,7 @@
 
 		<!-- Spring Versions -->
 
-		<springframework.boot.version>3.4.3</springframework.boot.version>
+		<springframework.boot.version>3.4.4</springframework.boot.version>
 
 		<!-- OpenAPI Versions -->
 
@@ -87,8 +87,8 @@
 
 		<wallet-service.version>1.8.0</wallet-service.version>
 		<key-formats-java.version>1.22.0</key-formats-java.version>
-		<did-common-java.version>1.17.0</did-common-java.version>
-		<danubetech-common-java.version>1.27.0</danubetech-common-java.version>
+		<did-common-java.version>1.18.0</did-common-java.version>
+		<danubetech-common-java.version>1.28.0</danubetech-common-java.version>
 		<danubetech-kms-java.version>0.1.0</danubetech-kms-java.version>
 		<com.github.mattrglobal-bbs.signatures.version>2.0</com.github.mattrglobal-bbs.signatures.version>
 
@@ -97,7 +97,7 @@
 		<commons-codec.version>1.18.0</commons-codec.version>
 		<info.picocli-picocli.version>4.7.6</info.picocli-picocli.version>
 		<org.modelmapper-modelmapper.version>3.2.2</org.modelmapper-modelmapper.version>
-		<nimbus-jose-jwt.version>10.0.2</nimbus-jose-jwt.version>
+		<nimbus-jose-jwt.version>10.2</nimbus-jose-jwt.version>
 		<org.fusesource.jansi-jansi.version>2.4.1</org.fusesource.jansi-jansi.version>
 
 	</properties>
