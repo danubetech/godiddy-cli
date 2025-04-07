@@ -143,5 +143,5 @@ mvn -s settings.xml clean package
 Get command line
 
 ```shell
-java -jar target/cli-*-jar-with-dependencies.jar -h
+java -jar target/godiddy-cli-*-jar-with-dependencies.jar -h
 ```
