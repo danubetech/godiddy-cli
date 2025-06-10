@@ -120,7 +120,7 @@ docker compose run --rm godiddy-cli continue -i
 
 ### did:ebsi examples
 
-Also see https://docs.godiddy.com/advanced/universal-registrar-execute/ebsi-execute.
+Also see https://docs.godiddy.com/apis/universal-registrar/ebsi-execute
 
 ```
 docker compose run --rm godiddy-cli execute -d did:ebsi:zjUnExsyyweQ9p4cy3nvrVc --op issueOnboardingVC
