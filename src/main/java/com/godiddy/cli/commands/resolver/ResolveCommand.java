@@ -11,6 +11,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Command(
@@ -21,6 +22,12 @@ import java.util.concurrent.Callable;
 public class ResolveCommand extends GodiddyAbstractCommand implements Callable<Integer> {
 
     private static final Logger log = LogManager.getLogger(ResolveCommand.class);
+
+    @Option(
+            names = {"-o", "--option"},
+            description = "This input field contains a key/value pair with an option for the DID operation."
+    )
+    Map<String, String> options;
 
     @Option(
             names = {"-r", "--result"},
@@ -42,10 +49,11 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
 
         String identifier = this.identifier;
         String accept = Boolean.TRUE.equals(this.metadata) ? "application/ld+json;profile=\"https://w3id.org/did-resolution\"": "" + RepresentationProducerDID.MEDIA_TYPE + "," + RepresentationProducerDIDJSONLD.MEDIA_TYPE + "," + RepresentationConsumerDIDJSON.MEDIA_TYPE;
+        Map<String, String> options = this.options;
 
         // execute
 
-        Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(identifier, accept));
+        Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(identifier, accept, options));
 
         // done
 

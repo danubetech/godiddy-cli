@@ -13,7 +13,8 @@ tags:
   - name: Universal Registrar
   - name: Universal Issuer
   - name: Universal Verifier
-  - name: Wallet Service
+  - name: Wallet Service - DIDs and Keys
+  - name: Wallet Service - Credentials
   - name: Version Service
   - name: Revocation Service
 paths:
@@ -71,6 +72,16 @@ paths:
             application/ld+json;profile="https://w3id.org/did-resolution":
               value: application/ld+json;profile="https://w3id.org/did-resolution"
               description: Media type of a DID resolution result (JSON-LD representation).
+        - in: query
+          name: options
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+          description: The options for resolving the DID or dereferencing the DID
+            URL.
+          style: form
+          explode: true
       responses:
         '200':
           description: successfully resolved!
@@ -602,7 +613,7 @@ paths:
         keys for a given DID.</p>
       operationId: getKeys
       tags:
-        - Wallet Service
+        - Wallet Service - DIDs and Keys
       parameters:
         - in: query
           name: controller
@@ -687,7 +698,7 @@ paths:
         Registrar, its keys are automatically imported into the Wallet Service.</p>
       operationId: importKey
       tags:
-        - Wallet Service
+        - Wallet Service - DIDs and Keys
       requestBody:
         content:
           application/json:
@@ -710,7 +721,7 @@ paths:
         identifier from the Wallet Service.</p>
       operationId: getKey
       tags:
-        - Wallet Service
+        - Wallet Service - DIDs and Keys
       parameters:
         - in: path
           name: id
@@ -750,7 +761,7 @@ paths:
         before.</a>
       operationId: deleteKey
       tags:
-        - Wallet Service
+        - Wallet Service - DIDs and Keys
       parameters:
         - in: path
           name: id
@@ -775,7 +786,7 @@ paths:
         Wallet Service.</p>
       operationId: updateKey
       tags:
-        - Wallet Service
+        - Wallet Service - DIDs and Keys
       parameters:
         - in: path
           name: id
@@ -807,7 +818,7 @@ paths:
         key from the Wallet Service.</p>
       operationId: signWithKey
       tags:
-        - Wallet Service
+        - Wallet Service - DIDs and Keys
       parameters:
         - in: query
           name: id
@@ -857,7 +868,7 @@ paths:
         key from the Wallet Service.</p>
       operationId: verifyWithKey
       tags:
-        - Wallet Service
+        - Wallet Service - DIDs and Keys
       parameters:
         - in: query
           name: id
@@ -914,7 +925,7 @@ paths:
         a private key from the Wallet Service.</p>
       operationId: decryptWithKey
       tags:
-        - Wallet Service
+        - Wallet Service - DIDs and Keys
       parameters:
         - in: query
           name: id
@@ -957,6 +968,213 @@ paths:
           description: No key was found with the given identifier.
         '500':
           description: An internal error has occurred.
+  /wallet-service/credentials:
+    get:
+      summary: Get credentials(s)
+      operationId: getCredentials
+      tags:
+        - Wallet Service - Credentials
+      parameters:
+        - in: query
+          name: subject
+          schema:
+            type: string
+            format: uri
+          description: The subject of the credential(s) to retrieve.
+        - in: query
+          name: issuer
+          schema:
+            type: string
+            format: uri
+          description: The issuer of the credential(s) to retrieve.
+        - in: query
+          name: type
+          schema:
+            type: string
+          description: The type of the credential(s) to retrieve.
+          example: Ed25519
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            format: int64
+          description: The limit (total number) of keys to retrieve.
+          example: 1
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Credential'
+                description: The list of credential(s).
+          description: The request was successful, and the list of credential(s) has
+            been retrieved.
+        '400':
+          description: A problem with the input fields has occurred.
+        '500':
+          description: An internal error has occurred.
+    post:
+      summary: Import credential
+      operationId: importCredential
+      tags:
+        - Wallet Service - Credentials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credential'
+        description: The new credential to import.
+      responses:
+        '201':
+          description: The request was successful, and the new credential has been
+            imported.
+        '400':
+          description: A problem with the input fields has occurred.
+        '409':
+          description: This credential already exists in the Wallet Service.
+        '500':
+          description: An internal error has occurred.
+  /wallet-service/credentials/{id}:
+    get:
+      summary: Get credential
+      description: <p>This endpoint returns a credential with a given internal identifier
+        from the Wallet Service.</p>
+      operationId: getCredential
+      tags:
+        - Wallet Service - Credentials
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The internal identifier of the credential to retrieve.
+          example: 1bba3d1c-1bda-4827-add6-6d5782658c3a
+      responses:
+        '200':
+          description: The request was successful, and the credential has been retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Credential'
+        '400':
+          description: A problem with the input fields has occurred.
+        '404':
+          description: No credential was found with the given identifier.
+        '500':
+          description: An internal error has occurred.
+    delete:
+      summary: Delete credential
+      operationId: deleteCredential
+      tags:
+        - Wallet Service - Credentials
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The internal identifier of the credential to delete.
+          example: 1bba3d1c-1bda-4827-add6-6d5782658c3a
+      responses:
+        '204':
+          description: The request was successful, and the credential has been deleted.
+        '400':
+          description: A problem with the input fields has occurred.
+        '404':
+          description: No credential was found with the given identifier.
+        '500':
+          description: An internal error has occurred.
+    put:
+      summary: Update credential
+      description: <p>This endpoint updates an existing credential in the Wallet Service.</p>
+      operationId: updateCredential
+      tags:
+        - Wallet Service - Credentials
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The internal identifier of the credential to update.
+          example: 1bba3d1c-1bda-4827-add6-6d5782658c3a
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credential'
+        description: The updated credential.
+      responses:
+        '200':
+          description: The request was successful, and the credential has been updated.
+        '400':
+          description: A problem with the input fields has occurred.
+        '404':
+          description: No credential was found with the given identifier.
+        '500':
+          description: An internal error has occurred.
+  /wallet-service/credentials/search:
+    get:
+      summary: Find credentials by path/value
+      operationId: findInCredentials
+      tags:
+        - Wallet Service - Credentials
+      parameters:
+        - in: query
+          name: path
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: value
+          schema:
+            type: object
+        - in: query
+          name: subject
+          schema:
+            type: string
+        - in: query
+          name: issuer
+          schema:
+            type: string
+        - in: query
+          name: type
+          schema:
+            type: string
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the
+            result set.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Maximum number of items to return.
+      responses:
+        '200':
+          description: Credential(s) successfully retrieved!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Credential'
+                description: The credential(s).
+        '400':
+          description: invalid input!
+        '404':
+          description: Credential(s) not found!
+        '500':
+          description: error!
   /wallet-service/controllers:
     get:
       summary: Get controller(s)
@@ -964,19 +1182,19 @@ paths:
         that match the input parameters.</p>
       operationId: getControllers
       tags:
-        - Wallet Service
+        - Wallet Service - DIDs and Keys
       parameters:
         - in: query
           name: type
           schema:
             type: string
-          description: The type of the controller(s) to retrieve.
+          description: The type of the key(s) to retrieve.
           example: Ed25519
         - in: query
           name: purpose
           schema:
             type: string
-          description: The purpose of the controller(s) to retrieve.
+          description: The purpose of the key(s) to retrieve.
           example: authentication
         - in: query
           name: limit
@@ -1005,6 +1223,105 @@ paths:
           description: A problem with the input fields has occurred.
         '404':
           description: No controllers were found that match the input parameters.
+        '500':
+          description: An internal error has occurred.
+  /wallet-service/controllers/{controller}:
+    delete:
+      summary: Delete keys by controller
+      description: <p>This endpoint deletes all private/public keys from the Wallet
+        Service related to the given controller.</p>
+      operationId: deleteKeysByController
+      tags:
+        - Wallet Service - DIDs and Keys
+      parameters:
+        - in: path
+          name: controller
+          required: true
+          schema:
+            type: string
+            format: uri
+          description: The controller of the key(s) to delete.
+          example: did:key:z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz
+      responses:
+        '204':
+          description: The request was successful, and the keys have been deleted.
+        '400':
+          description: A problem with the input fields has occurred.
+        '404':
+          description: No controller was found with the given identifier.
+        '500':
+          description: An internal error has occurred.
+  /wallet-service/subjects:
+    get:
+      summary: Get subjects(s)
+      description: <p>This endpoint returns a list of subjects from the wallet that
+        match the input parameters.</p>
+      operationId: getSubjects
+      tags:
+        - Wallet Service - Credentials
+      parameters:
+        - in: query
+          name: issuer
+          schema:
+            type: string
+            format: uri
+          description: The issuer of the credential(s) to retrieve.
+        - in: query
+          name: type
+          schema:
+            type: string
+          description: The type of the credential(s) to retrieve.
+          example: Ed25519
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            format: int64
+          description: The limit (total number) of subjects to retrieve.
+          example: 1
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                description: The list of subjects(s).
+                example:
+                  - did:key:z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz
+          description: The request was successful, and the list of subject(s) has
+            been retrieved.
+        '400':
+          description: A problem with the input fields has occurred.
+        '404':
+          description: No subjects were found that match the input parameters.
+        '500':
+          description: An internal error has occurred.
+  /wallet-service/subjects/{subject}:
+    delete:
+      summary: Delete credentials by subject
+      description: <p>This endpoint deletes all credentials from the Wallet Service
+        related to the given subject.</p>
+      operationId: deleteCredentialsBySubject
+      tags:
+        - Wallet Service - Credentials
+      parameters:
+        - in: path
+          name: subject
+          required: true
+          schema:
+            type: string
+            format: uri
+          description: The subjects of the credential(s) to delete.
+          example: did:key:z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz
+      responses:
+        '204':
+          description: The request was successful, and the credentials have been deleted.
+        '400':
+          description: A problem with the input fields has occurred.
+        '404':
+          description: No subject was found with the given identifier.
         '500':
           description: An internal error has occurred.
   /version-service/didrecords:
@@ -2380,6 +2697,43 @@ components:
             - null
           example: {}
           additionalProperties: {}
+    Credential:
+      description: A credential stored in the Wallet Service.
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 1bba3d1c-1bda-4827-add6-6d5782658c3a
+        timestamp:
+          type: integer
+          format: int64
+          example: 1633531154167
+        subject:
+          type: string
+          format: uri
+          example: did:key:z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz
+        issuer:
+          type: string
+          format: uri
+          example: did:key:z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz
+        type:
+          type: string
+          example: PermanentResidentCredential
+        credential:
+          type:
+            - object
+            - null
+          additionalProperties: {}
+        credentialMetadata:
+          type:
+            - object
+            - null
+          example: {}
+          additionalProperties: {}
+        reference:
+          type: string
+          example: user-012345
     DidRecord:
       type: object
       required:

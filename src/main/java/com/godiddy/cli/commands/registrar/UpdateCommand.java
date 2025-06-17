@@ -5,8 +5,8 @@ import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.api.client.openapi.model.UpdateRequest;
 import com.godiddy.cli.GodiddyAbstractCommand;
-import com.godiddy.cli.config.Api;
 import com.godiddy.cli.clistorage.clistate.CLIState;
+import com.godiddy.cli.config.Api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -130,7 +130,7 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
         List<DidDocument> didDocument = Collections.singletonList(Api.fromJson(this.didDocument, DidDocument.class));
 
         if (Boolean.TRUE.equals(this.resolve)) {
-            Object result = Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(this.did, "application/did+ld+json"));
+            Object result = Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(this.did, "application/did+ld+json", null));
             didDocument = Collections.singletonList(Api.convert(result, DidDocument.class));
         }
 

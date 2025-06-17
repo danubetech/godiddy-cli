@@ -64,8 +64,12 @@ public class Api {
         return new UniversalRegistrarApi(apiClient());
     }
 
-    public static WalletServiceApi walletServiceApi() {
-        return new WalletServiceApi(apiClient());
+    public static WalletServiceDidsAndKeysApi walletServiceDidsAndKeysApi() {
+        return new WalletServiceDidsAndKeysApi(apiClient());
+    }
+
+    public static WalletServiceCredentialsApi walletServiceCredentialsApi() {
+        return new WalletServiceCredentialsApi(apiClient());
     }
 
     public static VersionServiceApi versionServiceApi() {
