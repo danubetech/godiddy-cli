@@ -4,6 +4,7 @@ import com.godiddy.api.client.openapi.model.ResolutionOptions;
 import com.godiddy.api.client.openapi.model.ResolveOptionsParameter;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.config.Api;
+import foundation.identity.did.representations.Representations;
 import foundation.identity.did.representations.consumption.RepresentationConsumerDIDJSON;
 import foundation.identity.did.representations.production.RepresentationProducerDID;
 import foundation.identity.did.representations.production.RepresentationProducerDIDJSONLD;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
+import uniresolver.result.ResolveResult;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -50,7 +52,7 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
         // request
 
         String identifier = this.identifier;
-        String accept = Boolean.TRUE.equals(this.metadata) ? "application/ld+json;profile=\"https://w3id.org/did-resolution\"" : "" + RepresentationProducerDID.MEDIA_TYPE + "," + RepresentationProducerDIDJSONLD.MEDIA_TYPE + "," + RepresentationConsumerDIDJSON.MEDIA_TYPE;
+        String accept = Boolean.TRUE.equals(this.metadata) ? ResolveResult.MEDIA_TYPE : Representations.DEFAULT_MEDIA_TYPE;
 
         ResolutionOptions resolutionOptions = this.options == null ? null : new ResolutionOptions();
         if (resolutionOptions != null) this.options.forEach(resolutionOptions::putAdditionalProperty);
