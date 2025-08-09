@@ -57,7 +57,7 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
         ResolutionOptions resolutionOptions = this.options == null ? null : new ResolutionOptions();
         if (resolutionOptions != null) this.options.forEach(resolutionOptions::putAdditionalProperty);
 
-        ResolveOptionsParameter resolveOptionsParameter = resolutionOptions == null ? new ResolveOptionsParameter() : new ResolveOptionsParameter(resolutionOptions);
+        ResolveOptionsParameter resolveOptionsParameter = resolutionOptions == null ? null : new ResolveOptionsParameter(resolutionOptions);
 
         // execute
 
