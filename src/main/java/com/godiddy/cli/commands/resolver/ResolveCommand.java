@@ -50,12 +50,12 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
         // request
 
         String identifier = this.identifier;
-        String accept = Boolean.TRUE.equals(this.metadata) ? "application/ld+json;profile=\"https://w3id.org/did-resolution\"": "" + RepresentationProducerDID.MEDIA_TYPE + "," + RepresentationProducerDIDJSONLD.MEDIA_TYPE + "," + RepresentationConsumerDIDJSON.MEDIA_TYPE;
+        String accept = Boolean.TRUE.equals(this.metadata) ? "application/ld+json;profile=\"https://w3id.org/did-resolution\"" : "" + RepresentationProducerDID.MEDIA_TYPE + "," + RepresentationProducerDIDJSONLD.MEDIA_TYPE + "," + RepresentationConsumerDIDJSON.MEDIA_TYPE;
 
-        ResolutionOptions resolutionOptions = new ResolutionOptions();
-        this.options.forEach(resolutionOptions::putAdditionalProperty);
+        ResolutionOptions resolutionOptions = this.options == null ? null : new ResolutionOptions();
+        if (resolutionOptions != null) this.options.forEach(resolutionOptions::putAdditionalProperty);
 
-        ResolveOptionsParameter resolveOptionsParameter = new ResolveOptionsParameter(resolutionOptions);
+        ResolveOptionsParameter resolveOptionsParameter = resolutionOptions == null ? new ResolveOptionsParameter() : new ResolveOptionsParameter(resolutionOptions);
 
         // execute
 
