@@ -1,5 +1,7 @@
 package com.godiddy.cli.commands.resolver;
 
+import com.godiddy.api.client.openapi.model.ResolutionOptions;
+import com.godiddy.api.client.openapi.model.ResolveOptionsParameter;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.config.Api;
 import foundation.identity.did.representations.consumption.RepresentationConsumerDIDJSON;
@@ -49,11 +51,15 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
 
         String identifier = this.identifier;
         String accept = Boolean.TRUE.equals(this.metadata) ? "application/ld+json;profile=\"https://w3id.org/did-resolution\"": "" + RepresentationProducerDID.MEDIA_TYPE + "," + RepresentationProducerDIDJSONLD.MEDIA_TYPE + "," + RepresentationConsumerDIDJSON.MEDIA_TYPE;
-        Map<String, String> options = this.options;
+
+        ResolutionOptions resolutionOptions = new ResolutionOptions();
+        this.options.forEach(resolutionOptions::putAdditionalProperty);
+
+        ResolveOptionsParameter resolveOptionsParameter = new ResolveOptionsParameter(resolutionOptions);
 
         // execute
 
-        Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(identifier, accept, options));
+        Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(identifier, accept, resolveOptionsParameter));
 
         // done
 

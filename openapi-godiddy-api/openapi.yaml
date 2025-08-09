@@ -1,13 +1,13 @@
 openapi: 3.1.0
 info:
-  description: See https://docs.godiddy.com/ for additional documentation.
   version: 1.0.0
-  title: GoDiddy.com - API Reference
+  title: API Reference
   contact:
     email: contact@danubetech.com
 servers:
-  - url: /0.1.0
   - url: /1.0.0
+security:
+  - bearerAuth: []
 tags:
   - name: Universal Resolver
   - name: Universal Registrar
@@ -21,12 +21,12 @@ paths:
   /universal-resolver/identifiers/{identifier}:
     get:
       summary: Resolve a DID / Dereference a DID URL
-      description: <p>This endpoint resolves a DID. As input it takes the DID, plus
-        DID resolution <a href="https://www.w3.org/TR/did-core/#did-resolution-options">options</a>.
-        The output is a DID document in one of the supported representations, plus
-        metadata. The same endpoint can also be used to dereference a DID URL. In
-        this case, the output is a DID document, or part of a DID document, or some
-        other resource identified by the DID URL.</p> <p>See the <a href="https://w3c-ccg.github.io/did-resolution/">DID
+      description: <p>This endpoint either resolves a DID, or dereferences a DID URL.
+        When resolving a DID, it takes the DID and resolution options as inputs, and
+        the output is a DID document plus metadata. When dereferencing a DID URL,
+        it takes the DID URL and dereferencing options as inputs, and the output is
+        a DID document, a part of a DID document, or some other resource identified
+        by the DID URL.</p> <p>See the <a href="<a href="https://www.w3.org/TR/did-resolution/">DID
         Resolution</a> specification for additional details.</p>
       operationId: resolve
       tags:
@@ -48,36 +48,29 @@ paths:
             example3:
               value: did:ebsi:z25ZZFS7FweHsm9MX2Qvc6gc
               description: A DID using the `ebsi` method.
-            example4:
-              value: did:indy:sovrin:builder:VbPQNHsvoLZdaNU7fTBeFx#key-1
-              description: A DID URL with a fragment.
-            example5:
-              value: did:ebsi:z25ZZFS7FweHsm9MX2Qvc6gc#keys-1
-              description: A DID URL with a fragment.
         - in: header
           required: false
           name: Accept
           schema:
             type: string
           description: The requested media type of the DID document representation
-            or DID resolution result. See <a href="https://www.w3.org/TR/did-core/#representations">https://www.w3.org/TR/did-core/#representations</a>
-            and <a href="https://w3c-ccg.github.io/did-resolution/#did-resolution-result">https://w3c-ccg.github.io/did-resolution/#did-resolution-result</a>.
+            or DID resolution result.
           examples:
-            application/did+json:
-              value: application/json
-              description: Media type of a DID document (JSON representation).
-            application/did+ld+json:
-              value: application/did+ld+json
-              description: Media type of a DID document (JSON-LD representation).
-            application/ld+json;profile="https://w3id.org/did-resolution":
-              value: application/ld+json;profile="https://w3id.org/did-resolution"
-              description: Media type of a DID resolution result (JSON-LD representation).
+            application/did:
+              value: application/did
+              description: Media type of a DID document.
+            application/did-resolution:
+              value: application/did-resolution
+              description: Media type of a DID resolution result.
+            application/did-url-dereferencing:
+              value: application/did-url-dereferencing
+              description: Media type of a DID URL dereferencing result.
         - in: query
           name: options
           schema:
-            type: object
-            additionalProperties:
-              type: string
+            oneOf:
+              - $ref: '#/components/schemas/ResolutionOptions'
+              - $ref: '#/components/schemas/DereferencingOptions'
           description: The options for resolving the DID or dereferencing the DID
             URL.
           style: form
@@ -86,30 +79,23 @@ paths:
         '200':
           description: successfully resolved!
           content:
-            application/did+json:
+            application/did:
               schema:
                 type: object
-                description: The DID document (JSON representation).
+                description: The DID document.
                 example:
+                  '@context': https://www.w3.org/ns/did/v1.1
                   id: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
                   verificationMethod:
                     - id: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw#key-1
                       type: Ed25519VerificationKey2018
                       publicKeyBase58: H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV
-            application/did+ld+json:
-              schema:
-                type: object
-                description: The DID document (JSON-LD representation).
-                example:
-                  '@context': https://www.w3.org/ns/did/v1
-                  id: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
-                  verificationMethod:
-                    - id: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw#key-1
-                      type: Ed25519VerificationKey2018
-                      publicKeyBase58: H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV
-            application/ld+json;profile="https://w3id.org/did-resolution":
+            application/did-resolution:
               schema:
                 $ref: '#/components/schemas/ResolutionResult'
+            application/did-url-dereferencing:
+              schema:
+                $ref: '#/components/schemas/DereferencingResult'
         '400':
           description: Invalid DID or DID URL.
         '404':
@@ -119,17 +105,16 @@ paths:
         '410':
           description: Successfully resolved, but DID is deactivated.
           content:
-            application/did+json:
+            application/did:
               schema:
                 type: object
-                description: The deactivated DID document (JSON representation).
-            application/did+ld+json:
-              schema:
-                type: object
-                description: The deactivated DID document (JSON-LD representation).
-            application/ld+json;profile="https://w3id.org/did-resolution":
+                description: The deactivated DID document.
+            application/did-resolution:
               schema:
                 $ref: '#/components/schemas/ResolutionResult'
+            application/did-url-dereferencing:
+              schema:
+                $ref: '#/components/schemas/DereferencingResult'
         '500':
           description: Internal Error.
         '501':
@@ -2003,7 +1988,31 @@ paths:
         '500':
           description: error!
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: apiKey
   schemas:
+    ResolutionOptions:
+      description: The DID resolution options. See https://www.w3.org/TR/did-resolution/#did-resolution-options
+      type: object
+      properties:
+        expandRelativeUrls:
+          type: boolean
+        versionId:
+          type: string
+        versionTime:
+          type: string
+          format: date-time
+      additionalProperties: {}
+    DereferencingOptions:
+      description: The DID URL dereferencing options. See https://www.w3.org/TR/did-resolution/#did-url-dereferencing-options
+      type: object
+      properties:
+        verificationRelationship:
+          type: string
+      additionalProperties: {}
     ResolutionResult:
       description: The DID resolution result.
       type: object
@@ -2011,11 +2020,80 @@ components:
         didDocument:
           type: object
         didResolutionMetadata:
-          type: object
-          additionalProperties: {}
+          $ref: '#/components/schemas/DidResolutionMetadata'
         didDocumentMetadata:
+          $ref: '#/components/schemas/DidDocumentMetadata'
+    DidResolutionMetadata:
+      type: object
+      properties:
+        contentType:
+          type: string
+        error:
+          $ref: '#/components/schemas/RFC9457ProblemDetails'
+      additionalProperties: {}
+    DidDocumentMetadata:
+      type: object
+      properties:
+        created:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
+        deactivated:
+          type: string
+        nextUpdate:
+          type: string
+          format: date-time
+        versionId:
+          type: string
+        nextVersionId:
+          type: string
+        equivalentId:
+          type: array
+          items:
+            type: string
+        canonicalId:
+          type: string
+      additionalProperties: {}
+    DereferencingResult:
+      description: The DID URL dereferencing result.
+      type: object
+      properties:
+        content:
           type: object
-          additionalProperties: {}
+        dereferencingMetadata:
+          $ref: '#/components/schemas/DereferencingMetadata'
+        contentMetadata:
+          $ref: '#/components/schemas/ContentMetadata'
+    DereferencingMetadata:
+      type: object
+      properties:
+        contentType:
+          type: string
+        error:
+          $ref: '#/components/schemas/RFC9457ProblemDetails'
+      additionalProperties: {}
+    ContentMetadata:
+      type: object
+      additionalProperties: {}
+    RFC9457ProblemDetails:
+      type: object
+      required:
+        - type
+        - title
+      properties:
+        type:
+          type: string
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+      additionalProperties: {}
     RegistrarRequest:
       description: Input fields for a DID operation.
       type: object
@@ -2862,7 +2940,6 @@ components:
             status: '0'
     IssueCredentialOptions:
       type: object
-      additionalProperties: false
       description: Options for the Verifiable Credential issuance process.
       properties:
         format:
@@ -2883,12 +2960,34 @@ components:
           type: boolean
           description: 'Whether or not to return metadata in the response. Possible
             values: true, false. Default value: false.'
+        importCredential:
+          type: boolean
+          description: Whether or not to import an issued Verifiable Credential into
+            a wallet service.
         type:
           type: string
           description: 'The type of proof to generate for the Verifiable Credential.
             Possible values: Ed25519Signature2018, Ed25519Signature2018, JsonWebSignature2020,
             etc. If omitted, a default type of proof for the Issuer''s verification
             method will be used.'
+        cryptosuite:
+          type: string
+        created:
+          type: string
+          description: The date and time of the proof (with a maximum accuracy in
+            seconds). Default current system time.
+        expires:
+          type: string
+        domain:
+          type: string
+          description: The intended domain of validity for the proof. For example
+            website.example
+        challenge:
+          type: string
+          description: A challenge provided by the requesting party of the proof.
+            For example 6e62f66e-67de-11eb-b490-ef3eeefa55f2
+        nonce:
+          type: string
         verificationMethod:
           type: string
           description: The URI of the verification method to use for generating the
@@ -2897,25 +2996,19 @@ components:
         proofPurpose:
           type: string
           description: 'The purpose of the proof. Default value: assertionMethod.'
-        created:
+        previousProof:
           type: string
-          description: The date and time of the proof (with a maximum accuracy in
-            seconds). Default current system time.
-        challenge:
-          type: string
-          description: A challenge provided by the requesting party of the proof.
-            For example 6e62f66e-67de-11eb-b490-ef3eeefa55f2
-        domain:
-          type: string
-          description: The intended domain of validity for the proof. For example
-            website.example
         credentialStatus:
           type: object
           properties:
             type:
               type: string
-              description: The method of Verifiable Credentialstatus to generate for
-                the Verifiable Credential.
+              description: The method of Verifiable Credential status to generate
+                for the Verifiable Credential.
+            options:
+              type: object
+              description: Options for the Verifiable Credential status.
+      additionalProperties: {}
       example:
         verificationMethod: did:example:123#z6MksHh7qHWvybLg5QTPPdG2DgEjjduBDArV9EF9mRiRzMBN
         proofPurpose: assertionMethod
@@ -2935,7 +3028,6 @@ components:
       type: object
     VerifyOptions:
       type: object
-      additionalProperties: false
       description: Options for the Verifiable Credential verification process.
       properties:
         format:
@@ -2959,14 +3051,17 @@ components:
           type: boolean
           description: 'Whether or not to return metadata in the response. Possible
             values: true, false. Default value: false.'
-        challenge:
-          type: string
-          description: A challenge provided by the requesting party of the proof.
-            For example 6e62f66e-67de-11eb-b490-ef3eeefa55f2
         domain:
           type: string
           description: The intended domain of validity for the proof. For example
             website.example
+        nonce:
+          type: string
+        challenge:
+          type: string
+          description: A challenge provided by the requesting party of the proof.
+            For example 6e62f66e-67de-11eb-b490-ef3eeefa55f2
+      additionalProperties: {}
       example:
         verificationMethod: did:example:123#z6MksHh7qHWvybLg5QTPPdG2DgEjjduBDArV9EF9mRiRzMBN
         proofPurpose: assertionMethod
@@ -3001,8 +3096,6 @@ components:
     VerifyPresentationRequest:
       type: object
       properties:
-        presentation:
-          type: object
         verifiablePresentation:
           type: object
         options:
