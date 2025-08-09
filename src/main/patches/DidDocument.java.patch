@@ -3,7 +3,7 @@
 @@ -47,7 +47,7 @@
    DidDocument.JSON_PROPERTY_SERVICE
  })
- @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.4.0")
+ @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.14.0")
 -public class DidDocument extends HashMap<String, Object> {
 +public class DidDocument {
    public static final String JSON_PROPERTY_ID = "id";

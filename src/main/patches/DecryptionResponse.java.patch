@@ -3,7 +3,7 @@
 @@ -47,7 +47,7 @@
    DidDocument.JSON_PROPERTY_PURPOSE
  })
- @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.4.0")
+ @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.14.0")
 -public class DecryptionResponse extends HashMap<String, Object> {
 +public class DecryptionResponse {
    public static final String JSON_PROPERTY_DECRYPTED_PAYLOAD = "decryptedPayload";
