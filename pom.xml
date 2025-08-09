@@ -329,6 +329,7 @@
 								<artifactId>godiddy-api-client-openapi</artifactId>
 								<artifactVersion>${project.version}</artifactVersion>
 								<configPackage>com.godiddy.api.client.openapi.config</configPackage>
+								<containerDefaultToNull>true</containerDefaultToNull>
 								<asyncNative>false</asyncNative>
 								<disallowAdditionalPropertiesIfNotPresent>false</disallowAdditionalPropertiesIfNotPresent>
 								<library>native</library>
