@@ -24,19 +24,27 @@ public class ConfigEndpointCommand extends ConfigAbstractCommand implements Call
     )
     String endpoint;
 
+    @CommandLine.Option(
+            names = {"-r", "--raw"},
+            description = "Whether or not to use raw endpoints that omit the component paths, e.g. /universal-resolver/, /universal-registrar/."
+    )
+    Boolean endpointRaw;
+
     @Override
     public Integer call() throws Exception {
-        log.trace("Parameter 'endpoint': " + this.endpoint);
+        log.trace("Parameter 'endpoint': " + this.endpoint + ", 'endpointRaw': " + this.endpointRaw);
         if (Boolean.TRUE.equals(this.delete)) {
             CLIConfig.setEndpoint(null);
+            CLIConfig.setEndpointRaw(null);
             System.out.println("Endpoint setting successfully deleted.");
         } else {
             if (this.endpoint == null) {
                 String endpoint = CLIConfig.getEndpoint();
+                Boolean endpointRaw = CLIConfig.getEndpointRaw();
                 if (endpoint == null) {
                     System.out.println("No endpoint set.");
                 } else {
-                    System.out.println("Endpoint: " + endpoint);
+                    System.out.println("Endpoint: " + endpoint + " (raw=" + endpointRaw + ")");
                 }
             } else {
                 String endpoint = this.endpoint;
@@ -46,7 +54,13 @@ public class ConfigEndpointCommand extends ConfigAbstractCommand implements Call
                     endpoint = predefinedEndpoint;
                 }
                 CLIConfig.setEndpoint(endpoint);
-                System.out.println("Endpoint successfully set: " + endpoint);
+                if (this.endpointRaw == null) {
+                    System.out.println("Endpoint successfully set: " + endpoint);
+                } else {
+                    Boolean endpointRaw = this.endpointRaw;
+                    CLIConfig.setEndpointRaw(endpointRaw);
+                    System.out.println("Endpoint successfully set: " + endpoint + " (raw=" + endpointRaw + ")");
+                }
             }
         }
         return 0;

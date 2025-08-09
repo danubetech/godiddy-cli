@@ -19,10 +19,12 @@ public class Endpoint {
             "godiddy-dev", "https://api.dev.godiddy.com/1.0.0/",
             "dif-universalresolver", "https://dev.uniresolver.io/1.0/",
             "dif-universalregistrar", "https://uniregistrar.io/1.0/",
-            "local-universalresolver", "http://localhost:8080/1.0",
-            "local-universalregistrar", "http://localhost:9090/1.0",
+            "local-universalresolver", "http://localhost:8080/1.0/",
+            "local-universalregistrar", "http://localhost:9080/1.0/",
             "local-businesswallet", "http://localhost:21080/1.0.0/"
     );
+
+    public static final Boolean DEFAULT_ENDPOINTRAW = Boolean.FALSE;
 
     public static String getEndpoint() {
         String endpoint = Objects.requireNonNullElse(CLIConfig.getEndpoint(), DEFAULT_ENDPOINT);
@@ -30,5 +32,10 @@ public class Endpoint {
             log.debug("Using default endpoint: " + DEFAULT_ENDPOINT);
         }
         return endpoint;
+    }
+
+    public static Boolean getEndpointRaw() {
+        Boolean endpointRaw = Objects.requireNonNullElse(CLIConfig.getEndpointRaw(), DEFAULT_ENDPOINTRAW);
+        return endpointRaw;
     }
 }

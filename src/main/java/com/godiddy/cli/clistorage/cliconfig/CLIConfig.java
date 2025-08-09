@@ -31,6 +31,18 @@ public class CLIConfig {
         }
     }
 
+    public static Boolean getEndpointRaw() {
+        return CLIStorage.get("endpointRaw") == null ? null : Boolean.parseBoolean(CLIStorage.get("endpointRaw"));
+    }
+
+    public static void setEndpointRaw(Boolean endpointRaw) {
+        if (endpointRaw == null) {
+            CLIStorage.remove("endpointRaw");
+        } else {
+            CLIStorage.put("endpointRaw", endpointRaw.toString());
+        }
+    }
+
     public static Kms.Value getKms() {
         return CLIStorage.get("kms") == null ? null : Kms.Value.valueOf(CLIStorage.get("kms"));
     }

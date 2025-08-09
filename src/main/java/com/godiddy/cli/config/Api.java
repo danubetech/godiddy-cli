@@ -19,6 +19,7 @@ import com.godiddy.cli.clistorage.clistate.CLIState;
 import uniregistrar.openapi.RFC3339DateFormat;
 
 import java.io.*;
+import java.net.URI;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -48,9 +49,9 @@ public class Api {
 
     public static ApiClient apiClient() {
         ApiClient apiClient = new ApiClient();
-        String endpoint = Endpoint.getEndpoint();
-        if (endpoint.endsWith("/")) endpoint = endpoint.substring(0, endpoint.length()-1);
-        apiClient.updateBaseUri(endpoint);
+        String endpointWithoutSlash = Endpoint.getEndpoint();
+        if (endpointWithoutSlash.endsWith("/")) endpointWithoutSlash = endpointWithoutSlash.substring(0, endpointWithoutSlash.length()-1);
+        apiClient.updateBaseUri(endpointWithoutSlash);
         apiClient.setRequestInterceptor(requestInterceptor);
         apiClient.setResponseInterceptor(responseInterceptor);
         return apiClient;
@@ -105,8 +106,20 @@ public class Api {
     };
 
     private static final Consumer<HttpRequest.Builder> requestInterceptor = builder -> {
+        Boolean endpointRaw = Endpoint.getEndpointRaw();
+        if (Boolean.TRUE.equals(endpointRaw)) {
+            String endpointWithSlash = Endpoint.getEndpoint();
+            if (! endpointWithSlash.endsWith("/")) endpointWithSlash += "/";
+            String httpRequestUri = builder.build().uri().toString();
+            String httpRequestRelativeUri = httpRequestUri.substring(endpointWithSlash.length());
+            httpRequestRelativeUri = httpRequestRelativeUri.substring(httpRequestRelativeUri.indexOf("/")+1);
+            httpRequestUri = endpointWithSlash + httpRequestRelativeUri;
+            builder.uri(URI.create(httpRequestUri));
+        }
         String apiKey = ApiKey.getApiKey();
-        builder.header("Authorization", "Bearer " + apiKey);
+        if (apiKey != null && ! apiKey.isBlank()) {
+            builder.header("Authorization", "Bearer " + apiKey);
+        }
         HttpRequest httpRequest = builder.build();
         System.out.println();
         System.out.println(">>> " + httpRequest.method() + " " + httpRequest.uri());
