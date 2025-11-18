@@ -31,7 +31,7 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
             names = {"-o", "--option"},
             description = "This input field contains a key/value pair with an option for the DID operation."
     )
-    Map<String, String> options;
+    Map<String, Object> options;
 
     @Option(
             names = {"-r", "--result"},
