@@ -12,7 +12,9 @@ RUN apk add patch
 # build godiddy-cli
 
 ADD pom.xml /opt/godiddy-cli/
-RUN --mount=type=secret,id=DANUBETECH_MAVEN_INTERNAL_USERNAME,env=DANUBETECH_MAVEN_INTERNAL_USERNAME --mount=type=secret,id=DANUBETECH_MAVEN_INTERNAL_PASSWORD,env=DANUBETECH_MAVEN_INTERNAL_PASSWORD cd /opt/godiddy-cli/ && mvn org.apache.maven.plugins:maven-dependency-plugin:3.8.1:go-offline
+RUN --mount=type=secret,id=DANUBETECH_MAVEN_INTERNAL_USERNAME,env=DANUBETECH_MAVEN_INTERNAL_USERNAME --mount=type=secret,id=DANUBETECH_MAVEN_INTERNAL_PASSWORD,env=DANUBETECH_MAVEN_INTERNAL_PASSWORD \
+    cd /opt/godiddy-cli/ && mvn org.apache.maven.plugins:maven-dependency-plugin:3.8.1:go-offline
+
 ADD . /opt/godiddy-cli/
 RUN cd /opt/godiddy-cli/ && mvn clean package -DskipTests
 
