@@ -20,7 +20,7 @@ public class VaultEndpoint {
     public static String getVaultEndpoint() {
         String vaultEndpoint = Objects.requireNonNullElse(CLIConfig.getVaultEndpoint(), DEFAULT_VAULTENDPOINT);
         if (DEFAULT_VAULTENDPOINT.equals(vaultEndpoint)) {
-            log.info("Using default vault endpoint: " + DEFAULT_VAULTENDPOINT);
+            log.debug("Using default vault endpoint: " + DEFAULT_VAULTENDPOINT);
         }
         return vaultEndpoint;
     }

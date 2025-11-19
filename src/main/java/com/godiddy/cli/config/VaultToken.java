@@ -20,7 +20,7 @@ public class VaultToken {
     public static String getVaultToken() {
         String vaultEndpoint = Objects.requireNonNullElse(CLIConfig.getVaultToken(), DEFAULT_VAULTTOKEN);
         if (DEFAULT_VAULTTOKEN.equals(vaultEndpoint)) {
-            log.info("Using default vault token: " + DEFAULT_VAULTTOKEN);
+            log.debug("Using default vault token: " + DEFAULT_VAULTTOKEN);
         }
         return vaultEndpoint;
     }
