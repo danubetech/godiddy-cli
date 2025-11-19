@@ -151,6 +151,6 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
 
         // continue
 
-        return ContinueCommand.doContinue(interactive);
+        return DoContinue.doContinue(interactive);
     }
 }

@@ -162,6 +162,6 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
 
         // continue
 
-        return ContinueCommand.doContinue(interactive);
+        return DoContinue.doContinue(interactive);
     }
 }

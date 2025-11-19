@@ -22,7 +22,7 @@ public class Interfaces {
 
         // prepare interfaces
 
-        Kms.Value kms = Kms.getKeyInterface();
+        Kms.Value kms = Kms.getKms();
 
         ClientKeyInterface<? extends ClientKey> clientKeyInterface = switch (kms) {
             case dummy -> new DummyClientKeyInterface();

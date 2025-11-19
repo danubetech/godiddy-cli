@@ -24,7 +24,7 @@ public class Kms {
             "def", Value.valueOf(DEFAULT_KMS)
     );
 
-    public static Value getKeyInterface() {
+    public static Value getKms() {
         Value kms = Objects.requireNonNullElse(CLIConfig.getKms(), Value.valueOf(DEFAULT_KMS));
         if (Value.valueOf(DEFAULT_KMS).equals(kms)) {
             log.debug("Using default KMS: " + DEFAULT_KMS);

@@ -120,6 +120,6 @@ public class ExecuteCommand extends GodiddyAbstractCommand implements Callable<I
 
         // continue
 
-        return ContinueCommand.doContinue(interactive);
+        return DoContinue.doContinue(interactive);
     }
 }

@@ -133,6 +133,6 @@ public class DeactivateCommand extends GodiddyAbstractCommand implements Callabl
 
         // continue
 
-        return ContinueCommand.doContinue(interactive);
+        return DoContinue.doContinue(interactive);
     }
 }
