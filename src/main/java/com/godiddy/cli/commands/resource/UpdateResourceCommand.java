@@ -6,6 +6,7 @@ import com.godiddy.api.client.openapi.model.UpdateResourceRequest;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.clistorage.clistate.CLIState;
 import com.godiddy.cli.commands.registrar.ContinueCommand;
+import com.godiddy.cli.commands.registrar.DoContinue;
 import com.godiddy.cli.config.Api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -128,6 +129,6 @@ public class UpdateResourceCommand extends GodiddyAbstractCommand implements Cal
 
         // continue
 
-        return ContinueCommand.doContinue(interactive);
+        return DoContinue.doContinue(interactive);
     }
 }

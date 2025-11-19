@@ -1,9 +1,9 @@
 package com.godiddy.cli.clistorage.cliconfig;
 
+import com.godiddy.cli.clistorage.CLIStorage;
 import com.godiddy.cli.config.Formatting;
 import com.godiddy.cli.config.Headers;
 import com.godiddy.cli.config.Kms;
-import com.godiddy.cli.clistorage.CLIStorage;
 
 public class CLIConfig {
 
@@ -64,6 +64,30 @@ public class CLIConfig {
             CLIStorage.remove("walletServiceBase");
         } else {
             CLIStorage.put("walletServiceBase", walletServiceBase);
+        }
+    }
+
+    public static String getVaultEndpoint() {
+        return CLIStorage.get("vaultEndpoint");
+    }
+
+    public static void setVaultEndpoint(String vaultEndpoint) {
+        if (vaultEndpoint == null) {
+            CLIStorage.remove("vaultEndpoint");
+        } else {
+            CLIStorage.put("vaultEndpoint", vaultEndpoint);
+        }
+    }
+
+    public static String getVaultToken() {
+        return CLIStorage.get("vaultToken");
+    }
+
+    public static void setVaultToken(String vaultToken) {
+        if (vaultToken == null) {
+            CLIStorage.remove("vaultToken");
+        } else {
+            CLIStorage.put("vaultToken", vaultToken);
         }
     }
 

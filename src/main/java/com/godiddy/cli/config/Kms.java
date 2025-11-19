@@ -14,8 +14,9 @@ public class Kms {
 
     public enum Value {
         dummy,
-        walletservice,
         local,
+        hashicorp_vault,
+        wallet_service,
         def
     };
 

@@ -12,10 +12,12 @@ import java.util.concurrent.Callable;
         subcommands = {
                 ConfigApiKeyCommand.class,
                 ConfigEndpointCommand.class,
+                ConfigFormattingCommand.class,
+                ConfigHeadersCommand.class,
                 ConfigKmsCommand.class,
                 ConfigWalletServiceBaseCommand.class,
-                ConfigFormattingCommand.class,
-                ConfigHeadersCommand.class
+                ConfigVaultEndpointCommand.class,
+                ConfigVaultTokenCommand.class
         }
 )
 public class ConfigRootCommand extends GodiddyAbstractCommand implements Callable<Integer> {

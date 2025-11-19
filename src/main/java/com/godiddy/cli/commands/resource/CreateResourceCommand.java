@@ -4,6 +4,7 @@ import com.godiddy.api.client.openapi.model.CreateResourceRequest;
 import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
+import com.godiddy.cli.commands.registrar.DoContinue;
 import com.godiddy.cli.config.Api;
 import com.godiddy.cli.clistorage.clistate.CLIState;
 import com.godiddy.cli.commands.registrar.ContinueCommand;
@@ -123,6 +124,6 @@ public class CreateResourceCommand extends GodiddyAbstractCommand implements Cal
 
         // continue
 
-        return ContinueCommand.doContinue(interactive);
+        return DoContinue.doContinue(interactive);
     }
 }
