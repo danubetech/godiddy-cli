@@ -61,43 +61,43 @@
 		<!-- Testing Versions -->
 
 		<junit.version>4.13.4</junit.version>
-		<junit-jupiter.version>5.13.4</junit-jupiter.version>
-		<junit-platform.version>1.13.4</junit-platform.version>
-		<junit-platform-commons.version>1.13.4</junit-platform-commons.version>
-		<mockito-core.version>5.18.0</mockito-core.version>
+		<junit-jupiter.version>6.0.1</junit-jupiter.version>
+		<junit-platform.version>6.0.1</junit-platform.version>
+		<junit-platform-commons.version>6.0.1</junit-platform-commons.version>
+		<mockito-core.version>5.20.0</mockito-core.version>
 
 		<!-- Systems Versions -->
 
-		<apache.log4j.version>2.25.1</apache.log4j.version>
+		<apache.log4j.version>2.25.2</apache.log4j.version>
 
 		<!-- Spring Versions -->
 
-		<springframework.boot.version>3.5.4</springframework.boot.version>
+		<springframework.boot.version>3.5.0</springframework.boot.version>
 
 		<!-- OpenAPI Versions -->
 
 		<openapi-generator.version>7.14.0</openapi-generator.version>
-		<fasterxml.jackson.version>2.19.2</fasterxml.jackson.version>
+		<fasterxml.jackson.version>2.19.4</fasterxml.jackson.version>
 		<fasterxml.jackson.yaml.version>2.19.2</fasterxml.jackson.yaml.version>
-		<org.openapitools-jackson-databind-nullable.version>0.2.6</org.openapitools-jackson-databind-nullable.version>
+		<org.openapitools-jackson-databind-nullable.version>0.2.8</org.openapitools-jackson-databind-nullable.version>
 		<jakarta-annotation.version>3.0.0</jakarta-annotation.version>
 		<jakarta-validation.version>3.1.1</jakarta-validation.version>
 
 		<!-- Danube Tech Versions -->
 
-		<wallet-service.version>1.13.0</wallet-service.version>
-		<key-formats-java.version>1.22.0</key-formats-java.version>
-		<did-common-java.version>1.18.0</did-common-java.version>
-		<danubetech-common-java.version>1.32.0</danubetech-common-java.version>
+		<wallet-service.version>1.15.0</wallet-service.version>
+		<key-formats-java.version>1.23.0</key-formats-java.version>
+		<did-common-java.version>1.20.0</did-common-java.version>
+		<danubetech-common-java.version>1.35.0</danubetech-common-java.version>
 		<danubetech-kms-java.version>0.4.0</danubetech-kms-java.version>
 		<com.github.mattrglobal-bbs.signatures.version>2.0</com.github.mattrglobal-bbs.signatures.version>
 
 		<!-- Other Versions -->
 
-		<commons-codec.version>1.19.0</commons-codec.version>
+		<commons-codec.version>1.20.0</commons-codec.version>
 		<info.picocli-picocli.version>4.7.7</info.picocli-picocli.version>
-		<org.modelmapper-modelmapper.version>3.2.4</org.modelmapper-modelmapper.version>
-		<nimbus-jose-jwt.version>10.4.1</nimbus-jose-jwt.version>
+		<org.modelmapper-modelmapper.version>3.2.6</org.modelmapper-modelmapper.version>
+		<nimbus-jose-jwt.version>10.6</nimbus-jose-jwt.version>
 		<org.fusesource.jansi-jansi.version>2.4.2</org.fusesource.jansi-jansi.version>
 
 	</properties>
