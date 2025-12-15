@@ -89,7 +89,7 @@
 		<key-formats-java.version>1.25.0</key-formats-java.version>
 		<did-common-java.version>1.21.0</did-common-java.version>
 		<danubetech-resolver-common-java.version>0.1.0</danubetech-resolver-common-java.version>
-        <danubetech-registrar-common-java.version>0.1.0</danubetech-registrar-common-java.version>
+		<danubetech-registrar-common-java.version>0.2-SNAPSHOT</danubetech-registrar-common-java.version>
 		<danubetech-kms-java.version>0.4.0</danubetech-kms-java.version>
 		<com.github.mattrglobal-bbs.signatures.version>2.0</com.github.mattrglobal-bbs.signatures.version>
 
@@ -537,11 +537,11 @@
 				<artifactId>danubetech-resolver-common-java</artifactId>
 				<version>${danubetech-resolver-common-java.version}</version>
 			</dependency>
-            <dependency>
-                <groupId>com.danubetech</groupId>
-                <artifactId>danubetech-registrar-common-java</artifactId>
-                <version>${danubetech-registrar-common-java.version}</version>
-            </dependency>
+			<dependency>
+				<groupId>com.danubetech</groupId>
+				<artifactId>danubetech-registrar-common-java</artifactId>
+				<version>${danubetech-registrar-common-java.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.danubetech</groupId>
 				<artifactId>danubetech-kms-java</artifactId>
@@ -667,10 +667,10 @@
 			<groupId>com.danubetech</groupId>
 			<artifactId>danubetech-resolver-common-java</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>com.danubetech</groupId>
-            <artifactId>danubetech-registrar-common-java</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>com.danubetech</groupId>
+			<artifactId>danubetech-registrar-common-java</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.danubetech</groupId>
 			<artifactId>danubetech-kms-java</artifactId>
