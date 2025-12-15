@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Interfaces {
 
-    private static final Logger log = LogManager.getLogger(Kms.class);
+    private static final Logger log = LogManager.getLogger(Interfaces.class);
 
     public static ClientKeyInterface<? extends ClientKey> instantiateClientKeyInterface() {
 
