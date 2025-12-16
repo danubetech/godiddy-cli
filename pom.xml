@@ -76,7 +76,7 @@
 
 		<!-- OpenAPI Versions -->
 
-		<openapi-generator.version>7.17.0</openapi-generator.version>
+		<openapi-generator.version>7.14.0</openapi-generator.version>
 		<fasterxml.jackson.version>2.19.4</fasterxml.jackson.version>
 		<fasterxml.jackson.yaml.version>2.19.4</fasterxml.jackson.yaml.version>
 		<org.openapitools-jackson-databind-nullable.version>0.2.8</org.openapitools-jackson-databind-nullable.version>

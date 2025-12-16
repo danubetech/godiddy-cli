@@ -12,6 +12,8 @@ import com.godiddy.cli.config.Api;
 import com.godiddy.cli.interfaces.Interfaces;
 import com.godiddy.cli.util.MappingUtil;
 
+import java.util.Optional;
+
 public class DoProcess {
 
     public static Integer doProcess(boolean interactive) throws Exception {
@@ -23,8 +25,8 @@ public class DoProcess {
             System.err.println("No current state for preparing next command.");
             return 1;
         }
-        RegistrarRequest prevRequest = CLIState.getPrevRequest();
-        if (prevRequest == null) {
+        RegistrarRequest request = CLIState.getPrevRequest();
+        if (request == null) {
             System.err.println("No previous request for preparing next command.");
             return 1;
         }
@@ -39,19 +41,21 @@ public class DoProcess {
         RegistrarRequest nextRequest = null;
 
         if (state instanceof RegistrarState registrarState) {
-            uniregistrar.openapi.model.RegistrarRequest handleRequest = MappingUtil.map(prevRequest);
-            uniregistrar.openapi.model.RegistrarState handleState = MappingUtil.map(registrarState);
+            uniregistrar.openapi.model.RegistrarRequest mappedRequest = MappingUtil.map(request);
+            uniregistrar.openapi.model.RegistrarState mappedState = MappingUtil.map(registrarState);
 
-            uniregistrar.openapi.model.RegistrarRequest handleNextRequest = InternalSecretMode.handleState(handleRequest, handleState, clientKeyInterface, clientStateInterface);
+            Optional<uniregistrar.openapi.model.RegistrarRequest> handleStateResult = InternalSecretMode.handleState(mappedRequest, mappedState, clientKeyInterface, clientStateInterface);
+            uniregistrar.openapi.model.RegistrarRequest mappedNextRequest = handleStateResult == null ? null : handleStateResult.orElse(null);
 
-            nextRequest = MappingUtil.map(handleNextRequest);
+            nextRequest = MappingUtil.map(mappedNextRequest);
         } else if (state instanceof RegistrarResourceState registrarResourceState) {
-            uniregistrar.openapi.model.RegistrarRequest handleRequest = MappingUtil.map(prevRequest);
-            uniregistrar.openapi.model.RegistrarResourceState handleState = MappingUtil.map(registrarResourceState);
+            uniregistrar.openapi.model.RegistrarRequest mappedRequest = MappingUtil.map(request);
+            uniregistrar.openapi.model.RegistrarResourceState mappedState = MappingUtil.map(registrarResourceState);
 
-            uniregistrar.openapi.model.RegistrarRequest handleNextRequest = InternalSecretMode.handleState(handleRequest, handleState, clientKeyInterface, clientStateInterface);
+            Optional<uniregistrar.openapi.model.RegistrarRequest> handleStateResult = InternalSecretMode.handleState(mappedRequest, mappedState, clientKeyInterface, clientStateInterface);
+            uniregistrar.openapi.model.RegistrarRequest mappedNextRequest = handleStateResult == null ? null : handleStateResult.orElse(null);
 
-            nextRequest = MappingUtil.map(handleNextRequest);
+            nextRequest = MappingUtil.map(mappedNextRequest);
         }
 
         // save next request

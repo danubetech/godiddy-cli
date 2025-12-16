@@ -1,21 +1,6 @@
 package com.godiddy.cli.commands.state;
 
-import com.danubetech.kms.clientkeyinterface.ClientKeyInterface;
-import com.danubetech.kms.clientstateinterface.ClientStateInterface;
-import com.danubetech.uniregistrar.local.extensions.handlers.HandleStateUpdateTempKeys;
-import com.danubetech.uniregistrar.local.extensions.handlers.HandleStateUpdateVerificationMethods;
-import com.danubetech.uniregistrar.local.extensions.handlers.action.HandleActionState;
-import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretJsonWebKeys;
-import com.danubetech.uniregistrar.local.extensions.handlers.finished.HandleFinishedStateImportSecretVerificationMethods;
-import com.godiddy.api.client.openapi.model.RegistrarRequest;
-import com.godiddy.api.client.openapi.model.RegistrarResourceState;
-import com.godiddy.api.client.openapi.model.RegistrarState;
 import com.godiddy.cli.GodiddyAbstractCommand;
-import com.godiddy.cli.config.Api;
-import com.godiddy.cli.clistorage.clistate.CLIState;
-import com.godiddy.cli.commands.registrar.ContinueCommand;
-import com.godiddy.cli.interfaces.Interfaces;
-import com.godiddy.cli.util.MappingUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
