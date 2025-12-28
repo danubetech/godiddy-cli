@@ -54,11 +54,11 @@ public class KmsDeleteCommand extends GodiddyAbstractCommand implements Callable
 
         // instantiate client key interface
 
-        final ClientKeyInterface<? extends ClientKey> clientKeyInterface = Interfaces.instantiateClientKeyInterface();
+        final ClientKeyInterface<ClientKey> clientKeyInterface = (ClientKeyInterface<ClientKey>) Interfaces.instantiateClientKeyInterface();
 
         // execute
 
-        List<? extends ClientKey> clientKeys = clientKeyInterface.getKeys(controller, url, type, purpose);
+        List<ClientKey> clientKeys = clientKeyInterface.getKeys(controller, url, type, purpose);
         for (ClientKey clientKey : clientKeys) clientKeyInterface.deleteKey(clientKey);
 
         // done
