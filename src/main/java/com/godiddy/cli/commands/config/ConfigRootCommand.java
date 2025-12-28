@@ -15,6 +15,7 @@ import java.util.concurrent.Callable;
                 ConfigFormattingCommand.class,
                 ConfigHeadersCommand.class,
                 ConfigKmsCommand.class,
+                ConfigLogLevelCommand.class,
                 ConfigWalletServiceBaseCommand.class,
                 ConfigVaultEndpointCommand.class,
                 ConfigVaultTokenCommand.class

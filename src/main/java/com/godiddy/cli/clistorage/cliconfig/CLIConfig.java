@@ -4,6 +4,7 @@ import com.godiddy.cli.clistorage.CLIStorage;
 import com.godiddy.cli.config.Formatting;
 import com.godiddy.cli.config.Headers;
 import com.godiddy.cli.config.Kms;
+import com.godiddy.cli.config.LogLevel;
 
 public class CLIConfig {
 
@@ -52,6 +53,18 @@ public class CLIConfig {
             CLIStorage.remove("kms");
         } else {
             CLIStorage.put("kms", kms.name());
+        }
+    }
+
+    public static LogLevel.Value getLogLevel() {
+        return CLIStorage.get("logLevel") == null ? null : LogLevel.Value.valueOf(CLIStorage.get("logLevel"));
+    }
+
+    public static void setLogLevel(LogLevel.Value logLevel) {
+        if (logLevel == null) {
+            CLIStorage.remove("logLevel");
+        } else {
+            CLIStorage.put("logLevel", logLevel.name());
         }
     }
 
