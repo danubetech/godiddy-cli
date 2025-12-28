@@ -88,9 +88,9 @@
 		<wallet-service.version>1.16.0</wallet-service.version>
 		<key-formats-java.version>1.25.0</key-formats-java.version>
 		<did-common-java.version>1.21.0</did-common-java.version>
+		<danubetech-kms-java.version>0.14.0</danubetech-kms-java.version>
 		<danubetech-resolver-common-java.version>0.3.0</danubetech-resolver-common-java.version>
-		<danubetech-registrar-common-java.version>0.7.0</danubetech-registrar-common-java.version>
-		<danubetech-kms-java.version>0.9.0</danubetech-kms-java.version>
+		<danubetech-registrar-common-java.version>0.10.0</danubetech-registrar-common-java.version>
 		<com.github.mattrglobal-bbs.signatures.version>2.0</com.github.mattrglobal-bbs.signatures.version>
 
 		<!-- Other Versions -->
