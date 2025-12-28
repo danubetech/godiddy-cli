@@ -4,6 +4,7 @@ import com.godiddy.cli.clistorage.cliconfig.CLIConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -13,16 +14,22 @@ public class Endpoint {
     private static final Logger log = LogManager.getLogger(Endpoint.class);
 
     public static final String DEFAULT_ENDPOINT = "https://api.godiddy.com/1.0.0/";
-    public static final Map<String, String> PREDEFINED_ENDPOINTS = Map.of(
-            "def", DEFAULT_ENDPOINT,
-            "godiddy", "https://api.godiddy.com/1.0.0/",
-            "godiddy-dev", "https://api.dev.godiddy.com/1.0.0/",
-            "dif-universalresolver", "https://dev.uniresolver.io/1.0/",
-            "dif-universalregistrar", "https://uniregistrar.io/1.0/",
-            "local-universalresolver", "http://localhost:8080/1.0/",
-            "local-universalregistrar", "http://localhost:9080/1.0/",
-            "local-businesswallet", "http://localhost:21080/1.0.0/"
-    );
+    public static final Map<String, String> PREDEFINED_ENDPOINTS;
+
+    static {
+        PREDEFINED_ENDPOINTS = new HashMap<>();
+        PREDEFINED_ENDPOINTS.put("def", DEFAULT_ENDPOINT);
+        PREDEFINED_ENDPOINTS.put("godiddy", "https://api.godiddy.com/1.0.0/");
+        PREDEFINED_ENDPOINTS.put("godiddy-dev", "https://api.dev.godiddy.com/1.0.0/");
+        PREDEFINED_ENDPOINTS.put("dif-universalresolver", "https://dev.uniresolver.io/1.0/");
+        PREDEFINED_ENDPOINTS.put("dif-universalregistrar", "https://uniregistrar.io/1.0/");
+        PREDEFINED_ENDPOINTS.put("local-universalresolver", "http://localhost:8080/1.0/");
+        PREDEFINED_ENDPOINTS.put("local-universalregistrar", "http://localhost:9080/1.0/");
+        PREDEFINED_ENDPOINTS.put("local-businesswallet", "http://localhost:21080/1.0.0/");
+        PREDEFINED_ENDPOINTS.put("docker-universalresolver", "http://172.17.0.1:8080/1.0/");
+        PREDEFINED_ENDPOINTS.put("docker-universalregistrar", "http://172.17.0.1:9080/1.0/");
+        PREDEFINED_ENDPOINTS.put("docker-businesswallet", "http://172.17.0.1:21080/1.0.0/");
+    }
 
     public static final Boolean DEFAULT_ENDPOINTRAW = Boolean.FALSE;
 
