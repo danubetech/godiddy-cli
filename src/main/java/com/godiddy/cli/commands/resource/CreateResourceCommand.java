@@ -70,7 +70,7 @@ public class CreateResourceCommand extends GodiddyAbstractCommand implements Cal
 
     @Option(
             names = "--content",
-            description = "This input field contains the content to be used for the DID create resource operation.",
+            description = "This input field contains the Base64-encoded content to be used for the DID create resource operation.",
             defaultValue = "{}"
     )
     String content;

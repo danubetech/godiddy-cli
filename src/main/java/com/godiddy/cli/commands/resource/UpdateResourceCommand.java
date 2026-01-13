@@ -73,7 +73,7 @@ public class UpdateResourceCommand extends GodiddyAbstractCommand implements Cal
 
     @Option(
             names = "--content",
-            description = "This input field contains the content to be used for the DID update resource operation.",
+            description = "This input field contains the Base64-encoded content to be used for the DID update resource operation.",
             defaultValue = "{}"
     )
     String content;
