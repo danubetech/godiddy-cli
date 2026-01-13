@@ -77,6 +77,24 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
     List<String> requestVerificationMethodPurpose;
 
     @Option(
+            names = {"-rvmj", "--requestVerificationMethodPublicKeyJwk"},
+            description = "A 'publicKeyJwk' property for a verification method to generate."
+    )
+    List<String> requestVerificationMethodPublicKeyJwk;
+
+    @Option(
+            names = {"-rvmjk", "--requestVerificationMethodPublicKeyJwkKty"},
+            description = "A 'publicKeyJwk.kty' property for a verification method to generate."
+    )
+    List<String> requestVerificationMethodPublicKeyJwkKty;
+
+    @Option(
+            names = {"-rvmjc", "--requestVerificationMethodPublicKeyJwkCrv"},
+            description = "A 'publicKeyJwk.crv' property for a verification method to generate."
+    )
+    List<String> requestVerificationMethodPublicKeyJwkCrv;
+
+    @Option(
             names = {"-s", "--secret"},
             description = "This input field contains an object with DID controller keys and other secrets needed for performing the DID operation."
     )
@@ -110,10 +128,22 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
                 String requestVerificationMethodId = this.requestVerificationMethodId.get(i);
                 String requestVerificationMethodType = (this.requestVerificationMethodType == null || this.requestVerificationMethodType.size() < (i+1)) ? null : this.requestVerificationMethodType.get(i);
                 String requestVerificationMethodPurpose = (this.requestVerificationMethodPurpose == null || this.requestVerificationMethodPurpose.size() < (i+1)) ? null : this.requestVerificationMethodPurpose.get(i);
+                String requestVerificationMethodPublicKeyJwk = (this.requestVerificationMethodPublicKeyJwk == null || this.requestVerificationMethodPublicKeyJwk.size() < (i+1)) ? null : this.requestVerificationMethodPublicKeyJwk.get(i);
+                String requestVerificationMethodPublicKeyJwkKty = (this.requestVerificationMethodPublicKeyJwkKty == null || this.requestVerificationMethodPublicKeyJwkKty.size() < (i+1)) ? null : this.requestVerificationMethodPublicKeyJwkKty.get(i);
+                String requestVerificationMethodPublicKeyJwkCrv = (this.requestVerificationMethodPublicKeyJwkCrv == null || this.requestVerificationMethodPublicKeyJwkCrv.size() < (i+1)) ? null : this.requestVerificationMethodPublicKeyJwkCrv.get(i);
                 Map<String, Object> requestVerificationMethod = new HashMap<>();
                 requestVerificationMethod.put("id", requestVerificationMethodId);
                 if (requestVerificationMethodType != null) requestVerificationMethod.put("type", requestVerificationMethodType);
                 if (requestVerificationMethodPurpose != null) requestVerificationMethod.put("purpose", Api.fromJson(requestVerificationMethodPurpose, List.class));
+                if (requestVerificationMethodPublicKeyJwk != null) requestVerificationMethod.put("publicKeyJwk", Api.fromJson(requestVerificationMethodPublicKeyJwk, Map.class));
+                if (requestVerificationMethodPublicKeyJwkKty != null) {
+                    Map<String, Object> publicKeyJwk = (Map<String, Object>) requestVerificationMethod.computeIfAbsent("publicKeyJwk", x -> new HashMap<String, Object>());
+                    publicKeyJwk.put("kty", requestVerificationMethodPublicKeyJwkKty);
+                }
+                if (requestVerificationMethodPublicKeyJwkCrv != null) {
+                    Map<String, Object> publicKeyJwk = (Map<String, Object>) requestVerificationMethod.computeIfAbsent("publicKeyJwk", x -> new HashMap<String, Object>());
+                    publicKeyJwk.put("crv", requestVerificationMethodPublicKeyJwkCrv);
+                }
                 requestVerificationMethods.add(requestVerificationMethod);
             }
             requestOptions.putAdditionalProperty("requestVerificationMethod", requestVerificationMethods);
