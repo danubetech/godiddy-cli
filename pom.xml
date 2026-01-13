@@ -61,9 +61,9 @@
 		<!-- Testing Versions -->
 
 		<junit.version>4.13.4</junit.version>
-		<junit-jupiter.version>6.0.1</junit-jupiter.version>
-		<junit-platform.version>6.0.1</junit-platform.version>
-		<junit-platform-commons.version>6.0.1</junit-platform-commons.version>
+		<junit-jupiter.version>6.0.2</junit-jupiter.version>
+		<junit-platform.version>6.0.2</junit-platform.version>
+		<junit-platform-commons.version>6.0.2</junit-platform-commons.version>
 		<mockito-core.version>5.21.0</mockito-core.version>
 
 		<!-- Systems Versions -->
@@ -85,12 +85,13 @@
 
 		<!-- Danube Tech Versions -->
 
-		<wallet-service.version>1.16.0</wallet-service.version>
-		<key-formats-java.version>1.25.0</key-formats-java.version>
+		<wallet-service.version>1.17.0</wallet-service.version>
+		<key-formats-java.version>1.28.0</key-formats-java.version>
 		<did-common-java.version>1.21.0</did-common-java.version>
 		<danubetech-kms-java.version>0.14.0</danubetech-kms-java.version>
 		<danubetech-resolver-common-java.version>0.3.0</danubetech-resolver-common-java.version>
-		<danubetech-registrar-common-java.version>0.10.0</danubetech-registrar-common-java.version>
+		<danubetech-registrar-common-java.version>0.11.0</danubetech-registrar-common-java.version>
+		<danubetech-kms-java.version>0.17.0</danubetech-kms-java.version>
 		<com.github.mattrglobal-bbs.signatures.version>2.0</com.github.mattrglobal-bbs.signatures.version>
 
 		<!-- Other Versions -->
@@ -98,7 +99,7 @@
 		<commons-codec.version>1.20.0</commons-codec.version>
 		<info.picocli-picocli.version>4.7.7</info.picocli-picocli.version>
 		<org.modelmapper-modelmapper.version>3.2.6</org.modelmapper-modelmapper.version>
-		<nimbus-jose-jwt.version>10.6</nimbus-jose-jwt.version>
+		<nimbus-jose-jwt.version>10.7</nimbus-jose-jwt.version>
 		<org.fusesource.jansi-jansi.version>2.4.2</org.fusesource.jansi-jansi.version>
 
 	</properties>
