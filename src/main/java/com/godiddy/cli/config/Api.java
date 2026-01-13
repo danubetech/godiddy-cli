@@ -11,10 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.godiddy.api.client.ApiClient;
 import com.godiddy.api.client.ApiResponse;
 import com.godiddy.api.client.openapi.api.*;
-import com.godiddy.api.client.openapi.model.CreateRequest;
-import com.godiddy.api.client.openapi.model.DidStateAction;
-import com.godiddy.api.client.openapi.model.RegistrarRequest;
-import com.godiddy.api.client.openapi.model.RegistrarState;
+import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.clistorage.clistate.CLIState;
 import uniregistrar.openapi.RFC3339DateFormat;
 
@@ -178,6 +175,7 @@ public class Api {
         switch (object) {
             case RegistrarRequest registrarRequest -> print(registrarRequest, constructInterpretedString(registrarRequest), null);
             case RegistrarState registrarState -> print(registrarState, constructInterpretedString(registrarState), null);
+            case RegistrarResourceState registrarResourceState -> print(registrarResourceState, constructInterpretedString(registrarResourceState), null);
             default -> print(object, object.getClass().getSimpleName(), Formatting.Value.interpreted.equals(Formatting.getFormatting()) ? Formatting.Value.pretty : Formatting.getFormatting());
         }
     }
@@ -283,6 +281,37 @@ public class Api {
                 " / state=" + state +
                 " / action=" + action +
                 " / did=" + did + " / " +
+                verificationMethodTemplates + " / " +
+                signingRequests + " / " +
+                decryptionRequests;
+    }
+
+    private static String constructInterpretedString(RegistrarResourceState registrarResourceState) {
+        String name = registrarResourceState.getClass().getSimpleName();
+        String jobId = registrarResourceState.getJobId();
+        String state = registrarResourceState.getDidUrlState() == null ? "null" : registrarResourceState.getDidUrlState().getState();
+        String action = ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? "null" : didUrlStateAction.getAction() == null ? "null" : didUrlStateAction.getAction();
+        String didUrl = registrarResourceState.getDidUrlState() == null ? "null" : registrarResourceState.getDidUrlState().getDidUrl();
+        String verificationMethodTemplates = "" + (registrarResourceState.getDidUrlState() == null ? 0 : ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? 0 : didUrlStateAction.getVerificationMethodTemplate() == null ? 0 : didUrlStateAction.getVerificationMethodTemplate().size()) + " verification method templates";
+        String signingRequests = "" + (registrarResourceState.getDidUrlState() == null ? 0 : ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? 0 : didUrlStateAction.getSigningRequest() == null ? 0 : didUrlStateAction.getSigningRequest().size()) + " signing requests";
+        String decryptionRequests = "" + (registrarResourceState.getDidUrlState() == null ? 0 : ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? 0 : didUrlStateAction.getDecryptionRequest() == null ? 0 : didUrlStateAction.getDecryptionRequest().size()) + " decryption requests";
+
+        name = ansi().bold().a(name).boldOff().toString();
+        if ("action".equals(state)) state = ansi().fgBrightGreen().bold().a(state).boldOff().reset().toString();
+        if ("wait".equals(state)) state = ansi().fgBrightYellow().bold().a(state).boldOff().reset().toString();
+        if ("finished".equals(state)) state = ansi().fgBrightBlue().bold().a(state).boldOff().reset().toString();
+        if ("failure".equals(state)) state = ansi().fgBrightRed().bold().a(state).boldOff().reset().toString();
+        if (! action.equals("null")) action = ansi().fgBrightGreen().bold().a(action).boldOff().reset().toString();
+        if (didUrl != null) didUrl = ansi().fgBrightMagenta().a(didUrl).reset().toString();
+        if (! verificationMethodTemplates.startsWith("0")) verificationMethodTemplates = ansi().fgBrightYellow().a(verificationMethodTemplates).reset().toString();
+        if (! signingRequests.startsWith("0")) signingRequests = ansi().fgBrightYellow().a(signingRequests).reset().toString();
+        if (! decryptionRequests.startsWith("0")) decryptionRequests = ansi().fgBrightYellow().a(decryptionRequests).reset().toString();
+
+        return name +
+                ": jobId=" + jobId +
+                " / state=" + state +
+                " / action=" + action +
+                " / didUrl=" + didUrl + " / " +
                 verificationMethodTemplates + " / " +
                 signingRequests + " / " +
                 decryptionRequests;
