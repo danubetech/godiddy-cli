@@ -9,37 +9,6 @@ docker compose pull
 docker compose run --rm godiddy-cli
 ```
 
-## Install on Ubuntu/Debian
-
-**Download the latest `.deb` package**
-
-Visit the [Releases page](https://github.com/danubetech/godiddy-cli/releases) and download the `.deb` file for the latest version, or use the command line:
-
-```bash
-VERSION=$(curl -s https://api.github.com/repos/danubetech/godiddy-cli/releases/latest | grep "tag_name" | cut -d '"' -f 4)
-curl -LO "https://github.com/danubetech/godiddy-cli/releases/download/${VERSION}/godiddy-cli_${VERSION}_amd64.deb"
-```
-
-**Install the package**
-
-```bash
-sudo dpkg -i godiddy-cli_${VERSION}_amd64.deb
-```
-
-**Fix missing dependencies if needed**
-
-If you see any dependency issues:
-
-```bash
-sudo apt-get install -f
-```
-
-**Verify installation**
-
-```bash
-godiddy-cli --version
-```
-
 ## Examples
 
 ### Set endpoint and API key
@@ -130,6 +99,37 @@ docker compose run --rm godiddy-cli execute -d did:ebsi:zjUnExsyyweQ9p4cy3nvrVc 
 docker compose run --rm godiddy-cli execute -d did:ebsi:zaFsXXoQ4ZrmiEsrtGyMvwJ --op acceptTrustRole -c -s VerifiableAccreditationToAttest=
 ```
 
+## Install on Ubuntu/Debian
+
+**Download the latest `.deb` package**
+
+Visit the [Releases page](https://github.com/danubetech/godiddy-cli/releases) and download the `.deb` file for the latest version, or use the command line:
+
+```bash
+VERSION=$(curl -s https://api.github.com/repos/danubetech/godiddy-cli/releases/latest | grep "tag_name" | cut -d '"' -f 4)
+curl -LO "https://github.com/danubetech/godiddy-cli/releases/download/${VERSION}/godiddy-cli_${VERSION}_amd64.deb"
+```
+
+**Install the package**
+
+```bash
+sudo dpkg -i godiddy-cli_${VERSION}_amd64.deb
+```
+
+**Fix missing dependencies if needed**
+
+If you see any dependency issues:
+
+```bash
+sudo apt-get install -f
+```
+
+**Verify installation**
+
+```bash
+godiddy-cli --version
+```
+
 ## Build Java
 
 ```shell
@@ -138,7 +138,7 @@ mvn -s settings.xml clean package
 
 ## Run Java
 
-Get command line
+From command line:
 
 ```shell
 java -jar target/godiddy-cli-*-jar-with-dependencies.jar -h
