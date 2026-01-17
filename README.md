@@ -94,7 +94,7 @@ docker compose run --rm godiddy-cli execute -d did:ebsi:zjUnExsyyweQ9p4cy3nvrVc 
 
 docker compose run --rm godiddy-cli create -m ebsi -n pilot -c -s VerifiableAuthorisationToOnboard= 
 
-docker compose run --rm godiddy-cli execute -d did:ebsi:zjUnExsyyweQ9p4cy3nvrVc --op inviteForTrustRole --opdata trustModelDid=did:ebsi:zaFsXXoQ4ZrmiEsrtGyMvwJ --opdata trustModelRole=TI 
+docker compose run --rm godiddy-cli execute -d did:ebsi:zjUnExsyyweQ9p4cy3nvrVc --op inviteForTrustRole --opdata trustRoleDid=did:ebsi:zaFsXXoQ4ZrmiEsrtGyMvwJ --opdata trustRoleType=TI
 
 docker compose run --rm godiddy-cli execute -d did:ebsi:zaFsXXoQ4ZrmiEsrtGyMvwJ --op acceptTrustRole -c -s VerifiableAccreditationToAttest=
 ```
