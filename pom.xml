@@ -55,7 +55,7 @@
 		<maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.8.0</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.9.0</maven-dependency-plugin.version>
-		<codehaus.mojo.version>3.6.2</codehaus.mojo.version>
+		<codehaus.mojo.version>3.6.3</codehaus.mojo.version>
 		<maven-patch-plugin.version>1.3</maven-patch-plugin.version>
 
 		<!-- Testing Versions -->
@@ -76,7 +76,7 @@
 
 		<!-- OpenAPI Versions -->
 
-		<openapi-generator.version>7.14.0</openapi-generator.version>
+		<openapi-generator.version>7.18.0</openapi-generator.version>
 		<fasterxml.jackson.version>2.21.0</fasterxml.jackson.version>
 		<fasterxml.jackson.annotations.version>2.21</fasterxml.jackson.annotations.version>
 		<fasterxml.jackson.yaml.version>2.21.0</fasterxml.jackson.yaml.version>
@@ -324,7 +324,6 @@
 							<apiPackage>com.godiddy.api.client.openapi.api</apiPackage>
 							<modelPackage>com.godiddy.api.client.openapi.model</modelPackage>
 							<invokerPackage>com.godiddy.api.client</invokerPackage>
-							<openapiNormalizer>REF_AS_PARENT_IN_ALLOF=true</openapiNormalizer>
 							<configOptions>
 								<basePackage>com.godiddy.api.client</basePackage>
 								<sourceFolder>src/main/java/</sourceFolder>
@@ -335,6 +334,7 @@
 								<containerDefaultToNull>true</containerDefaultToNull>
 								<asyncNative>false</asyncNative>
 								<disallowAdditionalPropertiesIfNotPresent>false</disallowAdditionalPropertiesIfNotPresent>
+								<legacyDiscriminatorBehavior>false</legacyDiscriminatorBehavior>
 								<library>native</library>
 								<useBeanValidation>true</useBeanValidation>
 								<dateLibrary>java8</dateLibrary>

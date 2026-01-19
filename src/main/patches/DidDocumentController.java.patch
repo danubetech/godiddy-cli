@@ -1,6 +1,6 @@
---- src/main/java/com/godiddy/api/client/openapi/model/DidDocumentController.java	2026-01-19 11:48:14.605156591 +0100
-+++ src/main/java/com/godiddy/api/client/openapi/model/DidDocumentController.java.changed	2026-01-19 11:47:56.541283298 +0100
-@@ -90,17 +90,17 @@
+--- src/main/java/com/godiddy/api/client/openapi/model/DidDocumentController.java	2026-01-19 13:55:05.276890450 +0100
++++ src/main/java/com/godiddy/api/client/openapi/model/DidDocumentController.java.changed	2026-01-19 13:53:22.947007764 +0100
+@@ -94,17 +94,17 @@
              try {
                  boolean attemptParsing = true;
                  // ensure that we respect type coercion as set on the client ObjectMapper
@@ -24,16 +24,16 @@
                      // TODO: there is no validation against JSON schema constraints
                      // (min, max, enum, pattern...), this does not perform a strict JSON
                      // validation, which means the 'match' count may be higher than it should be.
-@@ -173,7 +173,7 @@
+@@ -232,7 +232,7 @@
      }
- 
+
      static {
 -        schemas.put("List<String>", List<String>.class);
-+        schemas.put("List", List.class);
++        schemas.put("List<String>", List.class);
          schemas.put("String", String.class);
          JSON.registerDescendants(DidDocumentController.class, Collections.unmodifiableMap(schemas));
      }
-@@ -193,7 +193,7 @@
+@@ -252,7 +252,7 @@
       */
      @Override
      public void setActualInstance(Object instance) {
@@ -42,7 +42,7 @@
              super.setActualInstance(instance);
              return;
          }
-@@ -224,7 +224,7 @@
+@@ -283,7 +283,7 @@
       * @return The actual instance of `List<String>`
       * @throws ClassCastException if the instance is not `List<String>`
       */
@@ -50,8 +50,8 @@
 +    public List<String> getList() throws ClassCastException {
          return (List<String>)super.getActualInstance();
      }
- 
-@@ -279,12 +279,12 @@
+
+@@ -338,12 +338,12 @@
          }
          return joiner.toString();
      }
@@ -59,8 +59,8 @@
 +    if (getActualInstance() instanceof List) {
          if (getActualInstance() != null) {
            for (int i = 0; i < ((List<String>)getActualInstance()).size(); i++) {
-             joiner.add(String.format("%sone_of_1%s%s=%s", prefix, suffix,
-                 "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix),
+             joiner.add(String.format(java.util.Locale.ROOT, "%sone_of_1%s%s=%s", prefix, suffix,
+                 "".equals(suffix) ? "" : String.format(java.util.Locale.ROOT, "%s%d%s", containerPrefix, i, containerSuffix),
 -                ApiClient.urlEncode(String.valueOf(getActualInstance().get(i)))));
 +                ApiClient.urlEncode(String.valueOf(((List<String>)getActualInstance()).get(i)))));
            }
