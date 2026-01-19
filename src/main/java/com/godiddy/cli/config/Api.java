@@ -185,21 +185,19 @@ public class Api {
     }
 
     private static void print(Object object, String interpretedString, Formatting.Value formatting) {
-        if (object == null) object = "(null)";
-        if (interpretedString == null) interpretedString = "(null)";
         if (formatting == null) formatting = Formatting.getFormatting();
         String string;
         try {
             if (formatting == Formatting.Value.interpreted) {
-                string = interpretedString;
+                string = interpretedString == null ? "(null)" : interpretedString;
             } else if (formatting == Formatting.Value.pretty) {
                 if (object instanceof String) object = objectMapper.readValue((String) object, Object.class);
-                string = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+                string = object == null ? "(null)" : objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
             } else if (formatting == Formatting.Value.flat) {
                 if (object instanceof String) object = objectMapper.readValue((String) object, Object.class);
-                string = objectMapper.writeValueAsString(object);
+                string = object == null ? "(null)" : objectMapper.writeValueAsString(object);
             } else if (formatting == Formatting.Value.raw) {
-                string = Objects.toString(object);
+                string = object == null ? "(null)" : object.toString();
             } else if (formatting == Formatting.Value.off) {
                 string = null;
             } else {
