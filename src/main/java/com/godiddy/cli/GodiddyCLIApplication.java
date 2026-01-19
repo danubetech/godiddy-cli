@@ -12,6 +12,12 @@ import java.util.Arrays;
 
 public class GodiddyCLIApplication {
 
+    static {
+        if (System.getProperty("java.util.logging.manager") == null) {
+            System.setProperty("java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager");
+        }
+    }
+
     private static final Logger log = LogManager.getLogger(GodiddyCLIApplication.class);
 
     public static void main(String... args) {
@@ -43,6 +49,10 @@ public class GodiddyCLIApplication {
             case debug -> {
                 Configurator.setLevel("com.godiddy.cli", Level.DEBUG);
                 Configurator.setLevel("com.danubetech", Level.DEBUG);
+            }
+            case trace -> {
+                Configurator.setLevel("com.godiddy.cli", Level.TRACE);
+                Configurator.setLevel("com.danubetech", Level.TRACE);
             }
             default -> throw new RuntimeException("Invalid log level: " + logLevel);
         }

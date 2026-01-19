@@ -463,6 +463,11 @@
 				<artifactId>log4j-slf4j2-impl</artifactId>
 				<version>${apache.log4j.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-jul</artifactId>
+				<version>${apache.log4j.version}</version>
+			</dependency>
 
 			<!-- Spring Dependencies -->
 
@@ -618,6 +623,11 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j2-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-jul</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- OpenAPI Dependencies -->

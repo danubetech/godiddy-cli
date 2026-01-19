@@ -16,6 +16,7 @@ public class LogLevel {
         standard,
         info,
         debug,
+        trace,
         def
     };
 
