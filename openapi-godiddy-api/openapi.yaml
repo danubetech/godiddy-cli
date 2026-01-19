@@ -24,12 +24,13 @@ paths:
     get:
       summary: Resolve a DID / Dereference a DID URL
       description: <p>This endpoint either resolves a DID, or dereferences a DID URL.
-        When resolving a DID, it takes the DID and resolution options as inputs, and
-        the output is a DID document plus metadata. When dereferencing a DID URL,
-        it takes the DID URL and dereferencing options as inputs, and the output is
-        a DID document, a part of a DID document, or some other resource identified
-        by the DID URL.</p> <p>See the <a href="<a href="https://www.w3.org/TR/did-resolution/">DID
-        Resolution</a> specification for additional details.</p>
+        When resolving a DID, it takes the DID and resolution options as inputs,
+        and the output is a DID document plus metadata. When dereferencing a DID
+        URL, it takes the DID URL and dereferencing options as inputs, and the
+        output is a DID document, a part of a DID document, or some other
+        resource identified by the DID URL.</p> <p>See the <a href="<a
+        href="https://www.w3.org/TR/did-resolution/">DID Resolution</a>
+        specification for additional details.</p>
       operationId: resolve
       tags:
         - Universal Resolver
@@ -55,8 +56,8 @@ paths:
           name: Accept
           schema:
             type: string
-          description: The requested media type of the DID document representation
-            or DID resolution result.
+          description: The requested media type of the DID document representation or DID
+            resolution result.
           examples:
             application/did:
               value: application/did
@@ -71,14 +72,13 @@ paths:
           name: options
           schema:
             oneOf:
-              - $ref: '#/components/schemas/ResolutionOptions'
-              - $ref: '#/components/schemas/DereferencingOptions'
-          description: The options for resolving the DID or dereferencing the DID
-            URL.
+              - $ref: "#/components/schemas/ResolutionOptions"
+              - $ref: "#/components/schemas/DereferencingOptions"
+          description: The options for resolving the DID or dereferencing the DID URL.
           style: form
           explode: true
       responses:
-        '200':
+        "200":
           description: successfully resolved!
           content:
             application/did:
@@ -86,7 +86,7 @@ paths:
                 type: object
                 description: The DID document.
                 example:
-                  '@context': https://www.w3.org/ns/did/v1.1
+                  "@context": https://www.w3.org/ns/did/v1.1
                   id: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
                   verificationMethod:
                     - id: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw#key-1
@@ -94,17 +94,17 @@ paths:
                       publicKeyBase58: H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV
             application/did-resolution:
               schema:
-                $ref: '#/components/schemas/ResolutionResult'
+                $ref: "#/components/schemas/ResolutionResult"
             application/did-url-dereferencing:
               schema:
-                $ref: '#/components/schemas/DereferencingResult'
-        '400':
+                $ref: "#/components/schemas/DereferencingResult"
+        "400":
           description: Invalid DID or DID URL.
-        '404':
+        "404":
           description: DID or DID URL not found.
-        '406':
+        "406":
           description: Representation not supported.
-        '410':
+        "410":
           description: Successfully resolved, but DID is deactivated.
           content:
             application/did:
@@ -113,24 +113,24 @@ paths:
                 description: The deactivated DID document.
             application/did-resolution:
               schema:
-                $ref: '#/components/schemas/ResolutionResult'
+                $ref: "#/components/schemas/ResolutionResult"
             application/did-url-dereferencing:
               schema:
-                $ref: '#/components/schemas/DereferencingResult'
-        '500':
+                $ref: "#/components/schemas/DereferencingResult"
+        "500":
           description: Internal Error.
-        '501':
+        "501":
           description: DID method not supported.
   /universal-resolver/properties:
     get:
       summary: Return a map of configuration properties
-      description: <p>This endpoint returns a map of the configuration properties
-        of the DID Resolver, including of its drivers.</p>
+      description: <p>This endpoint returns a map of the configuration properties of
+        the DID Resolver, including of its drivers.</p>
       operationId: universalResolverGetProperties
       tags:
         - Universal Resolver
       responses:
-        '200':
+        "200":
           description: Success.
           content:
             application/did+json:
@@ -140,17 +140,17 @@ paths:
                 example:
                   indy:
                     libIndyPath: /lib
-                    poolConfigs: '...'
+                    poolConfigs: ...
   /universal-resolver/methods:
     get:
       summary: Return a list of supported DID methods
-      description: <p>This endpoint returns a list of DID methods supported by the
-        DID Resolver.</p>
+      description: <p>This endpoint returns a list of DID methods supported by the DID
+        Resolver.</p>
       operationId: universalResolverGetMethods
       tags:
         - Universal Resolver
       responses:
-        '200':
+        "200":
           description: Success.
           content:
             application/did+json:
@@ -167,13 +167,13 @@ paths:
   /universal-resolver/testIdentifiers:
     get:
       summary: Return a map of test identifiers
-      description: <p>This endpoint returns a map of test identifiers, grouped by
-        DID method.</p>
+      description: <p>This endpoint returns a map of test identifiers, grouped by DID
+        method.</p>
       operationId: universalResolverGetTestIdentifiers
       tags:
         - Universal Resolver
       responses:
-        '200':
+        "200":
           description: Success.
           content:
             application/did+json:
@@ -195,7 +195,7 @@ paths:
       tags:
         - Universal Resolver
       responses:
-        '200':
+        "200":
           description: Success.
           content:
             application/did+json:
@@ -213,10 +213,13 @@ paths:
     post:
       summary: Create a DID
       description: <p>This endpoint creates a DID. As input it takes the DID, a DID
-        document, plus optional DID registration <a href="https://identity.foundation/did-registration/#options">options</a>
-        and <a href="https://identity.foundation/did-registration/#secret">secrets</a>
-        needed to create a DID. The output is a state object that represents the current
-        state of the DID creation process.</p> <p>See the <a href="https://identity.foundation/did-registration/#create">DID
+        document, plus optional DID registration <a
+        href="https://identity.foundation/did-registration/#options">options</a>
+        and <a
+        href="https://identity.foundation/did-registration/#secret">secrets</a>
+        needed to create a DID. The output is a state object that represents the
+        current state of the DID creation process.</p> <p>See the <a
+        href="https://identity.foundation/did-registration/#create">DID
         Registration</a> specification for additional details.</p>
       operationId: create
       tags:
@@ -233,46 +236,51 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateRequest'
+              $ref: "#/components/schemas/CreateRequest"
       responses:
-        '200':
+        "200":
           description: The request was successful, but the DID may not be fully created
-            yet, as indicated by the "didState.state" and "jobId" output fields. Additional
-            state information plus metadata are available in the response body.
+            yet, as indicated by the "didState.state" and "jobId" output fields.
+            Additional state information plus metadata are available in the
+            response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateState'
-        '201':
+                $ref: "#/components/schemas/CreateState"
+        "201":
           description: The DID has been successfully created, as indicated by the
-            "didState.state" output field. Additional state information (including
-            the created DID) plus metadata are available in the response body.
+            "didState.state" output field. Additional state information
+            (including the created DID) plus metadata are available in the
+            response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateState'
-        '400':
+                $ref: "#/components/schemas/CreateState"
+        "400":
           description: A problem with the input fields has occurred. Additional state
             information plus metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateState'
-        '500':
-          description: An internal error has occurred. Additional state information
-            plus metadata may be available in the response body.
+                $ref: "#/components/schemas/CreateState"
+        "500":
+          description: An internal error has occurred. Additional state information plus
+            metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateState'
+                $ref: "#/components/schemas/CreateState"
   /universal-registrar/update:
     post:
       summary: Update a DID
-      description: <p>This endpoint updates a DID. As input it takes the existing
-        DID, a DID document, plus optional DID registration <a href="https://identity.foundation/did-registration/#options">options</a>
-        and <a href="https://identity.foundation/did-registration/#secret">secrets</a>
-        needed to update a DID. The output is a state object that represents the current
-        state of the DID update process.</p> <p>See the <a href="https://identity.foundation/did-registration/#update">DID
+      description: <p>This endpoint updates a DID. As input it takes the existing DID,
+        a DID document, plus optional DID registration <a
+        href="https://identity.foundation/did-registration/#options">options</a>
+        and <a
+        href="https://identity.foundation/did-registration/#secret">secrets</a>
+        needed to update a DID. The output is a state object that represents the
+        current state of the DID update process.</p> <p>See the <a
+        href="https://identity.foundation/did-registration/#update">DID
         Registration</a> specification for additional details.</p>
       operationId: update
       tags:
@@ -281,39 +289,42 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateRequest'
+              $ref: "#/components/schemas/UpdateRequest"
       responses:
-        '200':
+        "200":
           description: The request was successful, and the DID may or may not be fully
-            updated yet, as indicated by the "didState.state" and "jobId" output fields.
-            Additional state information plus metadata are available in the response
-            body.
+            updated yet, as indicated by the "didState.state" and "jobId" output
+            fields. Additional state information plus metadata are available in
+            the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateState'
-        '400':
+                $ref: "#/components/schemas/UpdateState"
+        "400":
           description: A problem with the input fields has occurred. Additional state
             information plus metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateState'
-        '500':
-          description: An internal error has occurred. Additional state information
-            plus metadata may be available in the response body.
+                $ref: "#/components/schemas/UpdateState"
+        "500":
+          description: An internal error has occurred. Additional state information plus
+            metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateState'
+                $ref: "#/components/schemas/UpdateState"
   /universal-registrar/deactivate:
     post:
       summary: Deactivate a DID
       description: <p>This endpoint deactivates a DID. As input it takes the existing
-        DID, plus optional DID registration <a href="https://identity.foundation/did-registration/#options">options</a>
-        and <a href="https://identity.foundation/did-registration/#secret">secrets</a>
-        needed to deactivate a DID. The output is a state object that represents the
-        current state of the DID deactivation process.</p> <p>See the <a href="https://identity.foundation/did-registration/#deactivate">DID
+        DID, plus optional DID registration <a
+        href="https://identity.foundation/did-registration/#options">options</a>
+        and <a
+        href="https://identity.foundation/did-registration/#secret">secrets</a>
+        needed to deactivate a DID. The output is a state object that represents
+        the current state of the DID deactivation process.</p> <p>See the <a
+        href="https://identity.foundation/did-registration/#deactivate">DID
         Registration</a> specification for additional details.</p>
       operationId: deactivate
       tags:
@@ -322,43 +333,46 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DeactivateRequest'
+              $ref: "#/components/schemas/DeactivateRequest"
       responses:
-        '200':
+        "200":
           description: The request was successful, and the DID may or may not be fully
-            deactivated yet, as indicated by the "didState.state" and "jobId" output
-            fields. Additional state information plus metadata are available in the
-            response body.
+            deactivated yet, as indicated by the "didState.state" and "jobId"
+            output fields. Additional state information plus metadata are
+            available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeactivateState'
-        '400':
+                $ref: "#/components/schemas/DeactivateState"
+        "400":
           description: A problem with the input fields has occurred. Additional state
             information plus metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeactivateState'
-        '500':
-          description: An internal error has occurred. Additional state information
-            plus metadata may be available in the response body.
+                $ref: "#/components/schemas/DeactivateState"
+        "500":
+          description: An internal error has occurred. Additional state information plus
+            metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeactivateState'
+                $ref: "#/components/schemas/DeactivateState"
   /universal-registrar/execute:
     post:
       summary: Execute a DID operation
-      description: <p>This endpoint executes an operation that uses the DID but is
-        not related to the standard create/update/deactivate operations. As input
-        it takes the existing DID, an operation, operation data, plus optional DID
-        registration <a href="https://identity.foundation/did-registration/#options">options</a>
-        and <a href="https://identity.foundation/did-registration/#secret">secrets</a>
-        needed to execute the operation. The output is a state object that represents
-        the current state of the execution process, and an operation result.</p> <p>See
-        the <a href="https://identity.foundation/did-registration/#execute">DID Registration</a>
-        specification for additional details.</p>
+      description: <p>This endpoint executes an operation that uses the DID but is not
+        related to the standard create/update/deactivate operations. As input it
+        takes the existing DID, an operation, operation data, plus optional DID
+        registration <a
+        href="https://identity.foundation/did-registration/#options">options</a>
+        and <a
+        href="https://identity.foundation/did-registration/#secret">secrets</a>
+        needed to execute the operation. The output is a state object that
+        represents the current state of the execution process, and an operation
+        result.</p> <p>See the <a
+        href="https://identity.foundation/did-registration/#execute">DID
+        Registration</a> specification for additional details.</p>
       operationId: execute
       tags:
         - Universal Registrar
@@ -366,40 +380,44 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExecuteRequest'
+              $ref: "#/components/schemas/ExecuteRequest"
       responses:
-        '200':
-          description: The request was successful, and the operation may or may not
-            be fully executed yet, as indicated by the "didState.state" and "jobId"
-            output fields. Additional state information plus metadata are available
-            in the response body.
+        "200":
+          description: The request was successful, and the operation may or may not be
+            fully executed yet, as indicated by the "didState.state" and "jobId"
+            output fields. Additional state information plus metadata are
+            available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExecuteState'
-        '400':
+                $ref: "#/components/schemas/ExecuteState"
+        "400":
           description: A problem with the input fields has occurred. Additional state
             information plus metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExecuteState'
-        '500':
-          description: An internal error has occurred. Additional state information
-            plus metadata may be available in the response body.
+                $ref: "#/components/schemas/ExecuteState"
+        "500":
+          description: An internal error has occurred. Additional state information plus
+            metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExecuteState'
+                $ref: "#/components/schemas/ExecuteState"
   /universal-registrar/createResource:
     post:
       summary: Create a DID URL and associated resource
       description: <p>This endpoint creates a DID URL and associated resource. As
-        input it takes an existing DID, a relative DID URL, a resource, plus optional
-        DID registration <a href="https://identity.foundation/did-registration/#options">options</a>
-        and <a href="https://identity.foundation/did-registration/#secret">secrets</a>
-        needed to create the DID URL. The output is a state object that represents
-        the current state of the DID URL creation process.</p> <p>See the <a href="https://identity.foundation/did-registration/#createResource">DID
+        input it takes an existing DID, a relative DID URL, a resource, plus
+        optional DID registration <a
+        href="https://identity.foundation/did-registration/#options">options</a>
+        and <a
+        href="https://identity.foundation/did-registration/#secret">secrets</a>
+        needed to create the DID URL. The output is a state object that
+        represents the current state of the DID URL creation process.</p> <p>See
+        the <a
+        href="https://identity.foundation/did-registration/#createResource">DID
         Registration</a> specification for additional details.</p>
       operationId: createResource
       tags:
@@ -408,48 +426,53 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateResourceRequest'
+              $ref: "#/components/schemas/CreateResourceRequest"
       responses:
-        '200':
+        "200":
           description: The request was successful, but the DID URL may not be fully
-            created yet, as indicated by the "didState.state" and "jobId" output fields.
-            Additional state information plus metadata are available in the response
-            body.
+            created yet, as indicated by the "didState.state" and "jobId" output
+            fields. Additional state information plus metadata are available in
+            the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateResourceState'
-        '201':
-          description: The DID URL has been successfully created, as indicated by
-            the "didState.state" output field. Additional state information (including
-            the created DID URL) plus metadata are available in the response body.
+                $ref: "#/components/schemas/CreateResourceState"
+        "201":
+          description: The DID URL has been successfully created, as indicated by the
+            "didState.state" output field. Additional state information
+            (including the created DID URL) plus metadata are available in the
+            response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateResourceState'
-        '400':
+                $ref: "#/components/schemas/CreateResourceState"
+        "400":
           description: A problem with the input fields has occurred. Additional state
             information plus metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateResourceState'
-        '500':
-          description: An internal error has occurred. Additional state information
-            plus metadata may be available in the response body.
+                $ref: "#/components/schemas/CreateResourceState"
+        "500":
+          description: An internal error has occurred. Additional state information plus
+            metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateResourceState'
+                $ref: "#/components/schemas/CreateResourceState"
   /universal-registrar/updateResource:
     post:
       summary: Update a DID URL and associated resource
       description: <p>This endpoint updates a DID URL and associated resource. As
-        input it takes an existing DID, a relative DID URL, a resource, plus optional
-        DID registration <a href="https://identity.foundation/did-registration/#options">options</a>
-        and <a href="https://identity.foundation/did-registration/#secret">secrets</a>
-        needed to update the DID URL. The output is a state object that represents
-        the current state of the DID URL update process.</p> <p>See the <a href="https://identity.foundation/did-registration/#updateResource">DID
+        input it takes an existing DID, a relative DID URL, a resource, plus
+        optional DID registration <a
+        href="https://identity.foundation/did-registration/#options">options</a>
+        and <a
+        href="https://identity.foundation/did-registration/#secret">secrets</a>
+        needed to update the DID URL. The output is a state object that
+        represents the current state of the DID URL update process.</p> <p>See
+        the <a
+        href="https://identity.foundation/did-registration/#updateResource">DID
         Registration</a> specification for additional details.</p>
       operationId: updateResource
       tags:
@@ -458,40 +481,44 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateResourceRequest'
+              $ref: "#/components/schemas/UpdateResourceRequest"
       responses:
-        '200':
-          description: The request was successful, and the DID URL may or may not
-            be fully updated yet, as indicated by the "didState.state" and "jobId"
-            output fields. Additional state information plus metadata are available
-            in the response body.
+        "200":
+          description: The request was successful, and the DID URL may or may not be fully
+            updated yet, as indicated by the "didState.state" and "jobId" output
+            fields. Additional state information plus metadata are available in
+            the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateResourceState'
-        '400':
+                $ref: "#/components/schemas/UpdateResourceState"
+        "400":
           description: A problem with the input fields has occurred. Additional state
             information plus metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateResourceState'
-        '500':
-          description: An internal error has occurred. Additional state information
-            plus metadata may be available in the response body.
+                $ref: "#/components/schemas/UpdateResourceState"
+        "500":
+          description: An internal error has occurred. Additional state information plus
+            metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateResourceState'
+                $ref: "#/components/schemas/UpdateResourceState"
   /universal-registrar/deactivateResource:
     post:
       summary: Deactivate a DID URL and associated resource
-      description: <p>This endpoint deactivates a DID URL and associated resource.
-        As input it takes an existing DID, a relative DID URL, a resource, plus optional
-        DID registration <a href="https://identity.foundation/did-registration/#options">options</a>
-        and <a href="https://identity.foundation/did-registration/#secret">secrets</a>
-        needed to deactivate the DID URL. The output is a state object that represents
-        the current state of the DID URL deactivation process.</p> <p>See the <a href="https://identity.foundation/did-registration/#deactivateResource">DID
+      description: <p>This endpoint deactivates a DID URL and associated resource. As
+        input it takes an existing DID, a relative DID URL, a resource, plus
+        optional DID registration <a
+        href="https://identity.foundation/did-registration/#options">options</a>
+        and <a
+        href="https://identity.foundation/did-registration/#secret">secrets</a>
+        needed to deactivate the DID URL. The output is a state object that
+        represents the current state of the DID URL deactivation process.</p>
+        <p>See the <a
+        href="https://identity.foundation/did-registration/#deactivateResource">DID
         Registration</a> specification for additional details.</p>
       operationId: deactivateResource
       tags:
@@ -500,41 +527,41 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DeactivateResourceRequest'
+              $ref: "#/components/schemas/DeactivateResourceRequest"
       responses:
-        '200':
-          description: The request was successful, and the DID URL may or may not
-            be fully deactivated yet, as indicated by the "didState.state" and "jobId"
-            output fields. Additional state information plus metadata are available
-            in the response body.
+        "200":
+          description: The request was successful, and the DID URL may or may not be fully
+            deactivated yet, as indicated by the "didState.state" and "jobId"
+            output fields. Additional state information plus metadata are
+            available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeactivateResourceState'
-        '400':
+                $ref: "#/components/schemas/DeactivateResourceState"
+        "400":
           description: A problem with the input fields has occurred. Additional state
             information plus metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeactivateResourceState'
-        '500':
-          description: An internal error has occurred. Additional state information
-            plus metadata may be available in the response body.
+                $ref: "#/components/schemas/DeactivateResourceState"
+        "500":
+          description: An internal error has occurred. Additional state information plus
+            metadata may be available in the response body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeactivateResourceState'
+                $ref: "#/components/schemas/DeactivateResourceState"
   /universal-registrar/properties:
     get:
       summary: Return a map of configuration properties
-      description: <p>This endpoint returns a map of the configuration properties
-        of the DID Registrar, including of its drivers.</p>
+      description: <p>This endpoint returns a map of the configuration properties of
+        the DID Registrar, including of its drivers.</p>
       operationId: universalRegistrarGetProperties
       tags:
         - Universal Registrar
       responses:
-        '200':
+        "200":
           description: Success.
           content:
             application/did+json:
@@ -544,17 +571,17 @@ paths:
                 example:
                   indy:
                     libIndyPath: /lib
-                    poolConfigs: '...'
+                    poolConfigs: ...
   /universal-registrar/methods:
     get:
       summary: Return a list of supported DID methods
-      description: <p>This endpoint returns a list of DID methods supported by the
-        DID Registrar.</p>
+      description: <p>This endpoint returns a list of DID methods supported by the DID
+        Registrar.</p>
       operationId: universalRegistrarGetMethods
       tags:
         - Universal Registrar
       responses:
-        '200':
+        "200":
           description: Success.
           content:
             application/did+json:
@@ -578,7 +605,7 @@ paths:
       tags:
         - Universal Registrar
       responses:
-        '200':
+        "200":
           description: Success.
           content:
             application/did+json:
@@ -596,8 +623,8 @@ paths:
     get:
       summary: Get key(s)
       description: <p>This endpoint returns a list of public keys from the Wallet
-        Service that match the input parameters.</p> <p>Note that there may be multiple
-        keys for a given DID.</p>
+        Service that match the input parameters.</p> <p>Note that there may be
+        multiple keys for a given DID.</p>
       operationId: getKeys
       tags:
         - Wallet Service - DIDs and Keys
@@ -636,13 +663,13 @@ paths:
           description: The limit (total number) of keys to retrieve.
           example: 1
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Key'
+                  $ref: "#/components/schemas/Key"
                 description: The list of key(s).
                 example:
                   - id: f25bed83-570c-45a4-b2fa-07a0df2a25d5
@@ -672,17 +699,18 @@ paths:
                       crv: X25519
                       x: _Khr2RW7e-QAHqVx5RjDSshHomTjNDBCLeaJSQklgHI
                     keyMetadata: null
-          description: The request was successful, and the list of public key(s) has
-            been retrieved.
-        '400':
+          description: The request was successful, and the list of public key(s) has been
+            retrieved.
+        "400":
           description: A problem with the input fields has occurred.
-        '500':
+        "500":
           description: An internal error has occurred.
     post:
       summary: Import key
       description: <p>This endpoint imports a new private/public key in JWK into the
-        Wallet Service.</p><p>Note that when a DID is created using the Universal
-        Registrar, its keys are automatically imported into the Wallet Service.</p>
+        Wallet Service.</p><p>Note that when a DID is created using the
+        Universal Registrar, its keys are automatically imported into the Wallet
+        Service.</p>
       operationId: importKey
       tags:
         - Wallet Service - DIDs and Keys
@@ -690,16 +718,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Key'
+              $ref: "#/components/schemas/Key"
         description: The new key to import.
       responses:
-        '201':
+        "201":
           description: The request was successful, and the new key has been imported.
-        '400':
+        "400":
           description: A problem with the input fields has occurred.
-        '409':
+        "409":
           description: This key already exists in the Wallet Service.
-        '500':
+        "500":
           description: An internal error has occurred.
   /wallet-service/keys/{id}:
     get:
@@ -723,29 +751,29 @@ paths:
           required: false
           schema:
             type: boolean
-          description: An optional flag to indicate whether private key data should
-            be included in the response.
+          description: An optional flag to indicate whether private key data should be
+            included in the response.
           example: true
       responses:
-        '200':
+        "200":
           description: The request was successful, and the key has been retrieved.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Key'
-        '400':
+                $ref: "#/components/schemas/Key"
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No key was found with the given identifier.
-        '500':
+        "500":
           description: An internal error has occurred.
     delete:
       summary: Delete key
-      description: <p>This endpoint deletes a private/public key from the Wallet Service.</p>
-        <p>Note that deleting a key from the Wallet Service does not deactivate the
-        corresponding DID. This should be done before deleting keys.</p> <p>Also note
-        that deleting a key may render a DID uncontrollable, unless the key was exported
-        before.</a>
+      description: <p>This endpoint deletes a private/public key from the Wallet
+        Service.</p> <p>Note that deleting a key from the Wallet Service does
+        not deactivate the corresponding DID. This should be done before
+        deleting keys.</p> <p>Also note that deleting a key may render a DID
+        uncontrollable, unless the key was exported before.</a>
       operationId: deleteKey
       tags:
         - Wallet Service - DIDs and Keys
@@ -759,13 +787,13 @@ paths:
           description: The internal identifier of the key to delete.
           example: 386fd0bf-6bf2-4063-a1b0-42927caf1886
       responses:
-        '204':
+        "204":
           description: The request was successful, and the key has been deleted.
-        '400':
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No key was found with the given identifier.
-        '500':
+        "500":
           description: An internal error has occurred.
     put:
       summary: Update key
@@ -787,22 +815,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Key'
+              $ref: "#/components/schemas/Key"
         description: The updated key.
       responses:
-        '200':
+        "200":
           description: The request was successful, and the key has been updated.
-        '400':
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No key was found with the given identifier.
-        '500':
+        "500":
           description: An internal error has occurred.
   /wallet-service/keys/sign:
     post:
       summary: Sign with key
-      description: <p>This endpoint signs an arbitrary unsigned payload using a private
-        key from the Wallet Service.</p>
+      description: <p>This endpoint signs an arbitrary unsigned payload using a
+        private key from the Wallet Service.</p>
       operationId: signWithKey
       tags:
         - Wallet Service - DIDs and Keys
@@ -835,24 +863,24 @@ paths:
               format: byte
         description: The payload to sign.
       responses:
-        '200':
+        "200":
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: byte
           description: The request was successful, and the payload has been signed.
-        '400':
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No key was found with the given identifier.
-        '500':
+        "500":
           description: An internal error has occurred.
   /wallet-service/keys/verify:
     post:
       summary: Verify with key
-      description: <p>This endpoint verifies an arbitrary signed payload using a public
-        key from the Wallet Service.</p>
+      description: <p>This endpoint verifies an arbitrary signed payload using a
+        public key from the Wallet Service.</p>
       operationId: verifyWithKey
       tags:
         - Wallet Service - DIDs and Keys
@@ -891,7 +919,7 @@ paths:
               format: byte
         description: The payload to verify.
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
@@ -899,17 +927,17 @@ paths:
               example:
                 verified: true
           description: The request was successful, and the payload has been verified.
-        '400':
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No key was found with the given identifier.
-        '500':
+        "500":
           description: An internal error has occurred.
   /wallet-service/keys/decrypt:
     post:
       summary: Decrypt with key
-      description: <p>This endpoint decrypts an arbitrary encrypted payload using
-        a private key from the Wallet Service.</p>
+      description: <p>This endpoint decrypts an arbitrary encrypted payload using a
+        private key from the Wallet Service.</p>
       operationId: decryptWithKey
       tags:
         - Wallet Service - DIDs and Keys
@@ -942,18 +970,18 @@ paths:
               format: byte
         description: The payload to decrypt.
       responses:
-        '200':
+        "200":
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: byte
           description: The request was successful, and the payload has been decrypted.
-        '400':
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No key was found with the given identifier.
-        '500':
+        "500":
           description: An internal error has occurred.
   /wallet-service/credentials:
     get:
@@ -988,19 +1016,19 @@ paths:
           description: The limit (total number) of keys to retrieve.
           example: 1
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Credential'
+                  $ref: "#/components/schemas/Credential"
                 description: The list of credential(s).
-          description: The request was successful, and the list of credential(s) has
-            been retrieved.
-        '400':
+          description: The request was successful, and the list of credential(s) has been
+            retrieved.
+        "400":
           description: A problem with the input fields has occurred.
-        '500':
+        "500":
           description: An internal error has occurred.
     post:
       summary: Import credential
@@ -1011,23 +1039,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credential'
+              $ref: "#/components/schemas/Credential"
         description: The new credential to import.
       responses:
-        '201':
-          description: The request was successful, and the new credential has been
-            imported.
-        '400':
+        "201":
+          description: The request was successful, and the new credential has been imported.
+        "400":
           description: A problem with the input fields has occurred.
-        '409':
+        "409":
           description: This credential already exists in the Wallet Service.
-        '500':
+        "500":
           description: An internal error has occurred.
   /wallet-service/credentials/{id}:
     get:
       summary: Get credential
-      description: <p>This endpoint returns a credential with a given internal identifier
-        from the Wallet Service.</p>
+      description: <p>This endpoint returns a credential with a given internal
+        identifier from the Wallet Service.</p>
       operationId: getCredential
       tags:
         - Wallet Service - Credentials
@@ -1041,17 +1068,17 @@ paths:
           description: The internal identifier of the credential to retrieve.
           example: 1bba3d1c-1bda-4827-add6-6d5782658c3a
       responses:
-        '200':
+        "200":
           description: The request was successful, and the credential has been retrieved.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Credential'
-        '400':
+                $ref: "#/components/schemas/Credential"
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No credential was found with the given identifier.
-        '500':
+        "500":
           description: An internal error has occurred.
     delete:
       summary: Delete credential
@@ -1068,17 +1095,18 @@ paths:
           description: The internal identifier of the credential to delete.
           example: 1bba3d1c-1bda-4827-add6-6d5782658c3a
       responses:
-        '204':
+        "204":
           description: The request was successful, and the credential has been deleted.
-        '400':
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No credential was found with the given identifier.
-        '500':
+        "500":
           description: An internal error has occurred.
     put:
       summary: Update credential
-      description: <p>This endpoint updates an existing credential in the Wallet Service.</p>
+      description: <p>This endpoint updates an existing credential in the Wallet
+        Service.</p>
       operationId: updateCredential
       tags:
         - Wallet Service - Credentials
@@ -1095,16 +1123,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credential'
+              $ref: "#/components/schemas/Credential"
         description: The updated credential.
       responses:
-        '200':
+        "200":
           description: The request was successful, and the credential has been updated.
-        '400':
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No credential was found with the given identifier.
-        '500':
+        "500":
           description: An internal error has occurred.
   /wallet-service/credentials/search:
     get:
@@ -1139,34 +1167,34 @@ paths:
           name: offset
           schema:
             type: integer
-          description: The number of items to skip before starting to collect the
-            result set.
+          description: The number of items to skip before starting to collect the result
+            set.
         - in: query
           name: limit
           schema:
             type: integer
           description: Maximum number of items to return.
       responses:
-        '200':
+        "200":
           description: Credential(s) successfully retrieved!
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Credential'
+                  $ref: "#/components/schemas/Credential"
                 description: The credential(s).
-        '400':
+        "400":
           description: invalid input!
-        '404':
+        "404":
           description: Credential(s) not found!
-        '500':
+        "500":
           description: error!
   /wallet-service/controllers:
     get:
       summary: Get controller(s)
-      description: <p>This endpoint returns a list of controllers from the wallet
-        that match the input parameters.</p>
+      description: <p>This endpoint returns a list of controllers from the wallet that
+        match the input parameters.</p>
       operationId: getControllers
       tags:
         - Wallet Service - DIDs and Keys
@@ -1191,7 +1219,7 @@ paths:
           description: The limit (total number) of controllers to retrieve.
           example: 1
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
@@ -1204,13 +1232,13 @@ paths:
                   - did:key:z6MkiD3mSCJZFefR9GXY3bwa6cdxkLyUJ6a7HRFnU3YPNDp2
                   - did:indy:sovrin:danube:C7EGTrTaUruV98HPoEFP9n
                   - did:v1:test:nym:z6MknvTVgWvRUHt5wcFQzRSbTReN95cKwo3EAbd1vEmUzUtt
-          description: The request was successful, and the list of controller(s) has
-            been retrieved.
-        '400':
+          description: The request was successful, and the list of controller(s) has been
+            retrieved.
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No controllers were found that match the input parameters.
-        '500':
+        "500":
           description: An internal error has occurred.
   /wallet-service/controllers/{controller}:
     delete:
@@ -1230,13 +1258,13 @@ paths:
           description: The controller of the key(s) to delete.
           example: did:key:z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz
       responses:
-        '204':
+        "204":
           description: The request was successful, and the keys have been deleted.
-        '400':
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No controller was found with the given identifier.
-        '500':
+        "500":
           description: An internal error has occurred.
   /wallet-service/subjects:
     get:
@@ -1267,7 +1295,7 @@ paths:
           description: The limit (total number) of subjects to retrieve.
           example: 1
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
@@ -1277,13 +1305,13 @@ paths:
                 description: The list of subjects(s).
                 example:
                   - did:key:z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz
-          description: The request was successful, and the list of subject(s) has
-            been retrieved.
-        '400':
+          description: The request was successful, and the list of subject(s) has been
+            retrieved.
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No subjects were found that match the input parameters.
-        '500':
+        "500":
           description: An internal error has occurred.
   /wallet-service/subjects/{subject}:
     delete:
@@ -1303,23 +1331,24 @@ paths:
           description: The subjects of the credential(s) to delete.
           example: did:key:z6MkhES5w7ViszdQZBfKmzgFM8XVXy6DxVgBZzQCJdrcBuGz
       responses:
-        '204':
+        "204":
           description: The request was successful, and the credentials have been deleted.
-        '400':
+        "400":
           description: A problem with the input fields has occurred.
-        '404':
+        "404":
           description: No subject was found with the given identifier.
-        '500':
+        "500":
           description: An internal error has occurred.
   /version-service/didrecords:
     get:
       summary: Get DID Record(s)
-      description: This endpoint gets matching DID Records. As input, it takes multiple
-        optional parameters. The output is an array of DID Records if there are matches,
-        empty otherwise. <p> A DID Record represents a DID resolution at a specific
-        point in time, with additional metadata attached to it. Results are sorted
-        by versionTime in descending order. **limit** and **offset** parameters can
-        be used in possible combinations unless stated otherwise.
+      description: This endpoint gets matching DID Records. As input, it takes
+        multiple optional parameters. The output is an array of DID Records if
+        there are matches, empty otherwise. <p> A DID Record represents a DID
+        resolution at a specific point in time, with additional metadata
+        attached to it. Results are sorted by versionTime in descending order.
+        **limit** and **offset** parameters can be used in possible combinations
+        unless stated otherwise.
       operationId: getDidRecords
       tags:
         - Version Service
@@ -1330,41 +1359,42 @@ paths:
             type: string
             format: uuid
             example: 8ff29f08-ede2-426d-b127-b95c3fa43192
-          description: Unique id of the DID Record to get. When this parameter is
-            set, no other parameter is allowed.
+          description: Unique id of the DID Record to get. When this parameter is set, no
+            other parameter is allowed.
         - in: query
           name: did
           schema:
             type: string
             format: did
             example: did:ion:test:EiDnCmF6bjRF4GEB49PwGi3_AuOmXXBsSV4vor1fkNQc2w
-          description: A DID to get its DID Records. This parameter can be combined
-            with **versionTime** to get DID Records up until that time or with **versionTimeFrom**
-            and **versionTimeTo** to get DID Records in a given interval.
+          description: A DID to get its DID Records. This parameter can be combined with
+            **versionTime** to get DID Records up until that time or with
+            **versionTimeFrom** and **versionTimeTo** to get DID Records in a
+            given interval.
         - in: query
           name: method
           schema:
             type: string
             example: jolo
           description: A DID method to get its records. This parameter can be combined
-            with **versionTime** to get DID Records of the given method up to (inclusive)
-            the given time.
+            with **versionTime** to get DID Records of the given method up to
+            (inclusive) the given time.
         - in: query
           name: versionId
           schema:
             type: string
             example: 22
-          description: Gets the DID Record of given **did** with given versionId.
-            Usage only allowed with combination of the **did** field. No other parameters
-            are allowed.
+          description: Gets the DID Record of given **did** with given versionId. Usage
+            only allowed with combination of the **did** field. No other
+            parameters are allowed.
         - in: query
           name: versionTime
           schema:
             type: integer
             format: int64
             example: 1610582180000
-          description: Time in milliseconds. When used alone, this gets the records
-            up to (inclusive) given time.
+          description: Time in milliseconds. When used alone, this gets the records up to
+            (inclusive) given time.
         - in: query
           name: versionTimeFrom
           schema:
@@ -1385,28 +1415,28 @@ paths:
           name: offset
           schema:
             type: integer
-          description: The number of items to skip before starting to collect the
-            result set.
+          description: The number of items to skip before starting to collect the result
+            set.
         - in: query
           name: limit
           schema:
             type: integer
           description: Maximum number of items to return.
       responses:
-        '200':
+        "200":
           description: DID Record(s) successfully retrieved!
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DidRecord'
+                  $ref: "#/components/schemas/DidRecord"
                 description: The DID Record(s).
-        '400':
+        "400":
           description: invalid input!
-        '404':
+        "404":
           description: DID Record(s) not found!
-        '500':
+        "500":
           description: error!
   /version-service/didrecords/findInIdentifier:
     get:
@@ -1427,28 +1457,28 @@ paths:
           name: offset
           schema:
             type: integer
-          description: The number of items to skip before starting to collect the
-            result set.
+          description: The number of items to skip before starting to collect the result
+            set.
         - in: query
           name: limit
           schema:
             type: integer
           description: Maximum number of items to return.
       responses:
-        '200':
+        "200":
           description: DID Record(s) successfully retrieved!
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DidRecord'
+                  $ref: "#/components/schemas/DidRecord"
                 description: The DID Record(s).
-        '400':
+        "400":
           description: invalid input!
-        '404':
+        "404":
           description: DID Record(s) not found!
-        '500':
+        "500":
           description: error!
   /version-service/didrecords/count:
     get:
@@ -1462,7 +1492,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Number of DID Record(s) successfully retrieved!
           content:
             application/json:
@@ -1470,7 +1500,7 @@ paths:
                 type: integer
                 format: int64
                 description: The matching DID Record count.
-        '500':
+        "500":
           description: error!
   /version-service/diddocuments:
     get:
@@ -1497,28 +1527,28 @@ paths:
           name: offset
           schema:
             type: integer
-          description: The number of items to skip before starting to collect the
-            result set.
+          description: The number of items to skip before starting to collect the result
+            set.
         - in: query
           name: limit
           schema:
             type: integer
           description: Maximum number of items to return.
       responses:
-        '200':
+        "200":
           description: DID Document(s) successfully retrieved!
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DidDocument1'
+                  $ref: "#/components/schemas/DidDocument1"
                 description: The DID Document(s).
-        '400':
+        "400":
           description: invalid input!
-        '404':
+        "404":
           description: DID Document(s) not found!
-        '500':
+        "500":
           description: error!
   /version-service/diddocuments/search:
     get:
@@ -1545,28 +1575,28 @@ paths:
           name: offset
           schema:
             type: integer
-          description: The number of items to skip before starting to collect the
-            result set.
+          description: The number of items to skip before starting to collect the result
+            set.
         - in: query
           name: limit
           schema:
             type: integer
           description: Maximum number of items to return.
       responses:
-        '200':
+        "200":
           description: DID Document(s) successfully retrieved!
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DidDocument1'
+                  $ref: "#/components/schemas/DidDocument1"
                 description: The DID Document(s).
-        '400':
+        "400":
           description: invalid input!
-        '404':
+        "404":
           description: DID Document(s) not found!
-        '500':
+        "500":
           description: error!
   /version-service/diddocuments/count:
     get:
@@ -1586,7 +1616,7 @@ paths:
           schema:
             type: object
       responses:
-        '200':
+        "200":
           description: Number of DID Document(s) successfully retrieved!
           content:
             application/json:
@@ -1594,9 +1624,9 @@ paths:
                 type: integer
                 format: int64
                 description: The matching DID Document count.
-        '400':
+        "400":
           description: invalid input!
-        '500':
+        "500":
           description: error!
   /version-service/diddocuments/metadata/search:
     get:
@@ -1623,28 +1653,28 @@ paths:
           name: offset
           schema:
             type: integer
-          description: The number of items to skip before starting to collect the
-            result set.
+          description: The number of items to skip before starting to collect the result
+            set.
         - in: query
           name: limit
           schema:
             type: integer
           description: Maximum number of items to return.
       responses:
-        '200':
+        "200":
           description: DID Document(s) successfully retrieved!
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DidDocument1'
+                  $ref: "#/components/schemas/DidDocument1"
                 description: The DID Document(s).
-        '400':
+        "400":
           description: invalid input!
-        '404':
+        "404":
           description: DID Document(s) not found!
-        '500':
+        "500":
           description: error!
   /version-service/diddocuments/metadata/count:
     get:
@@ -1664,7 +1694,7 @@ paths:
           schema:
             type: object
       responses:
-        '200':
+        "200":
           description: Number of DID Document(s) successfully retrieved!
           content:
             application/json:
@@ -1672,9 +1702,9 @@ paths:
                 type: integer
                 format: int64
                 description: The matching DID Document count.
-        '400':
+        "400":
           description: invalid input!
-        '500':
+        "500":
           description: error!
   /version-service/didversions:
     get:
@@ -1701,28 +1731,28 @@ paths:
           name: offset
           schema:
             type: integer
-          description: The number of items to skip before starting to collect the
-            result set.
+          description: The number of items to skip before starting to collect the result
+            set.
         - in: query
           name: limit
           schema:
             type: integer
           description: Maximum number of items to return.
       responses:
-        '200':
+        "200":
           description: DID Version(s) successfully retrieved!
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DidVersion'
+                  $ref: "#/components/schemas/DidVersion"
                 description: The DID Version(s).
-        '400':
+        "400":
           description: invalid input!
-        '404':
+        "404":
           description: DID Version(s) not found!
-        '500':
+        "500":
           description: error!
   /version-service/didversions/search:
     get:
@@ -1749,28 +1779,28 @@ paths:
           name: offset
           schema:
             type: integer
-          description: The number of items to skip before starting to collect the
-            result set.
+          description: The number of items to skip before starting to collect the result
+            set.
         - in: query
           name: limit
           schema:
             type: integer
           description: Maximum number of items to return.
       responses:
-        '200':
+        "200":
           description: DID Version(s) successfully retrieved!
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DidVersion'
+                  $ref: "#/components/schemas/DidVersion"
                 description: The DID Version(s).
-        '400':
+        "400":
           description: invalid input!
-        '404':
+        "404":
           description: DID Version(s) not found!
-        '500':
+        "500":
           description: error!
   /version-service/didversions/count:
     get:
@@ -1790,7 +1820,7 @@ paths:
           schema:
             type: object
       responses:
-        '200':
+        "200":
           description: Number of DID Version(s) successfully retrieved!
           content:
             application/json:
@@ -1798,9 +1828,9 @@ paths:
                 type: integer
                 format: int64
                 description: The matching DID Version count.
-        '400':
+        "400":
           description: invalid input!
-        '500':
+        "500":
           description: error!
   /version-service/didrecords/methods:
     get:
@@ -1811,7 +1841,7 @@ paths:
       tags:
         - Version Service
       responses:
-        '200':
+        "200":
           description: Success.
           content:
             application/did+json:
@@ -1825,7 +1855,7 @@ paths:
                   - indy
                   - v1
                   - key
-        '500':
+        "500":
           description: error!
   /universal-issuer/credentials/issue:
     post:
@@ -1833,24 +1863,24 @@ paths:
         - Universal Issuer
       summary: Issue a Verifiable Credential
       operationId: issueCredential
-      description: This endpoint issues a Verifiable Credential and returns it in
-        the response body.
+      description: This endpoint issues a Verifiable Credential and returns it in the
+        response body.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IssueCredentialRequest'
+              $ref: "#/components/schemas/IssueCredentialRequest"
         description: Parameters for issuing the Verifiable Credential.
       responses:
-        '201':
+        "201":
           description: Verifiable Credential successfully issued!
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IssueCredentialResponse'
-        '400':
+                $ref: "#/components/schemas/IssueCredentialResponse"
+        "400":
           description: invalid input!
-        '500':
+        "500":
           description: error!
   /universal-issuer/credentials/status:
     post:
@@ -1864,16 +1894,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateCredentialStatus'
+              $ref: "#/components/schemas/UpdateCredentialStatus"
         description: Parameters for updating the status of the issued Verifiable Credential.
       responses:
-        '200':
+        "200":
           description: Verifiable Credential status successfully updated
-        '400':
+        "400":
           description: Bad Request
-        '404':
+        "404":
           description: Verifiable Credential not found
-        '500':
+        "500":
           description: Internal Server Error
   /universal-issuer-oid4vci/v13/authorize/pre-authorize:
     post:
@@ -1903,17 +1933,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PreAuthorizeRequest'
+              $ref: "#/components/schemas/PreAuthorizeRequest"
       responses:
-        '200':
+        "200":
           description: Pre-authorization successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PreAuthorizeResponse'
-        '400':
+                $ref: "#/components/schemas/PreAuthorizeResponse"
+        "400":
           description: Bad request - invalid parameters
-        '500':
+        "500":
           description: Internal server error
   /universal-issuer-oid4vci/v13/issuance-status:
     get:
@@ -1922,12 +1952,12 @@ paths:
       summary: Get issuance status (v13)
       description: Retrieves the issuance status for a given `requestId`.
       responses:
-        '200':
+        "200":
           description: Issuance status successfully retrieved.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IssuanceStatusResponse'
+                $ref: "#/components/schemas/IssuanceStatusResponse"
               example:
                 requestId: req-12345
                 status: COMPLETED
@@ -1938,14 +1968,14 @@ paths:
                     name: Alice
                     age: 29
                 metadata:
-                  issuedAt: '2025-09-25T12:00:00Z'
+                  issuedAt: 2025-09-25T12:00:00Z
                   issuer: did:example:123
-        '400':
+        "400":
           description: Invalid request.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
               example:
                 error: Invalid request
   /universal-issuer-oid4vci/v15/authorize/pre-authorize:
@@ -1976,17 +2006,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PreAuthorizeRequest'
+              $ref: "#/components/schemas/PreAuthorizeRequest"
       responses:
-        '200':
+        "200":
           description: Pre-authorization successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PreAuthorizeResponse'
-        '400':
+                $ref: "#/components/schemas/PreAuthorizeResponse"
+        "400":
           description: Bad request - invalid parameters
-        '500':
+        "500":
           description: Internal server error
   /universal-issuer-oid4vci/v15/issuance-status:
     get:
@@ -1995,12 +2025,12 @@ paths:
       summary: Get issuance status (v15)
       description: Retrieves the issuance status for a given `requestId`.
       responses:
-        '200':
+        "200":
           description: Issuance status successfully retrieved.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IssuanceStatusResponse'
+                $ref: "#/components/schemas/IssuanceStatusResponse"
               example:
                 requestId: req-12345
                 status: completed
@@ -2011,14 +2041,14 @@ paths:
                     name: Alice
                     age: 29
                 metadata:
-                  issuedAt: '2025-09-25T12:00:00Z'
+                  issuedAt: 2025-09-25T12:00:00Z
                   issuer: did:example:123
-        '400':
+        "400":
           description: Invalid request.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
               example:
                 error: Invalid request
   /universal-verifier/verify:
@@ -2026,52 +2056,52 @@ paths:
       tags:
         - Universal Verifier
       summary: Verify a Verifiable Credential or Verifiable Presentation
-      description: This endpoint verifies a Verifiable Credential or Verifiable Presentation
-        and returns a verification result in the response body.
+      description: This endpoint verifies a Verifiable Credential or Verifiable
+        Presentation and returns a verification result in the response body.
       operationId: verify
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VerifyRequest'
+              $ref: "#/components/schemas/VerifyRequest"
         description: Parameters for verifying a Verifiable Credential or Verifiable
           Presentation.
       responses:
-        '200':
+        "200":
           description: Verifiable Credential or Verifiable Presentation successfully
             verified!
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerifyResponse'
-        '400':
+                $ref: "#/components/schemas/VerifyResponse"
+        "400":
           description: invalid input!
-        '500':
+        "500":
           description: error!
   /universal-verifier/credentials/verify:
     post:
       tags:
         - Universal Verifier
       summary: Verify a Verifiable Credential
-      description: This endpoint verifies a Verifiable Credential and returns a verification
-        result in the response body.
+      description: This endpoint verifies a Verifiable Credential and returns a
+        verification result in the response body.
       operationId: verifyCredential
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VerifyCredentialRequest'
+              $ref: "#/components/schemas/VerifyCredentialRequest"
         description: Parameters for verifying a Verifiable Credential.
       responses:
-        '200':
+        "200":
           description: Verifiable Credential successfully verified!
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerifyCredentialResponse'
-        '400':
+                $ref: "#/components/schemas/VerifyCredentialResponse"
+        "400":
           description: invalid input!
-        '500':
+        "500":
           description: error!
   /universal-verifier/presentations/verify:
     post:
@@ -2079,29 +2109,29 @@ paths:
         - Universal Verifier
       summary: Verify a Verifiable Presentation
       description: This endpoint verifies a Verifiable Presentation and returns a
-        verificationResult in the response body. A simple Presentation without proof
-        can also be provided.
+        verificationResult in the response body. A simple Presentation without
+        proof can also be provided.
       operationId: verifyPresentation
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VerifyPresentationRequest'
+              $ref: "#/components/schemas/VerifyPresentationRequest"
         description: Parameters for verifying a Verifiable Presentation.
       responses:
-        '200':
+        "200":
           description: Verifiable Presentation successfully verified!
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerifyPresentationResponse'
-        '400':
+                $ref: "#/components/schemas/VerifyPresentationResponse"
+        "400":
           description: Invalid or malformed input
-        '413':
+        "413":
           description: Payload too large
-        '429':
+        "429":
           description: Request rate limit exceeded.
-        '500':
+        "500":
           description: Internal Server Error
   /universal-verifier-oid4vp/authorization/authorize:
     get:
@@ -2138,18 +2168,18 @@ paths:
           schema:
             type: object
       responses:
-        '200':
+        "200":
           description: Successfully generated QR code request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QRCodeRequest'
-        '400':
+                $ref: "#/components/schemas/QRCodeRequest"
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse1'
+                $ref: "#/components/schemas/ErrorResponse1"
   /universal-verifier-oid4vp/authorization/verification-result/{state}:
     get:
       tags:
@@ -2171,18 +2201,18 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Successfully retrieved verification result
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerificationResponse'
-        '400':
+                $ref: "#/components/schemas/VerificationResponse"
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse1'
+                $ref: "#/components/schemas/ErrorResponse1"
   /revocation-service/revocation/revoke:
     post:
       tags:
@@ -2195,25 +2225,25 @@ paths:
           name: credentialFormat
           schema:
             type: string
-          description: A string that identifies the format of the credential; this
-            is used to parse the credential and to look up the type of credential
-            status mechanism, which in turn will determine which driver will be used.
+          description: A string that identifies the format of the credential; this is used
+            to parse the credential and to look up the type of credential status
+            mechanism, which in turn will determine which driver will be used.
           example: jsonld
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RevokeRequest'
+              $ref: "#/components/schemas/RevokeRequest"
       responses:
-        '200':
+        "200":
           description: successfully revoked!
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RevokeResponse'
-        '400':
+                $ref: "#/components/schemas/RevokeResponse"
+        "400":
           description: invalid input!
-        '500':
+        "500":
           description: error!
 components:
   securitySchemes:
@@ -2223,7 +2253,8 @@ components:
       bearerFormat: apiKey
   schemas:
     ResolutionOptions:
-      description: The DID resolution options. See https://www.w3.org/TR/did-resolution/#did-resolution-options
+      description: The DID resolution options. See
+        https://www.w3.org/TR/did-resolution/#did-resolution-options
       type: object
       properties:
         expandRelativeUrls:
@@ -2235,7 +2266,8 @@ components:
           format: date-time
       additionalProperties: {}
     DereferencingOptions:
-      description: The DID URL dereferencing options. See https://www.w3.org/TR/did-resolution/#did-url-dereferencing-options
+      description: The DID URL dereferencing options. See
+        https://www.w3.org/TR/did-resolution/#did-url-dereferencing-options
       type: object
       properties:
         verificationRelationship:
@@ -2248,16 +2280,16 @@ components:
         didDocument:
           type: object
         didResolutionMetadata:
-          $ref: '#/components/schemas/DidResolutionMetadata'
+          $ref: "#/components/schemas/DidResolutionMetadata"
         didDocumentMetadata:
-          $ref: '#/components/schemas/DidDocumentMetadata'
+          $ref: "#/components/schemas/DidDocumentMetadata"
     DidResolutionMetadata:
       type: object
       properties:
         contentType:
           type: string
         error:
-          $ref: '#/components/schemas/RFC9457ProblemDetails'
+          $ref: "#/components/schemas/RFC9457ProblemDetails"
       additionalProperties: {}
     DidDocumentMetadata:
       type: object
@@ -2291,16 +2323,16 @@ components:
         content:
           type: object
         dereferencingMetadata:
-          $ref: '#/components/schemas/DereferencingMetadata'
+          $ref: "#/components/schemas/DereferencingMetadata"
         contentMetadata:
-          $ref: '#/components/schemas/ContentMetadata'
+          $ref: "#/components/schemas/ContentMetadata"
     DereferencingMetadata:
       type: object
       properties:
         contentType:
           type: string
         error:
-          $ref: '#/components/schemas/RFC9457ProblemDetails'
+          $ref: "#/components/schemas/RFC9457ProblemDetails"
       additionalProperties: {}
     ContentMetadata:
       type: object
@@ -2329,107 +2361,114 @@ components:
       properties:
         jobId:
           description: This input field is used to keep track of an ongoing DID operation
-            process. See <a href="https://identity.foundation/did-registration/#jobid">https://identity.foundation/did-registration/#jobid</a>.
+            process. See <a
+            href="https://identity.foundation/did-registration/#jobid">https://identity.foundation/did-registration/#jobid</a>.
           type: string
           example: 6d85bcd0-2ea3-4288-ab00-15afadd8a156
         options:
-          $ref: '#/components/schemas/RequestOptions'
+          $ref: "#/components/schemas/RequestOptions"
         secret:
-          $ref: '#/components/schemas/RequestSecret'
+          $ref: "#/components/schemas/RequestSecret"
     RequestOptions:
       description: This input field contains an object with various options for the
-        DID operation, such as the network where the DID operation should be executed.
-        See <a href="https://identity.foundation/did-registration/#options">https://identity.foundation/did-registration/#options</a>.
+        DID operation, such as the network where the DID operation should be
+        executed. See <a
+        href="https://identity.foundation/did-registration/#options">https://identity.foundation/did-registration/#options</a>.
       type: object
       properties:
         clientSecretMode:
-          $ref: '#/components/schemas/Boolean'
+          $ref: "#/components/schemas/Boolean"
         storeSecrets:
-          $ref: '#/components/schemas/Boolean'
+          $ref: "#/components/schemas/Boolean"
         returnSecrets:
-          $ref: '#/components/schemas/Boolean'
+          $ref: "#/components/schemas/Boolean"
         requestVerificationMethod:
-          $ref: '#/components/schemas/RequestOptionsRequestVerificationMethod'
+          $ref: "#/components/schemas/RequestOptionsRequestVerificationMethod"
       additionalProperties: {}
       example:
         network: testnet
     RequestOptionsRequestVerificationMethod:
       type: array
       items:
-        $ref: '#/components/schemas/VerificationMethodTemplate'
+        $ref: "#/components/schemas/VerificationMethodTemplate"
     CreateRequest:
       description: Input fields for a DID create operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarRequest'
+        - $ref: "#/components/schemas/RegistrarRequest"
         - type: object
           properties:
             didDocument:
-              description: This input field contains the DID document to be used for
-                the DID create operation. See <a href="https://identity.foundation/did-registration/#diddocument">https://identity.foundation/did-registration/#diddocument</a>.
-              $ref: '#/components/schemas/DidDocument'
+              description: This input field contains the DID document to be used for the DID
+                create operation. See <a
+                href="https://identity.foundation/did-registration/#diddocument">https://identity.foundation/did-registration/#diddocument</a>.
+              $ref: "#/components/schemas/DidDocument"
     UpdateRequest:
       description: Input fields for a DID update operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarRequest'
+        - $ref: "#/components/schemas/RegistrarRequest"
         - type: object
           required:
             - did
           properties:
             did:
-              description: This input field indicates the DID that is the target of
-                the DID update operation.
+              description: This input field indicates the DID that is the target of the DID
+                update operation.
               type: string
               example: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
             didDocumentOperation:
-              description: This input field indicates which update operation(s) should
-                be applied to a DID’s associated DID document. See <a href="https://identity.foundation/did-registration/#diddocumentoperation">https://identity.foundation/did-registration/#diddocumentoperation</a>.
+              description: This input field indicates which update operation(s) should be
+                applied to a DID’s associated DID document. See <a
+                href="https://identity.foundation/did-registration/#diddocumentoperation">https://identity.foundation/did-registration/#diddocumentoperation</a>.
               type: array
               items:
                 type: string
               example:
                 - setDidDocument
             didDocument:
-              description: This input field contains either a complete DID document,
-                or an incremental change (diff) to a DID document. See <a href="https://identity.foundation/did-registration/#diddocument">https://identity.foundation/did-registration/#diddocument</a>.
+              description: This input field contains either a complete DID document, or an
+                incremental change (diff) to a DID document. See <a
+                href="https://identity.foundation/did-registration/#diddocument">https://identity.foundation/did-registration/#diddocument</a>.
               type: array
               items:
-                $ref: '#/components/schemas/DidDocument'
+                $ref: "#/components/schemas/DidDocument"
     DeactivateRequest:
       description: Input fields for a DID deactivate operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarRequest'
+        - $ref: "#/components/schemas/RegistrarRequest"
         - type: object
           required:
             - did
           properties:
             did:
-              description: This input field indicates the DID that is the target of
-                the DID deactivation operation.
+              description: This input field indicates the DID that is the target of the DID
+                deactivation operation.
               type: string
               example: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
     ExecuteRequest:
       description: Input fields for a DID execute operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarRequest'
+        - $ref: "#/components/schemas/RegistrarRequest"
         - type: object
           required:
             - did
           properties:
             did:
-              description: This input field indicates the DID that is the target of
-                the DID execute operation.
+              description: This input field indicates the DID that is the target of the DID
+                execute operation.
               type: string
               example: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
             operation:
-              description: This input field indicates which operation should be executed.
-                See <a href="https://identity.foundation/did-registration/#operation">https://identity.foundation/did-registration/#operation</a>.
+              description: This input field indicates which operation should be executed. See
+                <a
+                href="https://identity.foundation/did-registration/#operation">https://identity.foundation/did-registration/#operation</a>.
               type: array
               items:
                 type: string
               example:
                 - executeMyOperation
             operationData:
-              description: This input field contains additional data. See <a href="https://identity.foundation/did-registration/#operationdata">https://identity.foundation/did-registration/#operationdata</a>.
+              description: This input field contains additional data. See <a
+                href="https://identity.foundation/did-registration/#operationdata">https://identity.foundation/did-registration/#operationdata</a>.
               type: array
               items:
                 type: object
@@ -2438,58 +2477,59 @@ components:
     CreateResourceRequest:
       description: Input fields for a DID URL create operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarRequest'
+        - $ref: "#/components/schemas/RegistrarRequest"
         - type: object
           required:
             - did
             - relativeDidUrl
           properties:
             did:
-              description: This input field indicates the DID that is the target of
-                the DID URL create operation.
+              description: This input field indicates the DID that is the target of the DID
+                URL create operation.
               type: string
               example: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
             relativeDidUrl:
-              description: This input field indicates a relative DID URL that is the
-                target of the DID URL create operation.
+              description: This input field indicates a relative DID URL that is the target of
+                the DID URL create operation.
               type: string
               example: /resources/123
             content:
-              description: This input field contains Base64-encoded data that is the
-                content of the resource associated with the DID URL.
+              description: This input field contains Base64-encoded data that is the content
+                of the resource associated with the DID URL.
               type: string
               example: SGVsbG8gV29ybGQ=
     UpdateResourceRequest:
       description: Input fields for a DID URL update operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarRequest'
+        - $ref: "#/components/schemas/RegistrarRequest"
         - type: object
           required:
             - did
             - relativeDidUrl
           properties:
             did:
-              description: This input field indicates the DID that is the target of
-                the DID URL update operation.
+              description: This input field indicates the DID that is the target of the DID
+                URL update operation.
               type: string
               example: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
             relativeDidUrl:
-              description: This input field indicates a relative DID URL that is the
-                target of the DID URL update operation.
+              description: This input field indicates a relative DID URL that is the target of
+                the DID URL update operation.
               type: string
               example: /resources/123
             contentOperation:
-              description: This input field indicates which update operation(s) should
-                be applied to the content of a DID URL’s associated resource. See
-                <a href="https://identity.foundation/did-registration/#diddocumentoperation">https://identity.foundation/did-registration/#resourceoperation</a>.
+              description: This input field indicates which update operation(s) should be
+                applied to the content of a DID URL’s associated resource. See
+                <a
+                href="https://identity.foundation/did-registration/#diddocumentoperation">https://identity.foundation/did-registration/#resourceoperation</a>.
               type: array
               items:
                 type: string
               example:
                 - setContent
             content:
-              description: This input field contains Base64-encoded data that is the
-                content of the resource associated with the DID URL.
+              description: This input field contains Base64-encoded data that is the content
+                of the resource associated with the DID URL.
               type: array
               items:
                 type: string
@@ -2498,36 +2538,36 @@ components:
     DeactivateResourceRequest:
       description: Input fields for a DID URL deactivate operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarRequest'
+        - $ref: "#/components/schemas/RegistrarRequest"
         - type: object
           required:
             - did
             - relativeDidUrl
           properties:
             did:
-              description: This input field indicates the DID that is the target of
-                the DID URL deactivate operation.
+              description: This input field indicates the DID that is the target of the DID
+                URL deactivate operation.
               type: string
               example: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
             relativeDidUrl:
-              description: This input field indicates a relative DID URL that is the
-                target of the DID URL deactivate operation.
+              description: This input field indicates a relative DID URL that is the target of
+                the DID URL deactivate operation.
               type: string
               example: /resources/123
     DidDocument:
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
           example: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
         controller:
-          $ref: '#/components/schemas/DidDocumentController'
+          $ref: "#/components/schemas/DidDocumentController"
           example:
             - did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
         verificationMethod:
-          $ref: '#/components/schemas/DidDocumentVerificationMethod'
+          $ref: "#/components/schemas/DidDocumentVerificationMethod"
         service:
-          $ref: '#/components/schemas/DidDocumentService'
+          $ref: "#/components/schemas/DidDocumentService"
       additionalProperties: {}
     DidDocumentController:
       oneOf:
@@ -2556,7 +2596,7 @@ components:
           type: string
           example: 6d85bcd0-2ea3-4288-ab00-15afadd8a156
         didState:
-          $ref: '#/components/schemas/DidState'
+          $ref: "#/components/schemas/DidState"
         didRegistrationMetadata:
           type: object
           additionalProperties: {}
@@ -2574,7 +2614,7 @@ components:
           type: string
           example: 6d85bcd0-2ea3-4288-ab00-15afadd8a156
         didUrlState:
-          $ref: '#/components/schemas/DidUrlState'
+          $ref: "#/components/schemas/DidUrlState"
         didRegistrationMetadata:
           type: object
           additionalProperties: {}
@@ -2584,27 +2624,27 @@ components:
     CreateState:
       description: The state after a DID create operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarState'
+        - $ref: "#/components/schemas/RegistrarState"
         - type: object
     UpdateState:
       description: The state after a DID update operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarState'
+        - $ref: "#/components/schemas/RegistrarState"
         - type: object
     DeactivateState:
       description: The state after a DID deactivate operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarState'
+        - $ref: "#/components/schemas/RegistrarState"
         - type: object
     ExecuteState:
       description: The state after a DID execute operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarState'
+        - $ref: "#/components/schemas/RegistrarState"
         - type: object
           properties:
             operationResult:
-              description: This output field contains the result of the operation.
-                See <a href="https://identity.foundation/did-registration/#operationdata">https://identity.foundation/did-registration/#operationdata</a>.
+              description: This output field contains the result of the operation. See <a
+                href="https://identity.foundation/did-registration/#operationdata">https://identity.foundation/did-registration/#operationdata</a>.
               type: array
               items:
                 type: object
@@ -2613,17 +2653,17 @@ components:
     CreateResourceState:
       description: The state after a DID URL create operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarResourceState'
+        - $ref: "#/components/schemas/RegistrarResourceState"
         - type: object
     UpdateResourceState:
       description: The state after a DID URL update operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarResourceState'
+        - $ref: "#/components/schemas/RegistrarResourceState"
         - type: object
     DeactivateResourceState:
       description: The state after a DID URL deactivate operation.
       allOf:
-        - $ref: '#/components/schemas/RegistrarResourceState'
+        - $ref: "#/components/schemas/RegistrarResourceState"
         - type: object
     DidState:
       description: The current state of a DID.
@@ -2634,21 +2674,21 @@ components:
       discriminator:
         propertyName: state
         mapping:
-          finished: '#/components/schemas/DidStateFinished'
-          failed: '#/components/schemas/DidStateFailed'
-          action: '#/components/schemas/DidStateAction'
-          wait: '#/components/schemas/DidStateWait'
+          finished: "#/components/schemas/DidStateFinished"
+          failed: "#/components/schemas/DidStateFailed"
+          action: "#/components/schemas/DidStateAction"
+          wait: "#/components/schemas/DidStateWait"
       properties:
         state:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
           example: finished
         did:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
           example: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
         secret:
-          $ref: '#/components/schemas/DidStateSecret'
+          $ref: "#/components/schemas/DidStateSecret"
         didDocument:
-          $ref: '#/components/schemas/DidDocument'
+          $ref: "#/components/schemas/DidDocument"
       additionalProperties: {}
     DidUrlState:
       description: The current state of a DID URL and associated resource.
@@ -2659,111 +2699,114 @@ components:
       discriminator:
         propertyName: state
         mapping:
-          finished: '#/components/schemas/DidUrlStateFinished'
-          failed: '#/components/schemas/DidUrlStateFailed'
-          action: '#/components/schemas/DidUrlStateAction'
-          wait: '#/components/schemas/DidUrlStateWait'
+          finished: "#/components/schemas/DidUrlStateFinished"
+          failed: "#/components/schemas/DidUrlStateFailed"
+          action: "#/components/schemas/DidUrlStateAction"
+          wait: "#/components/schemas/DidUrlStateWait"
       properties:
         state:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
           example: finished
         didUrl:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
           example: did:indy:sovrin:WRfXPg8dantKVubE3HX8pw
         secret:
-          $ref: '#/components/schemas/DidStateSecret'
+          $ref: "#/components/schemas/DidStateSecret"
         content:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
       additionalProperties: {}
     DidStateFinished:
       allOf:
-        - $ref: '#/components/schemas/DidState'
-        - $ref: '#/components/schemas/StateFinished'
+        - $ref: "#/components/schemas/DidState"
+        - $ref: "#/components/schemas/StateFinished"
     DidStateFailed:
       allOf:
-        - $ref: '#/components/schemas/DidState'
-        - $ref: '#/components/schemas/StateFailed'
+        - $ref: "#/components/schemas/DidState"
+        - $ref: "#/components/schemas/StateFailed"
     DidStateAction:
       allOf:
-        - $ref: '#/components/schemas/DidState'
-        - $ref: '#/components/schemas/StateAction'
+        - $ref: "#/components/schemas/DidState"
+        - $ref: "#/components/schemas/StateAction"
     DidStateWait:
       allOf:
-        - $ref: '#/components/schemas/DidState'
-        - $ref: '#/components/schemas/StateWait'
+        - $ref: "#/components/schemas/DidState"
+        - $ref: "#/components/schemas/StateWait"
     DidUrlStateFinished:
       allOf:
-        - $ref: '#/components/schemas/DidUrlState'
-        - $ref: '#/components/schemas/StateFinished'
+        - $ref: "#/components/schemas/DidUrlState"
+        - $ref: "#/components/schemas/StateFinished"
     DidUrlStateFailed:
       allOf:
-        - $ref: '#/components/schemas/DidUrlState'
-        - $ref: '#/components/schemas/StateFailed'
+        - $ref: "#/components/schemas/DidUrlState"
+        - $ref: "#/components/schemas/StateFailed"
     DidUrlStateAction:
       allOf:
-        - $ref: '#/components/schemas/DidUrlState'
-        - $ref: '#/components/schemas/StateAction'
+        - $ref: "#/components/schemas/DidUrlState"
+        - $ref: "#/components/schemas/StateAction"
     DidUrlStateWait:
       allOf:
-        - $ref: '#/components/schemas/DidUrlState'
-        - $ref: '#/components/schemas/StateWait'
+        - $ref: "#/components/schemas/DidUrlState"
+        - $ref: "#/components/schemas/StateWait"
     StateFinished:
-      description: This state indicates that the DID operation has been completed.
-        See https://identity.foundation/did-registration/#didstatestatefinished.
+      description: This state indicates that the DID operation has been completed. See
+        https://identity.foundation/did-registration/#didstatestatefinished.
       allOf:
         - type: object
     StateFailed:
-      description: This state indicates that the DID operation has failed. See https://identity.foundation/did-registration/#didstatestatefailed.
+      description: This state indicates that the DID operation has failed. See
+        https://identity.foundation/did-registration/#didstatestatefailed.
       allOf:
         - type: object
           properties:
             error:
-              $ref: '#/components/schemas/String'
+              $ref: "#/components/schemas/String"
             reason:
-              $ref: '#/components/schemas/String'
+              $ref: "#/components/schemas/String"
     StateAction:
       description: This state indicates that the client needs to perform an action,
-        before the DID operation can be continued. See https://identity.foundation/did-registration/#didstatestateaction.
+        before the DID operation can be continued. See
+        https://identity.foundation/did-registration/#didstatestateaction.
       allOf:
         - type: object
           properties:
             action:
-              $ref: '#/components/schemas/String'
+              $ref: "#/components/schemas/String"
             verificationMethodTemplate:
-              $ref: '#/components/schemas/StateActionVerificationMethodTemplate'
+              $ref: "#/components/schemas/StateActionVerificationMethodTemplate"
             signingRequest:
               type:
                 - object
                 - null
               additionalProperties:
-                $ref: '#/components/schemas/SigningRequest'
+                $ref: "#/components/schemas/SigningRequest"
             decryptionRequest:
               type:
                 - object
                 - null
               additionalProperties:
-                $ref: '#/components/schemas/DecryptionRequest'
+                $ref: "#/components/schemas/DecryptionRequest"
     StateActionVerificationMethodTemplate:
       type: array
       items:
-        $ref: '#/components/schemas/VerificationMethodTemplate'
+        $ref: "#/components/schemas/VerificationMethodTemplate"
     StateWait:
-      description: This state indicates that the client needs to wait, before the
-        DID operation can be continued. See https://identity.foundation/did-registration/#didstatestatewait.
+      description: This state indicates that the client needs to wait, before the DID
+        operation can be continued. See
+        https://identity.foundation/did-registration/#didstatestatewait.
       allOf:
         - type: object
           properties:
             wait:
-              $ref: '#/components/schemas/String'
+              $ref: "#/components/schemas/String"
             waittime:
-              $ref: '#/components/schemas/String'
+              $ref: "#/components/schemas/String"
     Secret:
       description: Secrets in requests and states.
       type: object
       x-parent: true
       properties:
         verificationMethod:
-          $ref: '#/components/schemas/SecretVerificationMethod'
+          $ref: "#/components/schemas/SecretVerificationMethod"
       additionalProperties: {}
       example:
         verificationMethod:
@@ -2778,18 +2821,19 @@ components:
       type: array
       items:
         oneOf:
-          - $ref: '#/components/schemas/VerificationMethodPublicData'
-          - $ref: '#/components/schemas/VerificationMethodPrivateData'
-          - $ref: '#/components/schemas/SecretVerificationMethodVerificationMethodTemplate'
+          - $ref: "#/components/schemas/VerificationMethodPublicData"
+          - $ref: "#/components/schemas/VerificationMethodPrivateData"
+          - $ref: "#/components/schemas/SecretVerificationMethodVerificationMethodTemplate"
     SecretVerificationMethodVerificationMethodTemplate:
       type: array
       items:
-        $ref: '#/components/schemas/VerificationMethodTemplate'
+        $ref: "#/components/schemas/VerificationMethodTemplate"
     RequestSecret:
       description: This input field contains an object with DID controller keys and
-        other secrets needed for performing the DID operation. See https://identity.foundation/did-registration/#secret.
+        other secrets needed for performing the DID operation. See
+        https://identity.foundation/did-registration/#secret.
       allOf:
-        - $ref: '#/components/schemas/Secret'
+        - $ref: "#/components/schemas/Secret"
         - type: object
           properties:
             signingResponse:
@@ -2797,25 +2841,27 @@ components:
                 - object
                 - null
               additionalProperties:
-                $ref: '#/components/schemas/SigningResponse'
+                $ref: "#/components/schemas/SigningResponse"
             decryptionResponse:
               type:
                 - object
                 - null
               additionalProperties:
-                $ref: '#/components/schemas/DecryptionResponse'
+                $ref: "#/components/schemas/DecryptionResponse"
           example:
             seed: 72WGp7NgFR1Oqdi8zlt7jQQ434XR0cNQ
     DidStateSecret:
       description: This output field contains an object with DID controller keys and
-        other secrets. See https://identity.foundation/did-registration/#didstatesecret.
+        other secrets. See
+        https://identity.foundation/did-registration/#didstatesecret.
       allOf:
-        - $ref: '#/components/schemas/Secret'
+        - $ref: "#/components/schemas/Secret"
         - type: object
           example:
             seed: 72WGp7NgFR1Oqdi8zlt7jQQ434XR0cNQ
     SigningRequest:
-      description: A signing request, see https://identity.foundation/did-registration/#signing-request-set.
+      description: A signing request, see
+        https://identity.foundation/did-registration/#signing-request-set.
       type: object
       required:
         - serializedPayload
@@ -2824,82 +2870,89 @@ components:
         payload:
           type: object
         serializedPayload:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         kid:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         alg:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         purpose:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
       additionalProperties: {}
     SigningRequestSet:
-      description: A signing request set, see https://identity.foundation/did-registration/#signing-request-set.
+      description: A signing request set, see
+        https://identity.foundation/did-registration/#signing-request-set.
       type: object
       additionalProperties:
-        $ref: '#/components/schemas/SigningRequest'
+        $ref: "#/components/schemas/SigningRequest"
     SigningResponse:
-      description: A signing response, see https://identity.foundation/did-registration/#signing-response-set.
+      description: A signing response, see
+        https://identity.foundation/did-registration/#signing-response-set.
       type: object
       required:
         - signature
       properties:
         signature:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         kid:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         alg:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         purpose:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
       additionalProperties: {}
     SigningResponseSet:
-      description: A signing response set, see https://identity.foundation/did-registration/#signing-response-set.
+      description: A signing response set, see
+        https://identity.foundation/did-registration/#signing-response-set.
       type: object
       additionalProperties:
-        $ref: '#/components/schemas/SigningResponse'
+        $ref: "#/components/schemas/SigningResponse"
     DecryptionRequest:
-      description: A decryption request, see https://identity.foundation/did-registration/#decryption-request-set.
+      description: A decryption request, see
+        https://identity.foundation/did-registration/#decryption-request-set.
       type: object
       required:
         - encryptedPayload
         - enc
       properties:
         payload:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         encryptedPayload:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         kid:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         enc:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         purpose:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
       additionalProperties: {}
     DecryptionRequestSet:
-      description: A decryption request set, see https://identity.foundation/did-registration/#decryption-request-set.
+      description: A decryption request set, see
+        https://identity.foundation/did-registration/#decryption-request-set.
       type: object
       additionalProperties:
-        $ref: '#/components/schemas/DecryptionRequest'
+        $ref: "#/components/schemas/DecryptionRequest"
     DecryptionResponse:
-      description: A decryption response, see https://identity.foundation/did-registration/#decryption-response-set.
+      description: A decryption response, see
+        https://identity.foundation/did-registration/#decryption-response-set.
       type: object
       required:
         - decryptedPayload
       properties:
         decryptedPayload:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         kid:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         enc:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
         purpose:
-          $ref: '#/components/schemas/String'
+          $ref: "#/components/schemas/String"
       additionalProperties: {}
     DecryptionResponseSet:
-      description: A decryption response set, see https://identity.foundation/did-registration/#decryption-response-set.
+      description: A decryption response set, see
+        https://identity.foundation/did-registration/#decryption-response-set.
       type: object
       additionalProperties:
-        $ref: '#/components/schemas/DecryptionResponse'
+        $ref: "#/components/schemas/DecryptionResponse"
     VerificationMethodData:
       type: object
       x-parent: true
@@ -2917,9 +2970,10 @@ components:
           items:
             type: string
     VerificationMethodPublicData:
-      description: A verification method public data object, see https://identity.foundation/did-registration/#verification-method-public-data
+      description: A verification method public data object, see
+        https://identity.foundation/did-registration/#verification-method-public-data
       allOf:
-        - $ref: '#/components/schemas/VerificationMethodData'
+        - $ref: "#/components/schemas/VerificationMethodData"
         - type: object
           properties:
             publicKeyJwk:
@@ -2930,9 +2984,10 @@ components:
             publicKeyMultibase:
               type: string
     VerificationMethodPrivateData:
-      description: A verification method private data object, see https://identity.foundation/did-registration/#verification-method-private-data
+      description: A verification method private data object, see
+        https://identity.foundation/did-registration/#verification-method-private-data
       allOf:
-        - $ref: '#/components/schemas/VerificationMethodData'
+        - $ref: "#/components/schemas/VerificationMethodData"
         - type: object
           properties:
             privateKeyJwk:
@@ -2943,7 +2998,8 @@ components:
             privateKeyMultibase:
               type: string
     VerificationMethodTemplate:
-      description: A verification method template, see https://identity.foundation/did-registration/#verification-method-template
+      description: A verification method template, see
+        https://identity.foundation/did-registration/#verification-method-template
       type: object
       properties:
         id:
@@ -3073,11 +3129,11 @@ components:
           example: indy
           description: DID Method name
         didDocument:
-          $ref: '#/components/schemas/DidDocument1'
+          $ref: "#/components/schemas/DidDocument1"
         didVersion:
-          $ref: '#/components/schemas/DidVersion'
+          $ref: "#/components/schemas/DidVersion"
         didState:
-          $ref: '#/components/schemas/DidState1'
+          $ref: "#/components/schemas/DidState1"
     DidDocument1:
       type: object
       required:
@@ -3174,19 +3230,18 @@ components:
         credentialId: urn:uuid:45a44711-e457-4fa8-9b89-69fe0287c86a
         credentialStatus:
           - type: RevocationList2020Status
-            status: '0'
+            status: "0"
     IssueCredentialOptions:
       type: object
       description: Options for the Verifiable Credential issuance process.
       properties:
         format:
           type: string
-          description: 'The format of the Verifiable Credential to issue. Possible
-            values: jsonld, jwt, jsonldjwt. Default value: jsonld.'
+          description: "The format of the Verifiable Credential to issue. Possible values:
+            jsonld, jwt, jsonldjwt. Default value: jsonld."
         credentialFormatOptions:
           type: object
-          description: Additional implementation-specific options for the credential
-            format.
+          description: Additional implementation-specific options for the credential format.
         proofFormatOptions:
           type: object
           description: Additional implementation-specific options for the proof format.
@@ -3195,18 +3250,18 @@ components:
           description: An internal reference to a subject.
         returnMetadata:
           type: boolean
-          description: 'Whether or not to return metadata in the response. Possible
-            values: true, false. Default value: false.'
+          description: "Whether or not to return metadata in the response. Possible
+            values: true, false. Default value: false."
         importCredential:
           type: boolean
-          description: Whether or not to import an issued Verifiable Credential into
-            a wallet service.
+          description: Whether or not to import an issued Verifiable Credential into a
+            wallet service.
         type:
           type: string
-          description: 'The type of proof to generate for the Verifiable Credential.
-            Possible values: Ed25519Signature2018, Ed25519Signature2018, JsonWebSignature2020,
-            etc. If omitted, a default type of proof for the Issuer''s verification
-            method will be used.'
+          description: "The type of proof to generate for the Verifiable Credential.
+            Possible values: Ed25519Signature2018, Ed25519Signature2018,
+            JsonWebSignature2020, etc. If omitted, a default type of proof for
+            the Issuer's verification method will be used."
         cryptosuite:
           type: string
         created:
@@ -3221,18 +3276,18 @@ components:
             website.example
         challenge:
           type: string
-          description: A challenge provided by the requesting party of the proof.
-            For example 6e62f66e-67de-11eb-b490-ef3eeefa55f2
+          description: A challenge provided by the requesting party of the proof. For
+            example 6e62f66e-67de-11eb-b490-ef3eeefa55f2
         nonce:
           type: string
         verificationMethod:
           type: string
-          description: The URI of the verification method to use for generating the
-            proof. If omitted, a default verification method for the Issuer's DID
-            will be used.
+          description: The URI of the verification method to use for generating the proof.
+            If omitted, a default verification method for the Issuer's DID will
+            be used.
         proofPurpose:
           type: string
-          description: 'The purpose of the proof. Default value: assertionMethod.'
+          description: "The purpose of the proof. Default value: assertionMethod."
         previousProof:
           type: string
         credentialStatus:
@@ -3240,8 +3295,8 @@ components:
           properties:
             type:
               type: string
-              description: The method of Verifiable Credential status to generate
-                for the Verifiable Credential.
+              description: The method of Verifiable Credential status to generate for the
+                Verifiable Credential.
             options:
               type: object
               description: Options for the Verifiable Credential status.
@@ -3249,7 +3304,7 @@ components:
       example:
         verificationMethod: did:example:123#z6MksHh7qHWvybLg5QTPPdG2DgEjjduBDArV9EF9mRiRzMBN
         proofPurpose: assertionMethod
-        created: '2020-04-02T18:48:36Z'
+        created: 2020-04-02T18:48:36Z
         domain: revocation.example
         challenge: d436f0c8-fbd9-4e48-bbb2-55fc5d0920a8
         credentialStatus:
@@ -3260,7 +3315,7 @@ components:
         credential:
           type: object
         options:
-          $ref: '#/components/schemas/IssueCredentialOptions'
+          $ref: "#/components/schemas/IssueCredentialOptions"
     IssueCredentialResponse:
       type: object
     PreAuthorizeRequest:
@@ -3276,13 +3331,13 @@ components:
           example:
             given_name: John
             family_name: Doe
-            birthdate: '1990-01-01'
+            birthdate: 1990-01-01
         schema:
           type: string
           description: Schema identifier for the credential
           example: https://did.example.org/healthCard
         txCode:
-          $ref: '#/components/schemas/TxCode'
+          $ref: "#/components/schemas/TxCode"
         txPin:
           type: string
           description: Transaction PIN for additional security
@@ -3411,12 +3466,12 @@ components:
           description: DID of the credential subject
           example: did:example:ebfeb1f712ebc6f1c276e12ec21
         proof:
-          $ref: '#/components/schemas/Proof'
+          $ref: "#/components/schemas/Proof"
         credential_identifier:
           type: string
           description: Identifier for the specific credential
         credential_definition:
-          $ref: '#/components/schemas/CredentialDefinition'
+          $ref: "#/components/schemas/CredentialDefinition"
         credential_response_encryption:
           type: object
           description: Encryption configuration for credential response
@@ -3443,7 +3498,7 @@ components:
     CredentialDefinition:
       type: object
       properties:
-        '@context':
+        "@context":
           type: array
           items:
             type: string
@@ -3472,7 +3527,7 @@ components:
         credentials:
           type: array
           items:
-            $ref: '#/components/schemas/Credential1'
+            $ref: "#/components/schemas/Credential1"
           description: Multiple credentials (for batch issuance)
         acceptance_token:
           type: string
@@ -3640,11 +3695,11 @@ components:
           type: object
           description: Supported credential configurations
           additionalProperties:
-            $ref: '#/components/schemas/CredentialConfiguration'
+            $ref: "#/components/schemas/CredentialConfiguration"
         credentials_supported:
           type: array
           items:
-            $ref: '#/components/schemas/CredentialsSupported'
+            $ref: "#/components/schemas/CredentialsSupported"
           description: Supported credentials (legacy format)
     CredentialConfiguration:
       type: object
@@ -3671,17 +3726,17 @@ components:
             type: string
           description: Supported credential signing algorithms
         credential_definition:
-          $ref: '#/components/schemas/CredentialDefinition'
+          $ref: "#/components/schemas/CredentialDefinition"
         proof_types_supported:
           type: object
           description: Supported proof types
           additionalProperties:
-            $ref: '#/components/schemas/ProofType'
+            $ref: "#/components/schemas/ProofType"
         vct:
           type: string
           description: Verifiable Credential Type
         display:
-          $ref: '#/components/schemas/Display'
+          $ref: "#/components/schemas/Display"
     CredentialsSupported:
       type: object
       properties:
@@ -3711,7 +3766,7 @@ components:
           items:
             type: string
           description: Supported cryptographic suites
-        '@context':
+        "@context":
           type: array
           items:
             type: string
@@ -3729,7 +3784,7 @@ components:
             type: string
           description: Supported proof signing algorithms
         key_attestations_required:
-          $ref: '#/components/schemas/KeyAttestationRequired'
+          $ref: "#/components/schemas/KeyAttestationRequired"
     KeyAttestationRequired:
       type: object
       properties:
@@ -3755,12 +3810,12 @@ components:
           type: string
           description: Locale for the display
         logo:
-          $ref: '#/components/schemas/Logo'
+          $ref: "#/components/schemas/Logo"
         description:
           type: string
           description: Display description
         background_image:
-          $ref: '#/components/schemas/Logo'
+          $ref: "#/components/schemas/Logo"
         background_color:
           type: string
           description: Background color
@@ -3785,12 +3840,11 @@ components:
       properties:
         format:
           type: string
-          description: 'The format of the Verifiable Credential to verify. Possible
-            values: jsonld, jwt, jsonldjwt. Default value: jsonld.'
+          description: "The format of the Verifiable Credential to verify. Possible
+            values: jsonld, jwt, jsonldjwt. Default value: jsonld."
         credentialFormatOptions:
           type: object
-          description: Additional implementation-specific options for the credential
-            format.
+          description: Additional implementation-specific options for the credential format.
         proofFormatOptions:
           type: object
           description: Additional implementation-specific options for the proof format.
@@ -3802,8 +3856,8 @@ components:
             verification process.
         returnMetadata:
           type: boolean
-          description: 'Whether or not to return metadata in the response. Possible
-            values: true, false. Default value: false.'
+          description: "Whether or not to return metadata in the response. Possible
+            values: true, false. Default value: false."
         domain:
           type: string
           description: The intended domain of validity for the proof. For example
@@ -3812,13 +3866,13 @@ components:
           type: string
         challenge:
           type: string
-          description: A challenge provided by the requesting party of the proof.
-            For example 6e62f66e-67de-11eb-b490-ef3eeefa55f2
+          description: A challenge provided by the requesting party of the proof. For
+            example 6e62f66e-67de-11eb-b490-ef3eeefa55f2
       additionalProperties: {}
       example:
         verificationMethod: did:example:123#z6MksHh7qHWvybLg5QTPPdG2DgEjjduBDArV9EF9mRiRzMBN
         proofPurpose: assertionMethod
-        created: '2020-04-02T18:48:36Z'
+        created: 2020-04-02T18:48:36Z
         domain: example.com
         challenge: d436f0c8-fbd9-4e48-bbb2-55fc5d0920a8
     VerificationResult:
@@ -3834,27 +3888,27 @@ components:
         verifiableCredentialOrVerifiablePresentation:
           type: object
         options:
-          $ref: '#/components/schemas/VerifyOptions'
+          $ref: "#/components/schemas/VerifyOptions"
     VerifyResponse:
-      $ref: '#/components/schemas/VerificationResult'
+      $ref: "#/components/schemas/VerificationResult"
     VerifyCredentialRequest:
       type: object
       properties:
         verifiableCredential:
           type: object
         options:
-          $ref: '#/components/schemas/VerifyOptions'
+          $ref: "#/components/schemas/VerifyOptions"
     VerifyCredentialResponse:
-      $ref: '#/components/schemas/VerificationResult'
+      $ref: "#/components/schemas/VerificationResult"
     VerifyPresentationRequest:
       type: object
       properties:
         verifiablePresentation:
           type: object
         options:
-          $ref: '#/components/schemas/VerifyOptions'
+          $ref: "#/components/schemas/VerifyOptions"
     VerifyPresentationResponse:
-      $ref: '#/components/schemas/VerificationResult'
+      $ref: "#/components/schemas/VerificationResult"
     QRCodeRequest:
       type: object
       required:
