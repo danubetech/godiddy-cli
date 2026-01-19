@@ -91,8 +91,7 @@
 		<did-common-java.version>1.22.0</did-common-java.version>
 		<danubetech-kms-java.version>0.18.0</danubetech-kms-java.version>
 		<danubetech-resolver-common-java.version>0.3.0</danubetech-resolver-common-java.version>
-		<danubetech-registrar-common-java.version>0.12.0</danubetech-registrar-common-java.version>
-		<danubetech-kms-java.version>0.18.0</danubetech-kms-java.version>
+		<danubetech-registrar-common-java.version>0.18.0</danubetech-registrar-common-java.version>
 		<com.github.mattrglobal-bbs.signatures.version>2.0</com.github.mattrglobal-bbs.signatures.version>
 
 		<!-- Other Versions -->
@@ -335,6 +334,7 @@
 								<asyncNative>false</asyncNative>
 								<disallowAdditionalPropertiesIfNotPresent>false</disallowAdditionalPropertiesIfNotPresent>
 								<legacyDiscriminatorBehavior>false</legacyDiscriminatorBehavior>
+								<containerDefaultToNull>true</containerDefaultToNull>
 								<library>native</library>
 								<useBeanValidation>true</useBeanValidation>
 								<dateLibrary>java8</dateLibrary>
