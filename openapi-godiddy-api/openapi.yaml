@@ -12,7 +12,9 @@ tags:
   - name: Universal Resolver
   - name: Universal Registrar
   - name: Universal Issuer
+  - name: Universal Issuer - OID4VCI
   - name: Universal Verifier
+  - name: Universal Verifier - OID4VP
   - name: Wallet Service - DIDs and Keys
   - name: Wallet Service - Credentials
   - name: Version Service
@@ -1873,6 +1875,152 @@ paths:
           description: Verifiable Credential not found
         '500':
           description: Internal Server Error
+  /universal-issuer-oid4vci/v13/authorize/pre-authorize:
+    post:
+      tags:
+        - Universal Issuer - OID4VCI
+      summary: Pre-authorize credential issuance request (v13)
+      description: Creates a pre-authorized code for credential issuance
+      parameters:
+        - in: query
+          name: scope
+          schema:
+            type: string
+          description: OAuth2 scope for the credential
+        - in: query
+          name: redirect_uri
+          schema:
+            type: string
+            format: uri
+          description: Redirect URI for the authorization flow
+        - in: header
+          name: X-Config
+          schema:
+            type: object
+          description: Tenant configuration for multi-tenant deployments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreAuthorizeRequest'
+      responses:
+        '200':
+          description: Pre-authorization successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreAuthorizeResponse'
+        '400':
+          description: Bad request - invalid parameters
+        '500':
+          description: Internal server error
+  /universal-issuer-oid4vci/v13/issuance-status:
+    get:
+      tags:
+        - Universal Issuer - OID4VCI
+      summary: Get issuance status (v13)
+      description: Retrieves the issuance status for a given `requestId`.
+      responses:
+        '200':
+          description: Issuance status successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssuanceStatusResponse'
+              example:
+                requestId: req-12345
+                status: COMPLETED
+                credential:
+                  type: VerifiableCredential
+                  id: urn:uuid:1234-5678-90ab
+                  claims:
+                    name: Alice
+                    age: 29
+                metadata:
+                  issuedAt: '2025-09-25T12:00:00Z'
+                  issuer: did:example:123
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: Invalid request
+  /universal-issuer-oid4vci/v15/authorize/pre-authorize:
+    post:
+      tags:
+        - Universal Issuer - OID4VCI
+      summary: Pre-authorize credential issuance request (v15)
+      description: Creates a pre-authorized code for credential issuance
+      parameters:
+        - in: query
+          name: scope
+          schema:
+            type: string
+          description: OAuth2 scope for the credential
+        - in: query
+          name: redirect_uri
+          schema:
+            type: string
+            format: uri
+          description: Redirect URI for the authorization flow
+        - in: header
+          name: X-Config
+          schema:
+            type: object
+          description: Tenant configuration for multi-tenant deployments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreAuthorizeRequest'
+      responses:
+        '200':
+          description: Pre-authorization successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreAuthorizeResponse'
+        '400':
+          description: Bad request - invalid parameters
+        '500':
+          description: Internal server error
+  /universal-issuer-oid4vci/v15/issuance-status:
+    get:
+      tags:
+        - Universal Issuer - OID4VCI
+      summary: Get issuance status (v15)
+      description: Retrieves the issuance status for a given `requestId`.
+      responses:
+        '200':
+          description: Issuance status successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssuanceStatusResponse'
+              example:
+                requestId: req-12345
+                status: completed
+                credential:
+                  type: VerifiableCredential
+                  id: urn:uuid:1234-5678-90ab
+                  claims:
+                    name: Alice
+                    age: 29
+                metadata:
+                  issuedAt: '2025-09-25T12:00:00Z'
+                  issuer: did:example:123
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: Invalid request
   /universal-verifier/verify:
     post:
       tags:
@@ -1955,6 +2103,86 @@ paths:
           description: Request rate limit exceeded.
         '500':
           description: Internal Server Error
+  /universal-verifier-oid4vp/authorization/authorize:
+    get:
+      tags:
+        - Universal Verifier - OID4VP
+      summary: Create Authorization Request QR Code
+      description: Generates a QR code for authorization request in multi-tenant mode
+      operationId: authorizeRequestQRCode
+      parameters:
+        - name: presentationDefinitionIds
+          in: query
+          required: true
+          description: List of presentation definition IDs
+          schema:
+            type: array
+            items:
+              type: string
+        - name: schema
+          in: query
+          required: false
+          description: Optional schema parameter
+          schema:
+            type: string
+        - name: walletName
+          in: query
+          required: false
+          description: Optional wallet name
+          schema:
+            type: string
+        - name: X-Config
+          in: header
+          required: true
+          description: Tenant configuration
+          schema:
+            type: object
+      responses:
+        '200':
+          description: Successfully generated QR code request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QRCodeRequest'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+  /universal-verifier-oid4vp/authorization/verification-result/{state}:
+    get:
+      tags:
+        - Universal Verifier - OID4VP
+      summary: Get Verification Result
+      description: Retrieves the verification result for a given state and account
+      operationId: verificationResult
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: Account identifier
+          schema:
+            type: string
+        - name: state
+          in: path
+          required: true
+          description: State parameter from the authorization request
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved verification result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
   /revocation-service/revocation/revoke:
     post:
       tags:
@@ -2301,9 +2529,11 @@ components:
           $ref: '#/components/schemas/DidDocumentService'
       additionalProperties: {}
     DidDocumentController:
-      type: array
-      items:
-        type: string
+      oneOf:
+        - type: string
+        - type: array
+          items:
+            type: string
     DidDocumentVerificationMethod:
       type: array
       items:
@@ -3026,6 +3256,522 @@ components:
           $ref: '#/components/schemas/IssueCredentialOptions'
     IssueCredentialResponse:
       type: object
+    PreAuthorizeRequest:
+      type: object
+      required:
+        - claims
+        - schema
+      properties:
+        claims:
+          type: object
+          description: Credential claims to be issued
+          additionalProperties: true
+          example:
+            given_name: John
+            family_name: Doe
+            birthdate: '1990-01-01'
+        schema:
+          type: string
+          description: Schema identifier for the credential
+          example: https://did.example.org/healthCard
+        txCode:
+          $ref: '#/components/schemas/TxCode'
+        txPin:
+          type: string
+          description: Transaction PIN for additional security
+        credentialStatus:
+          type: object
+          description: Credential status configuration
+          additionalProperties: true
+    TxCode:
+      type: object
+      properties:
+        input_mode:
+          type: string
+          enum:
+            - numeric
+            - alphanumeric
+          description: Input mode for the transaction code
+        length:
+          type: integer
+          description: Length of the transaction code
+          minimum: 1
+          maximum: 20
+        description:
+          type: string
+          description: Description of the transaction code
+    PreAuthorizeResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Unique request identifier
+        issuerUrl:
+          type: string
+          description: Issuer URL
+        credentialOfferUri:
+          type: string
+          description: Credential offer URI
+        issuanceStatusUri:
+          type: string
+          description: Issuance status URI
+    TokenRequest:
+      type: object
+      required:
+        - grant_type
+      properties:
+        grant_type:
+          type: string
+          enum:
+            - authorization_code
+            - pre-authorized_code
+          description: OAuth2 grant type
+        code:
+          type: string
+          description: Authorization code (for authorization_code grant)
+        pre-authorized_code:
+          type: string
+          description: Pre-authorized code (for pre-authorized_code grant)
+        redirect_uri:
+          type: string
+          format: uri
+          description: Redirect URI (for authorization_code grant)
+        client_id:
+          type: string
+          description: Client identifier
+        client_secret:
+          type: string
+          description: Client secret
+        code_verifier:
+          type: string
+          description: PKCE code verifier
+        tx_code:
+          type: string
+          description: Transaction code for additional security
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: OAuth2 access token
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        token_type:
+          type: string
+          default: Bearer
+          description: Token type
+        expires_in:
+          type: integer
+          description: Token expiration time in seconds
+          example: 3600
+        c_nonce:
+          type: string
+          description: Cryptographic nonce for proof generation
+          example: tZignsnFbp
+        c_nonce_expires_in:
+          type: integer
+          description: Nonce expiration time in seconds
+          example: 3600
+        authorization_details:
+          type: object
+          description: Authorization details
+          additionalProperties: true
+        error:
+          type: string
+          description: Error code if token request failed
+        error_description:
+          type: string
+          description: Error description if token request failed
+    CredentialRequest:
+      type: object
+      properties:
+        types:
+          type: array
+          items:
+            type: string
+          description: Credential types (legacy format)
+          example:
+            - https://did.example.org/healthCard
+        format:
+          type: string
+          enum:
+            - jwt_vc
+            - jwt_vc_json
+            - ldp_vc
+            - ldp_vc_json
+          description: Credential format
+        did:
+          type: string
+          description: DID of the credential subject
+          example: did:example:ebfeb1f712ebc6f1c276e12ec21
+        proof:
+          $ref: '#/components/schemas/Proof'
+        credential_identifier:
+          type: string
+          description: Identifier for the specific credential
+        credential_definition:
+          $ref: '#/components/schemas/CredentialDefinition'
+        credential_response_encryption:
+          type: object
+          description: Encryption configuration for credential response
+          additionalProperties: true
+        vct:
+          type: string
+          description: Verifiable Credential Type
+    Proof:
+      type: object
+      properties:
+        proof_type:
+          type: string
+          enum:
+            - jwt
+            - attestation
+          description: Type of proof
+        jwt:
+          type: string
+          description: JWT proof
+          example: eyJraWQiOiJkaWQ6ZXhhbXBsZTplYmZlYjFmNzEyZWJjNmYxYzI3NmUxMmVjMjEva2V5cy8xIiwiYWxnIjoiRVMyNTYiLCJ0eXAiOiJKV1QifQ...
+        attestation:
+          type: string
+          description: Attestation proof
+    CredentialDefinition:
+      type: object
+      properties:
+        '@context':
+          type: array
+          items:
+            type: string
+          description: JSON-LD context
+          example:
+            - https://www.w3.org/2018/credentials/v1
+        type:
+          type: array
+          items:
+            type: string
+          description: Credential types
+          example:
+            - VerifiableCredential
+            - https://did.example.org/healthCard
+        credentialSubject:
+          type: object
+          description: Credential subject data
+          additionalProperties: true
+    CredentialResponse:
+      type: object
+      properties:
+        credential:
+          type: object
+          description: Issued credential
+          additionalProperties: true
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/Credential1'
+          description: Multiple credentials (for batch issuance)
+        acceptance_token:
+          type: string
+          description: Token for deferred credential acceptance
+        c_nonce:
+          type: string
+          description: Cryptographic nonce for next proof
+          example: tZignsnFbp
+        c_nonce_expires_in:
+          type: integer
+          description: Nonce expiration time in seconds
+          example: 3600
+        error:
+          type: string
+          description: Error code if issuance failed
+        error_description:
+          type: string
+          description: Error description if issuance failed
+    Credential1:
+      type: object
+      properties:
+        credential:
+          type: object
+          description: Individual credential
+          additionalProperties: true
+    IssuanceStatusResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: The request identifier.
+        status:
+          type: string
+          description: The current status of the issuance request.
+          example: pending
+        credential:
+          type: object
+          description: The credential being issued (structure may vary).
+          additionalProperties: true
+        metadata:
+          type: object
+          description: Additional metadata about the issuance process.
+          additionalProperties: true
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+    AuthorizationServerMetadata:
+      type: object
+      required:
+        - issuer
+        - authorization_endpoint
+        - token_endpoint
+      properties:
+        issuer:
+          type: string
+          format: uri
+          description: Authorization server issuer
+        authorization_endpoint:
+          type: string
+          format: uri
+          description: Authorization endpoint
+        token_endpoint:
+          type: string
+          format: uri
+          description: Token endpoint
+        jwks_uri:
+          type: string
+          format: uri
+          description: JSON Web Key Set URI
+        grant_types_supported:
+          type: array
+          items:
+            type: string
+          description: Supported grant types
+          example:
+            - authorization_code
+            - pre-authorized_code
+        scopes_supported:
+          type: array
+          items:
+            type: string
+          description: Supported scopes
+        response_types_supported:
+          type: array
+          items:
+            type: string
+          description: Supported response types
+        code_challenge_methods_supported:
+          type: array
+          items:
+            type: string
+          description: Supported PKCE methods
+        subject_types_supported:
+          type: array
+          items:
+            type: string
+          description: Supported subject types
+        token_endpoint_auth_methods_supported:
+          type: array
+          items:
+            type: string
+          description: Supported token endpoint authentication methods
+        id_token_types_supported:
+          type: array
+          items:
+            type: string
+          description: Supported ID token types
+        id_token_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+          description: Supported ID token signing algorithms
+        request_object_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+          description: Supported request object signing algorithms
+        pre-authorized_grant_anonymous_access_supported:
+          type: boolean
+          description: Whether pre-authorized grant supports anonymous access
+    CredentialIssuerMetadata:
+      type: object
+      required:
+        - credential_issuer
+        - credential_endpoint
+      properties:
+        credential_issuer:
+          type: string
+          format: uri
+          description: Credential issuer identifier
+        authorization_server:
+          type: string
+          format: uri
+          description: Authorization server URI (v13)
+        authorization_servers:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: Authorization server URIs (v15)
+        credential_endpoint:
+          type: string
+          format: uri
+          description: Credential issuance endpoint
+        batch_credential_endpoint:
+          type: string
+          format: uri
+          description: Batch credential issuance endpoint
+        deferred_credential_endpoint:
+          type: string
+          format: uri
+          description: Deferred credential issuance endpoint
+        nonce_endpoint:
+          type: string
+          format: uri
+          description: Nonce endpoint (v15)
+        credential_response_encryption:
+          type: object
+          description: Credential response encryption configuration
+          additionalProperties: true
+        credential_configurations_supported:
+          type: object
+          description: Supported credential configurations
+          additionalProperties:
+            $ref: '#/components/schemas/CredentialConfiguration'
+        credentials_supported:
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialsSupported'
+          description: Supported credentials (legacy format)
+    CredentialConfiguration:
+      type: object
+      properties:
+        format:
+          type: string
+          enum:
+            - jwt_vc
+            - jwt_vc_json
+            - ldp_vc
+            - ldp_vc_json
+          description: Credential format
+        scope:
+          type: string
+          description: OAuth2 scope for this credential type
+        cryptographic_binding_methods_supported:
+          type: array
+          items:
+            type: string
+          description: Supported cryptographic binding methods
+        credential_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+          description: Supported credential signing algorithms
+        credential_definition:
+          $ref: '#/components/schemas/CredentialDefinition'
+        proof_types_supported:
+          type: object
+          description: Supported proof types
+          additionalProperties:
+            $ref: '#/components/schemas/ProofType'
+        vct:
+          type: string
+          description: Verifiable Credential Type
+        display:
+          $ref: '#/components/schemas/Display'
+    CredentialsSupported:
+      type: object
+      properties:
+        format:
+          type: string
+          enum:
+            - jwt_vc
+            - jwt_vc_json
+            - ldp_vc
+            - ldp_vc_json
+          description: Credential format
+        id:
+          type: string
+          description: Credential identifier
+        types:
+          type: array
+          items:
+            type: string
+          description: Credential types
+        cryptographic_binding_methods_supported:
+          type: array
+          items:
+            type: string
+          description: Supported cryptographic binding methods
+        cryptographic_suites_supported:
+          type: array
+          items:
+            type: string
+          description: Supported cryptographic suites
+        '@context':
+          type: array
+          items:
+            type: string
+          description: JSON-LD context
+        credentialSubject:
+          type: object
+          description: Credential subject schema
+          additionalProperties: true
+    ProofType:
+      type: object
+      properties:
+        proof_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+          description: Supported proof signing algorithms
+        key_attestations_required:
+          $ref: '#/components/schemas/KeyAttestationRequired'
+    KeyAttestationRequired:
+      type: object
+      properties:
+        key_storage:
+          type: array
+          items:
+            type: string
+          description: Required key storage methods
+        user_authentication:
+          type: array
+          items:
+            type: string
+          description: Required user authentication methods
+    Display:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Display name
+        locale:
+          type: string
+          description: Locale for the display
+        logo:
+          $ref: '#/components/schemas/Logo'
+        description:
+          type: string
+          description: Display description
+        background_image:
+          $ref: '#/components/schemas/Logo'
+        background_color:
+          type: string
+          description: Background color
+        text_color:
+          type: string
+          description: Text color
+    Logo:
+      type: object
+      required:
+        - uri
+      properties:
+        uri:
+          type: string
+          format: uri
+          description: Logo URI
+        alt_text:
+          type: string
+          description: Alternative text for the logo
     VerifyOptions:
       type: object
       description: Options for the Verifiable Credential verification process.
@@ -3102,6 +3848,74 @@ components:
           $ref: '#/components/schemas/VerifyOptions'
     VerifyPresentationResponse:
       $ref: '#/components/schemas/VerificationResult'
+    QRCodeRequest:
+      type: object
+      required:
+        - qrCodeData
+        - state
+        - verificationResult
+      properties:
+        qrCodeData:
+          type: string
+          description: QR code data for authorization request
+        state:
+          type: string
+          description: State parameter for the request
+        verificationResult:
+          type: string
+          description: URL for verification result endpoint
+    VerificationResponse:
+      type: object
+      required:
+        - state
+        - verified
+      properties:
+        state:
+          type: string
+          description: State parameter from the authorization request
+        verified:
+          type: boolean
+          description: Whether the verification was successful
+        claims:
+          type: object
+          additionalProperties: true
+          description: Verified claims from the presentation
+          nullable: true
+    AuthorizationResponse:
+      type: object
+      properties:
+        vp_token:
+          description: Verifiable presentation token
+          oneOf:
+            - type: string
+            - type: object
+        id_token:
+          type: string
+          description: ID token
+        presentation_submission:
+          type: object
+          description: Presentation submission object
+        nonce:
+          type: string
+          description: Nonce value
+        state:
+          type: string
+          description: State parameter
+    ErrorResponse1:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Error message describing what went wrong
+        timestamp:
+          type: string
+          format: date-time
+          description: When the error occurred
+        path:
+          type: string
+          description: The request path that caused the error
     InitializeRequest:
       type: object
       required:
