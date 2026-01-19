@@ -77,21 +77,22 @@
 		<!-- OpenAPI Versions -->
 
 		<openapi-generator.version>7.14.0</openapi-generator.version>
-		<fasterxml.jackson.version>2.19.4</fasterxml.jackson.version>
-		<fasterxml.jackson.yaml.version>2.19.4</fasterxml.jackson.yaml.version>
+		<fasterxml.jackson.version>2.21.0</fasterxml.jackson.version>
+		<fasterxml.jackson.annotations.version>2.21</fasterxml.jackson.annotations.version>
+		<fasterxml.jackson.yaml.version>2.21.0</fasterxml.jackson.yaml.version>
 		<org.openapitools-jackson-databind-nullable.version>0.2.8</org.openapitools-jackson-databind-nullable.version>
 		<jakarta-annotation.version>3.0.0</jakarta-annotation.version>
 		<jakarta-validation.version>3.1.1</jakarta-validation.version>
 
 		<!-- Danube Tech Versions -->
 
-		<wallet-service.version>1.17.0</wallet-service.version>
-		<key-formats-java.version>1.28.0</key-formats-java.version>
-		<did-common-java.version>1.21.0</did-common-java.version>
-		<danubetech-kms-java.version>0.14.0</danubetech-kms-java.version>
+		<wallet-service.version>1.18.0</wallet-service.version>
+		<key-formats-java.version>1.29.0</key-formats-java.version>
+		<did-common-java.version>1.22.0</did-common-java.version>
+		<danubetech-kms-java.version>0.18.0</danubetech-kms-java.version>
 		<danubetech-resolver-common-java.version>0.3.0</danubetech-resolver-common-java.version>
-		<danubetech-registrar-common-java.version>0.11.0</danubetech-registrar-common-java.version>
-		<danubetech-kms-java.version>0.17.0</danubetech-kms-java.version>
+		<danubetech-registrar-common-java.version>0.12.0</danubetech-registrar-common-java.version>
+		<danubetech-kms-java.version>0.18.0</danubetech-kms-java.version>
 		<com.github.mattrglobal-bbs.signatures.version>2.0</com.github.mattrglobal-bbs.signatures.version>
 
 		<!-- Other Versions -->
@@ -483,7 +484,7 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-annotations</artifactId>
-				<version>${fasterxml.jackson.version}</version>
+				<version>${fasterxml.jackson.annotations.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
