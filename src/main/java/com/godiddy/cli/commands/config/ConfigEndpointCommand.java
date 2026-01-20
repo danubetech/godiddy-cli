@@ -55,6 +55,7 @@ public class ConfigEndpointCommand extends ConfigAbstractCommand implements Call
                 }
                 CLIConfig.setEndpoint(endpoint);
                 if (this.endpointRaw == null) {
+                    CLIConfig.setEndpointRaw(null);
                     System.out.println("Endpoint successfully set: " + endpoint);
                 } else {
                     Boolean endpointRaw = this.endpointRaw;

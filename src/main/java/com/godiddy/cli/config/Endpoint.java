@@ -45,4 +45,18 @@ public class Endpoint {
         Boolean endpointRaw = Objects.requireNonNullElse(CLIConfig.getEndpointRaw(), DEFAULT_ENDPOINTRAW);
         return endpointRaw;
     }
+
+    public static Boolean guessEndpointRaw() {
+        String endpoint = getEndpoint();
+        if (endpoint == null) return null;
+        if (endpoint.contains("universal-resolver")) return Boolean.TRUE;
+        if (endpoint.contains("universal-registrar")) return Boolean.TRUE;
+        if (endpoint.contains("uni-resolver")) return Boolean.TRUE;
+        if (endpoint.contains("uni-registrar")) return Boolean.TRUE;
+        if (endpoint.contains("uniresolver.io")) return Boolean.TRUE;
+        if (endpoint.contains("uniregistrar.io")) return Boolean.TRUE;
+        if (endpoint.contains(":8080")) return Boolean.TRUE;
+        if (endpoint.contains(":9080")) return Boolean.TRUE;
+        return Boolean.FALSE;
+    }
 }

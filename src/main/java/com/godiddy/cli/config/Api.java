@@ -104,6 +104,7 @@ public class Api {
 
     private static final Consumer<HttpRequest.Builder> requestInterceptor = builder -> {
         Boolean endpointRaw = Endpoint.getEndpointRaw();
+        if (endpointRaw == null) endpointRaw = Endpoint.guessEndpointRaw();
         if (Boolean.TRUE.equals(endpointRaw)) {
             String endpointWithSlash = Endpoint.getEndpoint();
             if (! endpointWithSlash.endsWith("/")) endpointWithSlash += "/";
