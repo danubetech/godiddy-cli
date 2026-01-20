@@ -54,10 +54,10 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
         String identifier = this.identifier;
         String accept = Boolean.TRUE.equals(this.metadata) ? ResolveResult.MEDIA_TYPE : Representations.DEFAULT_MEDIA_TYPE;
 
-        ResolutionOptions resolutionOptions = this.options == null ? null : new ResolutionOptions();
-        if (resolutionOptions != null) this.options.forEach(resolutionOptions::putAdditionalProperty);
+        ResolutionOptions resolutionOptions = new ResolutionOptions();
+        if (this.options != null) this.options.forEach(resolutionOptions::putAdditionalProperty);
 
-        ResolveOptionsParameter resolveOptionsParameter = resolutionOptions == null ? null : new ResolveOptionsParameter(resolutionOptions);
+        ResolveOptionsParameter resolveOptionsParameter = new ResolveOptionsParameter(resolutionOptions);
 
         // execute
 

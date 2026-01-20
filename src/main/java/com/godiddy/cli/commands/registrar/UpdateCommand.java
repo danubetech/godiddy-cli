@@ -1,9 +1,6 @@
 package com.godiddy.cli.commands.registrar;
 
-import com.godiddy.api.client.openapi.model.DidDocument;
-import com.godiddy.api.client.openapi.model.RequestOptions;
-import com.godiddy.api.client.openapi.model.RequestSecret;
-import com.godiddy.api.client.openapi.model.UpdateRequest;
+import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.clistorage.clistate.CLIState;
 import com.godiddy.cli.config.Api;
@@ -160,7 +157,7 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
         List<DidDocument> didDocument = Collections.singletonList(Api.fromJson(this.didDocument, DidDocument.class));
 
         if (Boolean.TRUE.equals(this.resolve)) {
-            Object result = Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(this.did, "application/did+ld+json", null));
+            Object result = Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(this.did, "application/did+ld+json", new ResolveOptionsParameter(new ResolutionOptions())));
             didDocument = Collections.singletonList(Api.convert(result, DidDocument.class));
         }
 

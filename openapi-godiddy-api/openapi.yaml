@@ -72,6 +72,7 @@ paths:
           name: options
           schema:
             oneOf:
+              - type: null
               - $ref: "#/components/schemas/ResolutionOptions"
               - $ref: "#/components/schemas/DereferencingOptions"
           description: The options for resolving the DID or dereferencing the DID URL.
