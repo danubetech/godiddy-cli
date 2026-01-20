@@ -91,7 +91,7 @@
 		<did-common-java.version>1.22.0</did-common-java.version>
 		<danubetech-kms-java.version>0.18.0</danubetech-kms-java.version>
 		<danubetech-resolver-common-java.version>0.3.0</danubetech-resolver-common-java.version>
-		<danubetech-registrar-common-java.version>0.19-SNAPSHOT</danubetech-registrar-common-java.version>
+		<danubetech-registrar-common-java.version>0.19.0</danubetech-registrar-common-java.version>
 		<com.github.mattrglobal-bbs.signatures.version>2.0</com.github.mattrglobal-bbs.signatures.version>
 
 		<!-- Other Versions -->
