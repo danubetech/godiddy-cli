@@ -31,8 +31,6 @@ public class Endpoint {
         PREDEFINED_ENDPOINTS.put("docker-businesswallet", "http://172.17.0.1:21080/1.0.0/");
     }
 
-    public static final Boolean DEFAULT_ENDPOINTRAW = Boolean.FALSE;
-
     public static String getEndpoint() {
         String endpoint = Objects.requireNonNullElse(CLIConfig.getEndpoint(), DEFAULT_ENDPOINT);
         if (DEFAULT_ENDPOINT.equals(endpoint)) {
@@ -42,21 +40,22 @@ public class Endpoint {
     }
 
     public static Boolean getEndpointRaw() {
-        Boolean endpointRaw = Objects.requireNonNullElse(CLIConfig.getEndpointRaw(), DEFAULT_ENDPOINTRAW);
+        Boolean endpointRaw = Objects.requireNonNullElseGet(CLIConfig.getEndpointRaw(), Endpoint::guessEndpointRaw);
         return endpointRaw;
     }
 
     public static Boolean guessEndpointRaw() {
         String endpoint = getEndpoint();
         if (endpoint == null) return null;
-        if (endpoint.contains("universal-resolver")) return Boolean.TRUE;
-        if (endpoint.contains("universal-registrar")) return Boolean.TRUE;
-        if (endpoint.contains("uni-resolver")) return Boolean.TRUE;
-        if (endpoint.contains("uni-registrar")) return Boolean.TRUE;
-        if (endpoint.contains("uniresolver.io")) return Boolean.TRUE;
-        if (endpoint.contains("uniregistrar.io")) return Boolean.TRUE;
-        if (endpoint.contains(":8080")) return Boolean.TRUE;
-        if (endpoint.contains(":9080")) return Boolean.TRUE;
-        return Boolean.FALSE;
+        Boolean guessedEndpointRaw = Boolean.FALSE;
+        if (endpoint.contains("universal-resolver")) guessedEndpointRaw = Boolean.TRUE;
+        if (endpoint.contains("universal-registrar")) guessedEndpointRaw = Boolean.TRUE;
+        if (endpoint.contains("uni-resolver")) guessedEndpointRaw = Boolean.TRUE;
+        if (endpoint.contains("uni-registrar")) guessedEndpointRaw = Boolean.TRUE;
+        if (endpoint.contains("uniresolver.io")) guessedEndpointRaw = Boolean.TRUE;
+        if (endpoint.contains("uniregistrar.io")) guessedEndpointRaw = Boolean.TRUE;
+        if (endpoint.contains(":8080")) guessedEndpointRaw = Boolean.TRUE;
+        if (endpoint.contains(":9080")) guessedEndpointRaw = Boolean.TRUE;
+        return guessedEndpointRaw;
     }
 }
