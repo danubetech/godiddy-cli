@@ -62,7 +62,7 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
         String accept = Boolean.TRUE.equals(this.result) ? ResolveResult.MEDIA_TYPE : Representations.DEFAULT_MEDIA_TYPE;
 
         ResolutionOptions resolutionOptions = new ResolutionOptions();
-        if (this.post != null) ((Map<String, Object>) objectMapper.readValue(this.post, Map.class)).forEach(resolutionOptions::putAdditionalProperty);
+        if (this.post != null && this.post.startsWith("{")) ((Map<String, Object>) objectMapper.readValue(this.post, Map.class)).forEach(resolutionOptions::putAdditionalProperty);
         if (this.options != null) this.options.forEach(resolutionOptions::putAdditionalProperty);
 
         // execute
