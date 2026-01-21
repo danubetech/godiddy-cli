@@ -157,7 +157,7 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
         List<DidDocument> didDocument = Collections.singletonList(Api.fromJson(this.didDocument, DidDocument.class));
 
         if (Boolean.TRUE.equals(this.resolve)) {
-            Object result = Api.execute(() -> Api.universalResolverApi().resolveGetWithHttpInfo(this.did, "application/did+ld+json", new ResolveGetQuery(new ResolutionOptions())));
+            Object result = Api.execute(() -> Api.universalResolverApi().resolveGetWithHttpInfo(this.did, "application/did+ld+json", new ResolveGetQuery(Collections.emptyMap())));
             didDocument = Collections.singletonList(Api.convert(result, DidDocument.class));
         }
 

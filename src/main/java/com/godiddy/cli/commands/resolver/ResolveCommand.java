@@ -1,7 +1,6 @@
 package com.godiddy.cli.commands.resolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.godiddy.api.client.openapi.model.ResolutionOptions;
 import com.godiddy.api.client.openapi.model.ResolveGetQuery;
 import com.godiddy.api.client.openapi.model.ResolvePostBody;
 import com.godiddy.cli.GodiddyAbstractCommand;
@@ -14,6 +13,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import uniresolver.result.ResolveResult;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -61,9 +61,9 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
         String identifier = this.identifier;
         String accept = Boolean.TRUE.equals(this.result) ? ResolveResult.MEDIA_TYPE : Representations.DEFAULT_MEDIA_TYPE;
 
-        ResolutionOptions resolutionOptions = new ResolutionOptions();
-        if (this.post != null && this.post.startsWith("{")) ((Map<String, Object>) objectMapper.readValue(this.post, Map.class)).forEach(resolutionOptions::putAdditionalProperty);
-        if (this.options != null) this.options.forEach(resolutionOptions::putAdditionalProperty);
+        Map<String, Object> resolutionOptions = new LinkedHashMap<>();
+        if (this.post != null && this.post.startsWith("{")) ((Map<String, Object>) objectMapper.readValue(this.post, Map.class)).forEach(resolutionOptions::put);
+        if (this.options != null) this.options.forEach(resolutionOptions::put);
 
         // execute
 
