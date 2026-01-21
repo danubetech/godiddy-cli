@@ -3359,12 +3359,12 @@ components:
           description: An internal reference to a subject.
         returnMetadata:
           type: boolean
-          description: "Whether or not to return metadata in the response. Possible
-            values: true, false. Default value: false."
+          description: "Whether to return metadata in the response. Possible values: true,
+            false. Default value: false."
         importCredential:
           type: boolean
-          description: Whether or not to import an issued Verifiable Credential into a
-            wallet service.
+          description: Whether to import an issued Verifiable Credential into a wallet
+            service.
         type:
           type: string
           description: "The type of proof to generate for the Verifiable Credential.
@@ -3965,8 +3965,8 @@ components:
             verification process.
         returnMetadata:
           type: boolean
-          description: "Whether or not to return metadata in the response. Possible
-            values: true, false. Default value: false."
+          description: "Whether to return metadata in the response. Possible values: true,
+            false. Default value: false."
         domain:
           type: string
           description: The intended domain of validity for the proof. For example

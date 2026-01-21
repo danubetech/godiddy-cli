@@ -26,7 +26,7 @@ public class ConfigEndpointCommand extends ConfigAbstractCommand implements Call
 
     @CommandLine.Option(
             names = {"-r", "--raw"},
-            description = "Whether or not to use raw endpoints that omit the component paths, e.g. /universal-resolver/, /universal-registrar/."
+            description = "Whether to use raw endpoints that omit the component paths, e.g. /universal-resolver/, /universal-registrar/."
     )
     Boolean endpointRaw;
 

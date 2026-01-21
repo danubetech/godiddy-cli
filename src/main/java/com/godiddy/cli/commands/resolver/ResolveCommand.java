@@ -42,7 +42,7 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
 
     @Option(
             names = {"-r", "--result"},
-            description = "Whether or not to request a full DID resolution result including metadata.",
+            description = "Whether to request a full DID resolution result including metadata.",
             defaultValue = "false"
     )
     Boolean result;
