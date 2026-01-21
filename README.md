@@ -129,17 +129,3 @@ sudo apt-get install -f
 ```bash
 godiddy-cli --version
 ```
-
-## Build Java
-
-```shell
-mvn -s settings.xml clean package
-```
-
-## Run Java
-
-From command line:
-
-```shell
-java -jar target/godiddy-cli-*-jar-with-dependencies.jar -h
-```
