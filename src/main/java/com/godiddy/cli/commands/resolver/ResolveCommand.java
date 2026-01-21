@@ -1,13 +1,12 @@
 package com.godiddy.cli.commands.resolver;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.godiddy.api.client.openapi.model.ResolutionOptions;
-import com.godiddy.api.client.openapi.model.ResolveOptionsParameter;
+import com.godiddy.api.client.openapi.model.ResolveGetQuery;
+import com.godiddy.api.client.openapi.model.ResolvePostBody;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.config.Api;
 import foundation.identity.did.representations.Representations;
-import foundation.identity.did.representations.consumption.RepresentationConsumerDIDJSON;
-import foundation.identity.did.representations.production.RepresentationProducerDID;
-import foundation.identity.did.representations.production.RepresentationProducerDIDJSONLD;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -27,18 +26,26 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
 
     private static final Logger log = LogManager.getLogger(ResolveCommand.class);
 
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
     @Option(
             names = {"-o", "--option"},
-            description = "This input field contains a key/value pair with an option for the DID operation."
+            description = "This input field contains a key/value pair contains a DID resolution option / DID URL dereferencing option."
     )
     Map<String, Object> options;
+
+    @Option(
+            names = {"-p", "--post"},
+            description = "Execute a POST request with a JSON object that contains DID resolution options / DID URL dereferencing options."
+    )
+    String post;
 
     @Option(
             names = {"-r", "--result"},
             description = "Whether or not to request a full DID resolution result including metadata.",
             defaultValue = "false"
     )
-    Boolean metadata;
+    Boolean result;
 
     @Parameters(
             index = "0",
@@ -52,16 +59,21 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
         // request
 
         String identifier = this.identifier;
-        String accept = Boolean.TRUE.equals(this.metadata) ? ResolveResult.MEDIA_TYPE : Representations.DEFAULT_MEDIA_TYPE;
+        String accept = Boolean.TRUE.equals(this.result) ? ResolveResult.MEDIA_TYPE : Representations.DEFAULT_MEDIA_TYPE;
 
         ResolutionOptions resolutionOptions = new ResolutionOptions();
+        if (this.post != null) ((Map<String, Object>) objectMapper.readValue(this.post, Map.class)).forEach(resolutionOptions::putAdditionalProperty);
         if (this.options != null) this.options.forEach(resolutionOptions::putAdditionalProperty);
-
-        ResolveOptionsParameter resolveOptionsParameter = new ResolveOptionsParameter(resolutionOptions);
 
         // execute
 
-        Api.execute(() -> Api.universalResolverApi().resolveWithHttpInfo(identifier, accept, resolveOptionsParameter));
+        if (this.post == null) {
+            ResolveGetQuery resolveGetQuery = new ResolveGetQuery(resolutionOptions);
+            Api.execute(() -> Api.universalResolverApi().resolveGetWithHttpInfo(identifier, accept, resolveGetQuery));
+        } else {
+            ResolvePostBody resolvePostBody = new ResolvePostBody(resolutionOptions);
+            Api.execute(() -> Api.universalResolverApi().resolvePostWithHttpInfo(identifier, accept, resolvePostBody));
+        }
 
         // done
 
