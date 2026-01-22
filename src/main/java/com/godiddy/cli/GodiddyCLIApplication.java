@@ -8,8 +8,6 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.fusesource.jansi.AnsiConsole;
 import picocli.CommandLine;
 
-import java.util.Arrays;
-
 public class GodiddyCLIApplication {
 
     static {
@@ -21,7 +19,7 @@ public class GodiddyCLIApplication {
     private static final Logger log = LogManager.getLogger(GodiddyCLIApplication.class);
 
     public static void main(String... args) {
-        log.info("Starting application: " + Arrays.asList(args));
+        log.info("Starting application.");
         configureLogLevel();
         AnsiConsole.systemInstall();
         int exitCode = new CommandLine(new GodiddyRootCommand()).execute(args);
