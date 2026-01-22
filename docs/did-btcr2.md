@@ -1,5 +1,7 @@
 # godiddy-cli - did:btcr2 examples
 
+Also see https://youtu.be/yu_jIu0Wg-w
+
 ```shell
 # Create a DID
 godiddy-cli create -c -m btcr2 -n mutinynet
