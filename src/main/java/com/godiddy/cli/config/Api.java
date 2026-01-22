@@ -82,6 +82,8 @@ public class Api {
         return new UniversalVerifierApi(apiClient());
     }
 
+    public static Object postBody;
+
     private static final Flow.Subscriber<ByteBuffer> loggingSubscriber = new Flow.Subscriber<>() {
 
         @Override
@@ -91,8 +93,8 @@ public class Api {
 
         @Override
         public void onNext(ByteBuffer byteBuffer) {
-            RegistrarRequest nextRequest = CLIState.getNextRequest();
-            Api.print(nextRequest);
+            Api.print(postBody);
+            postBody = null;
         }
 
         @Override

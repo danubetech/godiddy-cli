@@ -20,6 +20,7 @@ public class DoContinue {
         }
 
         Object state;
+        Api.postBody = nextRequest;
         switch (nextRequest) {
             case CreateRequest createRequest -> state = Api.execute(() -> Api.universalRegistrarApi().createWithHttpInfo(method, createRequest));
             case UpdateRequest updateRequest -> state = Api.execute(() -> Api.universalRegistrarApi().updateWithHttpInfo(updateRequest));

@@ -72,6 +72,7 @@ public class ResolveCommand extends GodiddyAbstractCommand implements Callable<I
             Api.execute(() -> Api.universalResolverApi().resolveGetWithHttpInfo(identifier, accept, resolveGetQuery));
         } else {
             ResolvePostBody resolvePostBody = new ResolvePostBody(resolutionOptions);
+            Api.postBody = resolvePostBody;
             Api.execute(() -> Api.universalResolverApi().resolvePostWithHttpInfo(identifier, accept, resolvePostBody));
         }
 
