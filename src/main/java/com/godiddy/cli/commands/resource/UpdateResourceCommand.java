@@ -115,6 +115,7 @@ public class UpdateResourceCommand extends GodiddyAbstractCommand implements Cal
         CLIState.setState(null);
         CLIState.setPrevRequest(null);
         CLIState.setNextRequest(request);
+        CLIState.setClientStateObject(null);
 
         // interactive?
 

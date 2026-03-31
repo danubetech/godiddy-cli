@@ -92,6 +92,7 @@ public class DeactivateResourceCommand extends GodiddyAbstractCommand implements
         CLIState.setState(null);
         CLIState.setPrevRequest(null);
         CLIState.setNextRequest(request);
+        CLIState.setClientStateObject(null);
 
         // interactive?
 

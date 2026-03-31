@@ -167,6 +167,7 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
         CLIState.setState(null);
         CLIState.setPrevRequest(null);
         CLIState.setNextRequest(request);
+        CLIState.setClientStateObject(null);
 
         // interactive?
 

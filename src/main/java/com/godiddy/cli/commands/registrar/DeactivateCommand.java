@@ -119,6 +119,7 @@ public class DeactivateCommand extends GodiddyAbstractCommand implements Callabl
         CLIState.setState(null);
         CLIState.setPrevRequest(null);
         CLIState.setNextRequest(request);
+        CLIState.setClientStateObject(null);
 
         // interactive?
 
