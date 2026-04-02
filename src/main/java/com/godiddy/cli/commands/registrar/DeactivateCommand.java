@@ -1,6 +1,7 @@
 package com.godiddy.cli.commands.registrar;
 
 import com.godiddy.api.client.openapi.model.DeactivateRequest;
+import com.godiddy.api.client.openapi.model.RegistrarRequestJobId;
 import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
@@ -107,8 +108,10 @@ public class DeactivateCommand extends GodiddyAbstractCommand implements Callabl
         RequestSecret requestSecret = new RequestSecret();
         if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
 
+        RegistrarRequestJobId registrarRequestJobId = this.jobId == null ? null : new RegistrarRequestJobId(this.jobId);
+
         DeactivateRequest request = new DeactivateRequest();
-        request.setJobId(this.jobId);
+        request.setJobId(registrarRequestJobId);
         request.setDid(this.did);
         request.setOptions(requestOptions);
         request.setSecret(requestSecret);

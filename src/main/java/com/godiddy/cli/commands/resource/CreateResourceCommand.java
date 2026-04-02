@@ -1,6 +1,7 @@
 package com.godiddy.cli.commands.resource;
 
 import com.godiddy.api.client.openapi.model.CreateResourceRequest;
+import com.godiddy.api.client.openapi.model.RegistrarRequestJobId;
 import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
@@ -94,10 +95,12 @@ public class CreateResourceCommand extends GodiddyAbstractCommand implements Cal
         RequestSecret requestSecret = new RequestSecret();
         if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
 
+        RegistrarRequestJobId registrarRequestJobId = this.jobId == null ? null : new RegistrarRequestJobId(this.jobId);
+
         String content = this.content.isBlank() ? null : this.content;
 
         CreateResourceRequest request = new CreateResourceRequest();
-        request.setJobId(this.jobId);
+        request.setJobId(registrarRequestJobId);
         request.setDid(this.did);
         request.setRelativeDidUrl(this.relativeDidUrl);
         request.setOptions(requestOptions);

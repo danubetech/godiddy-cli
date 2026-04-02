@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -12,7 +11,6 @@ import com.godiddy.api.client.ApiClient;
 import com.godiddy.api.client.ApiResponse;
 import com.godiddy.api.client.openapi.api.*;
 import com.godiddy.api.client.openapi.model.*;
-import com.godiddy.cli.clistorage.clistate.CLIState;
 import uniregistrar.openapi.RFC3339DateFormat;
 
 import java.io.*;
@@ -23,7 +21,6 @@ import java.net.http.HttpResponse;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Flow;
 import java.util.function.Consumer;
@@ -32,7 +29,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 public class Api {
 
-    private static final ObjectMapper objectMapper = JsonMapper.builder()
+    private static final JsonMapper jsonMapper = JsonMapper.builder()
             .serializationInclusion(JsonInclude.Include.NON_NULL)
             .disable(MapperFeature.ALLOW_COERCION_OF_SCALARS)
             .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
@@ -143,14 +140,14 @@ public class Api {
 
     public static void writeJson(File file, Object object, boolean pretty) throws IOException {
         if (pretty) {
-            objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, object);
+            jsonMapper.writerWithDefaultPrettyPrinter().writeValue(file, object);
         } else {
-            objectMapper.writeValue(file, object);
+            jsonMapper.writeValue(file, object);
         }
     }
 
     public static Object readJson(File file, Class cl) throws IOException {
-        return objectMapper.readValue(file, cl);
+        return jsonMapper.readValue(file, cl);
     }
 
     public static Map<String, Object> fromJson(String json) {
@@ -159,14 +156,22 @@ public class Api {
 
     public static <T> T fromJson(String json, Class<T> cl) {
         try {
-            return objectMapper.readValue(json, cl);
+            return jsonMapper.readValue(json, cl);
         } catch (JsonProcessingException ex) {
             throw new IllegalArgumentException(ex);
         }
     }
 
     public static <T> T convert(Object object, Class<T> cl) {
-        return objectMapper.convertValue(object, cl);
+        return jsonMapper.convertValue(object, cl);
+    }
+
+    public static String string(Object object) {
+        try {
+            return jsonMapper.writeValueAsString(object);
+        } catch (JsonProcessingException ex) {
+            throw new IllegalArgumentException(ex.getMessage(), ex);
+        }
     }
 
     public static void print(Object object) {
@@ -193,11 +198,11 @@ public class Api {
             if (formatting == Formatting.Value.interpreted) {
                 string = interpretedString == null ? "(null)" : interpretedString;
             } else if (formatting == Formatting.Value.pretty) {
-                if (object instanceof String) object = objectMapper.readValue((String) object, Object.class);
-                string = object == null ? "(null)" : objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+                if (object instanceof String) object = jsonMapper.readValue((String) object, Object.class);
+                string = object == null ? "(null)" : jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
             } else if (formatting == Formatting.Value.flat) {
-                if (object instanceof String) object = objectMapper.readValue((String) object, Object.class);
-                string = object == null ? "(null)" : objectMapper.writeValueAsString(object);
+                if (object instanceof String) object = jsonMapper.readValue((String) object, Object.class);
+                string = object == null ? "(null)" : jsonMapper.writeValueAsString(object);
             } else if (formatting == Formatting.Value.raw) {
                 string = object == null ? "(null)" : object.toString();
             } else if (formatting == Formatting.Value.off) {
@@ -235,7 +240,7 @@ public class Api {
 
     private static String constructInterpretedString(RegistrarRequest registrarRequest) {
         String name = registrarRequest.getClass().getSimpleName();
-        String jobId = registrarRequest.getJobId();
+        String jobId = "" + (registrarRequest.getJobId() == null ? "" : registrarRequest.getJobId().getString());
         String didDocumentVerificationMethods = "" + (! (registrarRequest instanceof CreateRequest createRequest) ? 0 : createRequest.getDidDocument() == null ? 0 : createRequest.getDidDocument().getVerificationMethod() == null ? 0 : createRequest.getDidDocument().getVerificationMethod().size()) + " DID document verification methods";
         String secretVerificationMethods = "" + (registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getVerificationMethod() == null ? 0 : registrarRequest.getSecret().getVerificationMethod().size()) + " secret verification methods";
         String signingResponses = "" + (registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getSigningResponse() == null ? 0 : registrarRequest.getSecret().getSigningResponse().size()) + " signing responses";
@@ -257,7 +262,7 @@ public class Api {
 
     private static String constructInterpretedString(RegistrarState registrarState) {
         String name = registrarState.getClass().getSimpleName();
-        String jobId = registrarState.getJobId();
+        String jobId = "" + (registrarState.getJobId() == null ? "" : string(registrarState.getJobId()));
         String state = registrarState.getDidState() == null ? "null" : registrarState.getDidState().getState();
         String action = ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? "null" : didStateAction.getAction() == null ? "null" : didStateAction.getAction();
         String did = registrarState.getDidState() == null ? "null" : registrarState.getDidState().getDid();
@@ -288,7 +293,7 @@ public class Api {
 
     private static String constructInterpretedString(RegistrarResourceState registrarResourceState) {
         String name = registrarResourceState.getClass().getSimpleName();
-        String jobId = registrarResourceState.getJobId();
+        String jobId = "" + (registrarResourceState.getJobId() == null ? "" : registrarResourceState.getJobId().getString());
         String state = registrarResourceState.getDidUrlState() == null ? "null" : registrarResourceState.getDidUrlState().getState();
         String action = ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? "null" : didUrlStateAction.getAction() == null ? "null" : didUrlStateAction.getAction();
         String didUrl = registrarResourceState.getDidUrlState() == null ? "null" : registrarResourceState.getDidUrlState().getDidUrl();

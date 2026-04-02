@@ -152,6 +152,8 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
         RequestSecret requestSecret = new RequestSecret();
         if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
 
+        RegistrarRequestJobId registrarRequestJobId = this.jobId == null ? null : new RegistrarRequestJobId(this.jobId);
+
         List<String> didDocumentOperation = Collections.singletonList(this.didDocumentOperation);
 
         List<DidDocument> didDocument = Collections.singletonList(Api.fromJson(this.didDocument, DidDocument.class));
@@ -162,7 +164,7 @@ public class UpdateCommand extends GodiddyAbstractCommand implements Callable<In
         }
 
         UpdateRequest request = new UpdateRequest();
-        request.setJobId(this.jobId);
+        request.setJobId(registrarRequestJobId);
         request.setDid(this.did);
         request.setOptions(requestOptions);
         request.setSecret(requestSecret);

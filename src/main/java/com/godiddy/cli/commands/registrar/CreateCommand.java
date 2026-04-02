@@ -1,9 +1,6 @@
 package com.godiddy.cli.commands.registrar;
 
-import com.godiddy.api.client.openapi.model.CreateRequest;
-import com.godiddy.api.client.openapi.model.DidDocument;
-import com.godiddy.api.client.openapi.model.RequestOptions;
-import com.godiddy.api.client.openapi.model.RequestSecret;
+import com.godiddy.api.client.openapi.model.*;
 import com.godiddy.cli.GodiddyAbstractCommand;
 import com.godiddy.cli.config.Api;
 import com.godiddy.cli.clistorage.clistate.CLIState;
@@ -152,11 +149,13 @@ public class CreateCommand extends GodiddyAbstractCommand implements Callable<In
         RequestSecret requestSecret = new RequestSecret();
         if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
 
+        RegistrarRequestJobId registrarRequestJobId = this.jobId == null ? null : new RegistrarRequestJobId(this.jobId);
+
         DidDocument didDocument = this.didDocument.isBlank() ? null : Api.fromJson(this.didDocument, DidDocument.class);
 
         String method = this.method;
         CreateRequest request = new CreateRequest();
-        request.setJobId(this.jobId);
+        request.setJobId(registrarRequestJobId);
         request.setOptions(requestOptions);
         request.setSecret(requestSecret);
         request.setDidDocument(didDocument);

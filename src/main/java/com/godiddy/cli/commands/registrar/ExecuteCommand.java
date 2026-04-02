@@ -1,6 +1,7 @@
 package com.godiddy.cli.commands.registrar;
 
 import com.godiddy.api.client.openapi.model.ExecuteRequest;
+import com.godiddy.api.client.openapi.model.RegistrarRequestJobId;
 import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
@@ -88,12 +89,14 @@ public class ExecuteCommand extends GodiddyAbstractCommand implements Callable<I
         RequestSecret requestSecret = new RequestSecret();
         if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
 
+        RegistrarRequestJobId registrarRequestJobId = this.jobId == null ? null : new RegistrarRequestJobId(this.jobId);
+
         List<String> operation = Collections.singletonList(this.operation);
 
         List<Object> operationData = this.operationData == null ? Collections.singletonList(new HashMap<>()) : Collections.singletonList(this.operationData);
 
         ExecuteRequest request = new ExecuteRequest();
-        request.setJobId(this.jobId);
+        request.setJobId(registrarRequestJobId);
         request.setDid(this.did);
         request.setOptions(requestOptions);
         request.setSecret(requestSecret);
