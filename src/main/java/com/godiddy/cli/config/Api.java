@@ -240,7 +240,7 @@ public class Api {
 
     private static String constructInterpretedString(RegistrarRequest registrarRequest) {
         String name = registrarRequest.getClass().getSimpleName();
-        String jobId = "" + (registrarRequest.getJobId() == null ? "" : registrarRequest.getJobId().getString());
+        String jobId = "" + (registrarRequest.getJobId() == null ? "" : string(registrarRequest.getJobId()));
         String didDocumentVerificationMethods = "" + (! (registrarRequest instanceof CreateRequest createRequest) ? 0 : createRequest.getDidDocument() == null ? 0 : createRequest.getDidDocument().getVerificationMethod() == null ? 0 : createRequest.getDidDocument().getVerificationMethod().size()) + " DID document verification methods";
         String secretVerificationMethods = "" + (registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getVerificationMethod() == null ? 0 : registrarRequest.getSecret().getVerificationMethod().size()) + " secret verification methods";
         String signingResponses = "" + (registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getSigningResponse() == null ? 0 : registrarRequest.getSecret().getSigningResponse().size()) + " signing responses";
@@ -293,7 +293,7 @@ public class Api {
 
     private static String constructInterpretedString(RegistrarResourceState registrarResourceState) {
         String name = registrarResourceState.getClass().getSimpleName();
-        String jobId = "" + (registrarResourceState.getJobId() == null ? "" : registrarResourceState.getJobId().getString());
+        String jobId = "" + (registrarResourceState.getJobId() == null ? "" : string(registrarResourceState.getJobId()));
         String state = registrarResourceState.getDidUrlState() == null ? "null" : registrarResourceState.getDidUrlState().getState();
         String action = ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? "null" : didUrlStateAction.getAction() == null ? "null" : didUrlStateAction.getAction();
         String didUrl = registrarResourceState.getDidUrlState() == null ? "null" : registrarResourceState.getDidUrlState().getDidUrl();
