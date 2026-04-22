@@ -5,16 +5,13 @@ import com.godiddy.api.client.openapi.model.RegistrarRequestJobId;
 import com.godiddy.api.client.openapi.model.RequestOptions;
 import com.godiddy.api.client.openapi.model.RequestSecret;
 import com.godiddy.cli.GodiddyAbstractCommand;
-import com.godiddy.cli.config.Api;
 import com.godiddy.cli.clistorage.clistate.CLIState;
+import com.godiddy.cli.config.Api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -53,24 +50,6 @@ public class DeactivateCommand extends GodiddyAbstractCommand implements Callabl
     Boolean clientSecretMode;
 
     @Option(
-            names = {"-rvmi", "--requestVerificationMethodId"},
-            description = "An 'id' property for a verification method to generate."
-    )
-    List<String> requestVerificationMethodId;
-
-    @Option(
-            names = {"-rvmt", "--requestVerificationMethodType"},
-            description = "A 'type' property for a verification method to generate."
-    )
-    List<String> requestVerificationMethodType;
-
-    @Option(
-            names = {"-rvmp", "--requestVerificationMethodPurpose"},
-            description = "A 'type' property for a verification method to generate."
-    )
-    List<String> requestVerificationMethodPurpose;
-
-    @Option(
             names = {"-s", "--secret"},
             description = "This input field contains an object with DID controller keys and other secrets needed for performing the DID operation."
     )
@@ -90,20 +69,6 @@ public class DeactivateCommand extends GodiddyAbstractCommand implements Callabl
         RequestOptions requestOptions = new RequestOptions();
         if (this.options != null) this.options.forEach(requestOptions::putAdditionalProperty);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
-        if (this.requestVerificationMethodId != null) {
-            List<Map<String, Object>> requestVerificationMethods = new ArrayList<>();
-            for (int i=0; i<this.requestVerificationMethodId.size(); i++) {
-                String requestVerificationMethodId = this.requestVerificationMethodId.get(i);
-                String requestVerificationMethodType = (this.requestVerificationMethodType == null || this.requestVerificationMethodType.size() < (i+1)) ? null : this.requestVerificationMethodType.get(i);
-                String requestVerificationMethodPurpose = (this.requestVerificationMethodPurpose == null || this.requestVerificationMethodPurpose.size() < (i+1)) ? null : this.requestVerificationMethodPurpose.get(i);
-                Map<String, Object> requestVerificationMethod = new HashMap<>();
-                requestVerificationMethod.put("id", requestVerificationMethodId);
-                if (requestVerificationMethodType != null) requestVerificationMethod.put("type", requestVerificationMethodType);
-                if (requestVerificationMethodPurpose != null) requestVerificationMethod.put("purpose", Api.fromJson(requestVerificationMethodPurpose, List.class));
-                requestVerificationMethods.add(requestVerificationMethod);
-            }
-            requestOptions.putAdditionalProperty("requestVerificationMethod", requestVerificationMethods);
-        }
 
         RequestSecret requestSecret = new RequestSecret();
         if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
