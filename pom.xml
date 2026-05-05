@@ -3,11 +3,11 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.godiddy</groupId>
-	<artifactId>godiddy-cli</artifactId>
+	<groupId>com.danubetech</groupId>
+	<artifactId>did-cli</artifactId>
 	<version>1.17-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>godiddy-cli</name>
+	<name>did-cli</name>
 
 	<distributionManagement>
 		<snapshotRepository>
@@ -221,7 +221,7 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>${project.basedir}/openapi-godiddy-api/java-client-generated/</directory>
+							<directory>${project.basedir}/openapi-did-api/java-client-generated/</directory>
 							<includes>
 								<include>**/*</include>
 							</includes>
@@ -266,7 +266,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.godiddy.cli.GodiddyCLIApplication</mainClass>
+					<mainClass>com.danubetech.did.cli.DIDCLIApplication</mainClass>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -281,7 +281,7 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>com.godiddy.cli.GodiddyCLIApplication</mainClass>
+									<mainClass>com.danubetech.did.cli.DIDCLIApplication</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
@@ -312,24 +312,24 @@
 				<artifactId>openapi-generator-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>execution-godiddy-api</id>
+						<id>execution-did-api</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
 							<generatorName>java</generatorName>
-							<inputSpec>${project.basedir}/openapi-godiddy-api/openapi.yaml</inputSpec>
-							<output>openapi-godiddy-api/java-client-generated/</output>
-							<apiPackage>com.godiddy.api.client.openapi.api</apiPackage>
-							<modelPackage>com.godiddy.api.client.openapi.model</modelPackage>
-							<invokerPackage>com.godiddy.api.client</invokerPackage>
+							<inputSpec>${project.basedir}/openapi-did-api/openapi.yaml</inputSpec>
+							<output>openapi-did-api/java-client-generated/</output>
+							<apiPackage>com.danubetech.did.api.client.openapi.api</apiPackage>
+							<modelPackage>com.danubetech.did.api.client.openapi.model</modelPackage>
+							<invokerPackage>com.danubetech.did.api.client</invokerPackage>
 							<configOptions>
-								<basePackage>com.godiddy.api.client</basePackage>
+								<basePackage>com.danubetech.did.api.client</basePackage>
 								<sourceFolder>src/main/java/</sourceFolder>
-								<groupId>com.godiddy</groupId>
-								<artifactId>godiddy-api-client-openapi</artifactId>
+								<groupId>com.danubetech.did</groupId>
+								<artifactId>did-api-client-openapi</artifactId>
 								<artifactVersion>${project.version}</artifactVersion>
-								<configPackage>com.godiddy.api.client.openapi.config</configPackage>
+								<configPackage>com.danubetech.did.api.client.openapi.config</configPackage>
 								<containerDefaultToNull>true</containerDefaultToNull>
 								<asyncNative>false</asyncNative>
 								<disallowAdditionalPropertiesIfNotPresent>true</disallowAdditionalPropertiesIfNotPresent>
@@ -352,7 +352,7 @@
 				<artifactId>maven-patch-plugin</artifactId>
 				<configuration>
 					<patchDirectory>src/main/patches/</patchDirectory>
-					<targetDirectory>openapi-godiddy-api/java-client-generated/</targetDirectory>
+					<targetDirectory>openapi-did-api/java-client-generated/</targetDirectory>
 					<naturalOrderProcessing>true</naturalOrderProcessing>
 					<skipApplication>false</skipApplication>
 				</configuration>

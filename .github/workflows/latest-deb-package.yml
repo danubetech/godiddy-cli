@@ -99,10 +99,10 @@ jobs:
           sudo apt-get install -y fakeroot
 
       - name: Make packaging script executable
-        run: chmod +x ./godiddy-cli-package.sh
+        run: chmod +x ./did-cli-package.sh
 
       - name: Package using bash script
-        run: ./godiddy-cli-package.sh --version ${{ env.SNAPSHOT_VERSION }} --java-version ${{ inputs.JAVA_VERSION }}
+        run: ./did-cli-package.sh --version ${{ env.SNAPSHOT_VERSION }} --java-version ${{ inputs.JAVA_VERSION }}
 
       - name: Delete existing latest release
         run: |
@@ -129,7 +129,7 @@ jobs:
             --title "Latest Build (git-${{ env.GIT_HASH }})" \
             --notes-file release_notes.md \
             --prerelease \
-            ./build/output/godiddy-cli_${{ env.SNAPSHOT_VERSION }}_amd64.deb
+            ./build/output/did-cli_${{ env.SNAPSHOT_VERSION }}_amd64.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

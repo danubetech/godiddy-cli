@@ -1,5 +1,5 @@
---- src/main/java/com/godiddy/api/client/openapi/model/RegistrarStateJobId.java	2026-01-19 14:00:12.159445907 +0100
-+++ src/main/java/com/godiddy/api/client/openapi/model/RegistrarStateJobId.java.changed	2026-01-19 14:04:24.063072670 +0100
+--- src/main/java/com/danubetech/did/api/client/openapi/model/RegistrarStateJobId.java	2026-01-19 14:00:12.159445907 +0100
++++ src/main/java/com/danubetech/did/api/client/openapi/model/RegistrarStateJobId.java.changed	2026-01-19 14:04:24.063072670 +0100
 @@ -86,31 +86,31 @@
              boolean typeCoercion = ctxt.isEnabled(MapperFeature.ALLOW_COERCION_OF_SCALARS);
              int match = 0;

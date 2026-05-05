@@ -1,0 +1,324 @@
+package com.danubetech.did.cli.config;
+
+import com.danubetech.did.api.client.ApiClient;
+import com.danubetech.did.api.client.ApiResponse;
+import com.danubetech.did.api.client.openapi.api.*;
+import com.danubetech.did.api.client.openapi.model.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import uniregistrar.openapi.RFC3339DateFormat;
+
+import java.io.*;
+import java.net.URI;
+import java.net.http.HttpHeaders;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Flow;
+import java.util.function.Consumer;
+
+import static org.fusesource.jansi.Ansi.ansi;
+
+public class Api {
+
+    private static final JsonMapper jsonMapper = JsonMapper.builder()
+            .serializationInclusion(JsonInclude.Include.NON_NULL)
+            .disable(MapperFeature.ALLOW_COERCION_OF_SCALARS)
+            .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .enable(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE)
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
+            .enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
+            .defaultDateFormat(new RFC3339DateFormat())
+            .addModule(new JavaTimeModule())
+            .build();
+
+    public static ApiClient apiClient() {
+        ApiClient apiClient = new ApiClient();
+        String endpointWithoutSlash = Endpoint.getEndpoint();
+        if (endpointWithoutSlash.endsWith("/")) endpointWithoutSlash = endpointWithoutSlash.substring(0, endpointWithoutSlash.length()-1);
+        apiClient.updateBaseUri(endpointWithoutSlash);
+        apiClient.setRequestInterceptor(requestInterceptor);
+        apiClient.setResponseInterceptor(responseInterceptor);
+        return apiClient;
+    }
+
+    public static UniversalResolverApi universalResolverApi() {
+        return new UniversalResolverApi(apiClient());
+    }
+
+    public static UniversalRegistrarApi universalRegistrarApi() {
+        return new UniversalRegistrarApi(apiClient());
+    }
+
+    public static WalletServiceDidsAndKeysApi walletServiceDidsAndKeysApi() {
+        return new WalletServiceDidsAndKeysApi(apiClient());
+    }
+
+    public static WalletServiceCredentialsApi walletServiceCredentialsApi() {
+        return new WalletServiceCredentialsApi(apiClient());
+    }
+
+    public static VersionServiceApi versionServiceApi() {
+        return new VersionServiceApi(apiClient());
+    }
+
+    public static UniversalIssuerApi universalIssuerApi() {
+        return new UniversalIssuerApi(apiClient());
+    }
+
+    public static UniversalVerifierApi universalVerifierApi() {
+        return new UniversalVerifierApi(apiClient());
+    }
+
+    public static Object postBody;
+
+    private static final Flow.Subscriber<ByteBuffer> loggingSubscriber = new Flow.Subscriber<>() {
+
+        @Override
+        public void onSubscribe(Flow.Subscription subscription) {
+            subscription.request(Long.MAX_VALUE);
+        }
+
+        @Override
+        public void onNext(ByteBuffer byteBuffer) {
+            Api.print(postBody);
+            postBody = null;
+        }
+
+        @Override
+        public void onError(Throwable throwable) { }
+
+        @Override
+        public void onComplete() { }
+    };
+
+    private static final Consumer<HttpRequest.Builder> requestInterceptor = builder -> {
+        Boolean endpointRaw = Endpoint.getEndpointRaw();
+        if (Boolean.TRUE.equals(endpointRaw)) {
+            String endpointWithSlash = Endpoint.getEndpoint();
+            if (! endpointWithSlash.endsWith("/")) endpointWithSlash += "/";
+            String httpRequestUri = builder.build().uri().toString();
+            String httpRequestRelativeUri = httpRequestUri.substring(endpointWithSlash.length());
+            httpRequestRelativeUri = httpRequestRelativeUri.substring(httpRequestRelativeUri.indexOf("/")+1);
+            httpRequestUri = endpointWithSlash + httpRequestRelativeUri;
+            builder.uri(URI.create(httpRequestUri));
+        }
+        String apiKey = ApiKey.getApiKey();
+        if (apiKey != null && ! apiKey.isBlank()) {
+            builder.header("Authorization", "Bearer " + apiKey);
+        }
+        HttpRequest httpRequest = builder.build();
+        System.out.println();
+        System.out.println(">>> " + httpRequest.method() + " " + httpRequest.uri());
+        Api.printHeaders(httpRequest.headers(), ">");
+        if (httpRequest.bodyPublisher().isPresent()) {
+            httpRequest.bodyPublisher().get().subscribe(loggingSubscriber);
+        }
+    };
+
+    private static final Consumer<HttpResponse<InputStream>> responseInterceptor = inputStreamHttpResponse -> {
+        System.out.println();
+        System.out.println("<<< " + inputStreamHttpResponse.statusCode() + " " + inputStreamHttpResponse.request().uri());
+        Api.printHeaders(inputStreamHttpResponse.headers(), "<");
+    };
+
+    public static <T> T execute(Callable<ApiResponse<T>> supplier) throws Exception {
+        ApiResponse<T> apiResponse = supplier.call();
+        T data = apiResponse.getData();
+        Api.print(data);
+        return data;
+    }
+
+    public static void writeJson(File file, Object object, boolean pretty) throws IOException {
+        if (pretty) {
+            jsonMapper.writerWithDefaultPrettyPrinter().writeValue(file, object);
+        } else {
+            jsonMapper.writeValue(file, object);
+        }
+    }
+
+    public static Object readJson(File file, Class cl) throws IOException {
+        return jsonMapper.readValue(file, cl);
+    }
+
+    public static Map<String, Object> fromJson(String json) {
+        return fromJson(json, Map.class);
+    }
+
+    public static <T> T fromJson(String json, Class<T> cl) {
+        try {
+            return jsonMapper.readValue(json, cl);
+        } catch (JsonProcessingException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+    }
+
+    public static <T> T convert(Object object, Class<T> cl) {
+        return jsonMapper.convertValue(object, cl);
+    }
+
+    public static String string(Object object) {
+        try {
+            return jsonMapper.writeValueAsString(object);
+        } catch (JsonProcessingException ex) {
+            throw new IllegalArgumentException(ex.getMessage(), ex);
+        }
+    }
+
+    public static void print(Object object) {
+        if (object == null) {
+            print(null, null, null);
+            return;
+        }
+        switch (object) {
+            case RegistrarRequest registrarRequest -> print(registrarRequest, constructInterpretedString(registrarRequest), null);
+            case RegistrarState registrarState -> print(registrarState, constructInterpretedString(registrarState), null);
+            case RegistrarResourceState registrarResourceState -> print(registrarResourceState, constructInterpretedString(registrarResourceState), null);
+            default -> print(object, object.getClass().getSimpleName(), Formatting.Value.interpreted.equals(Formatting.getFormatting()) ? Formatting.Value.pretty : Formatting.getFormatting());
+        }
+    }
+
+    private static void print(Object object, String interpretedString) {
+        print(object, interpretedString, null);
+    }
+
+    private static void print(Object object, String interpretedString, Formatting.Value formatting) {
+        if (formatting == null) formatting = Formatting.getFormatting();
+        String string;
+        try {
+            if (formatting == Formatting.Value.interpreted) {
+                string = interpretedString == null ? "(null)" : interpretedString;
+            } else if (formatting == Formatting.Value.pretty) {
+                if (object instanceof String) object = jsonMapper.readValue((String) object, Object.class);
+                string = object == null ? "(null)" : jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+            } else if (formatting == Formatting.Value.flat) {
+                if (object instanceof String) object = jsonMapper.readValue((String) object, Object.class);
+                string = object == null ? "(null)" : jsonMapper.writeValueAsString(object);
+            } else if (formatting == Formatting.Value.raw) {
+                string = object == null ? "(null)" : object.toString();
+            } else if (formatting == Formatting.Value.off) {
+                string = null;
+            } else {
+                throw new IllegalStateException("Unexpected formatting value: " + formatting);
+            }
+        } catch (JsonProcessingException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        if (string != null) {
+            System.out.println(string);
+        }
+    }
+
+    public static void printHeaders(HttpHeaders httpHeaders, String prefix) {
+        String string;
+        Headers.Value headers = Headers.getHeaders();
+        if (headers == Headers.Value.on) {
+            StringWriter stringWriter = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(stringWriter);
+            for (Map.Entry<String, List<String>> headersEntry : httpHeaders.map().entrySet()) {
+                for (String headersValue : headersEntry.getValue()) {
+                    printWriter.println(prefix + headersEntry.getKey() + ": " + headersValue);
+                }
+            }
+            string = stringWriter.toString();
+        } else if (headers == Headers.Value.off) {
+            string = null;
+        } else {
+            throw new IllegalStateException("Unexpected headers value: " + headers);
+        }
+        if (string != null) System.out.println(string);
+    }
+
+    private static String constructInterpretedString(RegistrarRequest registrarRequest) {
+        String name = registrarRequest.getClass().getSimpleName();
+        String jobId = "" + (registrarRequest.getJobId() == null ? "" : string(registrarRequest.getJobId()));
+        String didDocumentVerificationMethods = "" + (! (registrarRequest instanceof CreateRequest createRequest) ? 0 : createRequest.getDidDocument() == null ? 0 : createRequest.getDidDocument().getVerificationMethod() == null ? 0 : createRequest.getDidDocument().getVerificationMethod().size()) + " DID document verification methods";
+        String secretVerificationMethods = "" + (registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getVerificationMethod() == null ? 0 : registrarRequest.getSecret().getVerificationMethod().size()) + " secret verification methods";
+        String signingResponses = "" + (registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getSigningResponse() == null ? 0 : registrarRequest.getSecret().getSigningResponse().size()) + " signing responses";
+        String decryptionResponses = "" + (registrarRequest.getSecret() == null ? 0 : registrarRequest.getSecret().getDecryptionResponse() == null ? 0 : registrarRequest.getSecret().getDecryptionResponse().size()) + " decryption responses";
+
+        name = ansi().bold().a(name).boldOff().toString();
+        if (! didDocumentVerificationMethods.startsWith("0")) didDocumentVerificationMethods = ansi().fgBrightYellow().a(didDocumentVerificationMethods).reset().toString();
+        if (! secretVerificationMethods.startsWith("0")) secretVerificationMethods = ansi().fgBrightYellow().a(secretVerificationMethods).reset().toString();
+        if (! signingResponses.startsWith("0")) signingResponses = ansi().fgBrightYellow().a(signingResponses).reset().toString();
+        if (! decryptionResponses.startsWith("0")) decryptionResponses = ansi().fgBrightYellow().a(decryptionResponses).reset().toString();
+
+        return name +
+                ": jobId=" + jobId + " / " +
+                didDocumentVerificationMethods + " / " +
+                secretVerificationMethods + " / " +
+                signingResponses + " / " +
+                decryptionResponses;
+    }
+
+    private static String constructInterpretedString(RegistrarState registrarState) {
+        String name = registrarState.getClass().getSimpleName();
+        String jobId = "" + (registrarState.getJobId() == null ? "" : string(registrarState.getJobId()));
+        String state = registrarState.getDidState() == null ? "null" : registrarState.getDidState().getState();
+        String action = ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? "null" : didStateAction.getAction() == null ? "null" : didStateAction.getAction();
+        String did = registrarState.getDidState() == null ? "null" : registrarState.getDidState().getDid();
+        String verificationMethodTemplates = "" + (registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getVerificationMethodTemplate() == null ? 0 : didStateAction.getVerificationMethodTemplate().size()) + " verification method templates";
+        String signingRequests = "" + (registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getSigningRequest() == null ? 0 : didStateAction.getSigningRequest().size()) + " signing requests";
+        String decryptionRequests = "" + (registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getDecryptionRequest() == null ? 0 : didStateAction.getDecryptionRequest().size()) + " decryption requests";
+
+        name = ansi().bold().a(name).boldOff().toString();
+        if ("action".equals(state)) state = ansi().fgBrightGreen().bold().a(state).boldOff().reset().toString();
+        if ("wait".equals(state)) state = ansi().fgBrightYellow().bold().a(state).boldOff().reset().toString();
+        if ("finished".equals(state)) state = ansi().fgBrightBlue().bold().a(state).boldOff().reset().toString();
+        if ("failure".equals(state)) state = ansi().fgBrightRed().bold().a(state).boldOff().reset().toString();
+        if (! action.equals("null")) action = ansi().fgBrightGreen().bold().a(action).boldOff().reset().toString();
+        if (did != null) did = ansi().fgBrightMagenta().a(did).reset().toString();
+        if (! verificationMethodTemplates.startsWith("0")) verificationMethodTemplates = ansi().fgBrightYellow().a(verificationMethodTemplates).reset().toString();
+        if (! signingRequests.startsWith("0")) signingRequests = ansi().fgBrightYellow().a(signingRequests).reset().toString();
+        if (! decryptionRequests.startsWith("0")) decryptionRequests = ansi().fgBrightYellow().a(decryptionRequests).reset().toString();
+
+        return name +
+                ": jobId=" + jobId +
+                " / state=" + state +
+                " / action=" + action +
+                " / did=" + did + " / " +
+                verificationMethodTemplates + " / " +
+                signingRequests + " / " +
+                decryptionRequests;
+    }
+
+    private static String constructInterpretedString(RegistrarResourceState registrarResourceState) {
+        String name = registrarResourceState.getClass().getSimpleName();
+        String jobId = "" + (registrarResourceState.getJobId() == null ? "" : string(registrarResourceState.getJobId()));
+        String state = registrarResourceState.getDidUrlState() == null ? "null" : registrarResourceState.getDidUrlState().getState();
+        String action = ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? "null" : didUrlStateAction.getAction() == null ? "null" : didUrlStateAction.getAction();
+        String didUrl = registrarResourceState.getDidUrlState() == null ? "null" : registrarResourceState.getDidUrlState().getDidUrl();
+        String verificationMethodTemplates = "" + (registrarResourceState.getDidUrlState() == null ? 0 : ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? 0 : didUrlStateAction.getVerificationMethodTemplate() == null ? 0 : didUrlStateAction.getVerificationMethodTemplate().size()) + " verification method templates";
+        String signingRequests = "" + (registrarResourceState.getDidUrlState() == null ? 0 : ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? 0 : didUrlStateAction.getSigningRequest() == null ? 0 : didUrlStateAction.getSigningRequest().size()) + " signing requests";
+        String decryptionRequests = "" + (registrarResourceState.getDidUrlState() == null ? 0 : ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? 0 : didUrlStateAction.getDecryptionRequest() == null ? 0 : didUrlStateAction.getDecryptionRequest().size()) + " decryption requests";
+
+        name = ansi().bold().a(name).boldOff().toString();
+        if ("action".equals(state)) state = ansi().fgBrightGreen().bold().a(state).boldOff().reset().toString();
+        if ("wait".equals(state)) state = ansi().fgBrightYellow().bold().a(state).boldOff().reset().toString();
+        if ("finished".equals(state)) state = ansi().fgBrightBlue().bold().a(state).boldOff().reset().toString();
+        if ("failure".equals(state)) state = ansi().fgBrightRed().bold().a(state).boldOff().reset().toString();
+        if (! action.equals("null")) action = ansi().fgBrightGreen().bold().a(action).boldOff().reset().toString();
+        if (didUrl != null) didUrl = ansi().fgBrightMagenta().a(didUrl).reset().toString();
+        if (! verificationMethodTemplates.startsWith("0")) verificationMethodTemplates = ansi().fgBrightYellow().a(verificationMethodTemplates).reset().toString();
+        if (! signingRequests.startsWith("0")) signingRequests = ansi().fgBrightYellow().a(signingRequests).reset().toString();
+        if (! decryptionRequests.startsWith("0")) decryptionRequests = ansi().fgBrightYellow().a(decryptionRequests).reset().toString();
+
+        return name +
+                ": jobId=" + jobId +
+                " / state=" + state +
+                " / action=" + action +
+                " / didUrl=" + didUrl + " / " +
+                verificationMethodTemplates + " / " +
+                signingRequests + " / " +
+                decryptionRequests;
+    }
+}

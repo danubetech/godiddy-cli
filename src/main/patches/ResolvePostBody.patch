@@ -1,5 +1,5 @@
---- src/main/java/com/godiddy/api/client/openapi/model/ResolvePostBody.java	2026-01-19 14:00:12.159445907 +0100
-+++ src/main/java/com/godiddy/api/client/openapi/model/ResolvePostBody.java.changed	2026-01-19 14:04:24.063072670 +0100
+--- src/main/java/com/danubetech/did/api/client/openapi/model/ResolvePostBody.java	2026-01-19 14:00:12.159445907 +0100
++++ src/main/java/com/danubetech/did/api/client/openapi/model/ResolvePostBody.java.changed	2026-01-19 14:04:24.063072670 +0100
 @@ -125,17 +125,17 @@
              try {
                  boolean attemptParsing = true;

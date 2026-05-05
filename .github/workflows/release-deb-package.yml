@@ -99,10 +99,10 @@ jobs:
           sudo apt-get install -y fakeroot
 
       - name: Make packaging script executable
-        run: chmod +x ./godiddy-cli-package.sh
+        run: chmod +x ./did-cli-package.sh
 
       - name: Build Debian package
-        run: ./godiddy-cli-package.sh --version ${{ env.RELEASE_VERSION }} --java-version ${{ inputs.JAVA_VERSION }}
+        run: ./did-cli-package.sh --version ${{ env.RELEASE_VERSION }} --java-version ${{ inputs.JAVA_VERSION }}
 
       - name: Generate Release Notes
         run: |
@@ -118,7 +118,7 @@ jobs:
           # Add installation instructions
           echo "## Installation" >> release_notes.md
           echo "```bash" >> release_notes.md
-          echo "sudo dpkg -i godiddy-cli_${{ env.RELEASE_VERSION }}_amd64.deb" >> release_notes.md
+          echo "sudo dpkg -i did-cli_${{ env.RELEASE_VERSION }}_amd64.deb" >> release_notes.md
           echo "# Or if you have dependencies issues:" >> release_notes.md
           echo "sudo apt install -f" >> release_notes.md
           echo "```" >> release_notes.md
@@ -161,7 +161,7 @@ jobs:
           gh release create ${{ env.RELEASE_VERSION }} \
             --title "Release ${{ env.RELEASE_VERSION }}" \
             --notes-file release_notes.md \
-            ./build/output/godiddy-cli_${{ env.RELEASE_VERSION }}_amd64.deb
+            ./build/output/did-cli_${{ env.RELEASE_VERSION }}_amd64.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

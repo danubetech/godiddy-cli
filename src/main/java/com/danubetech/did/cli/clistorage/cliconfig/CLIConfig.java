@@ -1,0 +1,130 @@
+package com.danubetech.did.cli.clistorage.cliconfig;
+
+import com.danubetech.did.cli.clistorage.CLIStorage;
+import com.danubetech.did.cli.config.Formatting;
+import com.danubetech.did.cli.config.Headers;
+import com.danubetech.did.cli.config.Kms;
+import com.danubetech.did.cli.config.LogLevel;
+
+public class CLIConfig {
+
+    public static String getApiKey() {
+        return CLIStorage.get("apiKey");
+    }
+
+    public static void setApiKey(String apiKey) {
+        if (apiKey == null) {
+            CLIStorage.remove("apiKey");
+        } else {
+            CLIStorage.put("apiKey", apiKey);
+        }
+    }
+
+    public static String getEndpoint() {
+        return CLIStorage.get("endpoint");
+    }
+
+    public static void setEndpoint(String endpoint) {
+        if (endpoint == null) {
+            CLIStorage.remove("endpoint");
+        } else {
+            CLIStorage.put("endpoint", endpoint);
+        }
+    }
+
+    public static Boolean getEndpointRaw() {
+        return CLIStorage.get("endpointRaw") == null ? null : Boolean.parseBoolean(CLIStorage.get("endpointRaw"));
+    }
+
+    public static void setEndpointRaw(Boolean endpointRaw) {
+        if (endpointRaw == null) {
+            CLIStorage.remove("endpointRaw");
+        } else {
+            CLIStorage.put("endpointRaw", endpointRaw.toString());
+        }
+    }
+
+    public static Kms.Value getKms() {
+        return CLIStorage.get("kms") == null ? null : Kms.Value.valueOf(CLIStorage.get("kms"));
+    }
+
+    public static void setKms(Kms.Value kms) {
+        if (kms == null) {
+            CLIStorage.remove("kms");
+        } else {
+            CLIStorage.put("kms", kms.name());
+        }
+    }
+
+    public static LogLevel.Value getLogLevel() {
+        return CLIStorage.get("logLevel") == null ? null : LogLevel.Value.valueOf(CLIStorage.get("logLevel"));
+    }
+
+    public static void setLogLevel(LogLevel.Value logLevel) {
+        if (logLevel == null) {
+            CLIStorage.remove("logLevel");
+        } else {
+            CLIStorage.put("logLevel", logLevel.name());
+        }
+    }
+
+    public static String getWalletServiceBase() {
+        return CLIStorage.get("walletServiceBase");
+    }
+
+    public static void setWalletServiceBase(String walletServiceBase) {
+        if (walletServiceBase == null) {
+            CLIStorage.remove("walletServiceBase");
+        } else {
+            CLIStorage.put("walletServiceBase", walletServiceBase);
+        }
+    }
+
+    public static String getVaultEndpoint() {
+        return CLIStorage.get("vaultEndpoint");
+    }
+
+    public static void setVaultEndpoint(String vaultEndpoint) {
+        if (vaultEndpoint == null) {
+            CLIStorage.remove("vaultEndpoint");
+        } else {
+            CLIStorage.put("vaultEndpoint", vaultEndpoint);
+        }
+    }
+
+    public static String getVaultToken() {
+        return CLIStorage.get("vaultToken");
+    }
+
+    public static void setVaultToken(String vaultToken) {
+        if (vaultToken == null) {
+            CLIStorage.remove("vaultToken");
+        } else {
+            CLIStorage.put("vaultToken", vaultToken);
+        }
+    }
+
+    public static Formatting.Value getFormatting() {
+        return CLIStorage.get("formatting") == null ? null : Formatting.Value.valueOf(CLIStorage.get("formatting"));
+    }
+
+    public static void setFormatting(Formatting.Value formatting) {
+        if (formatting == null) {
+            CLIStorage.remove("formatting");
+        } else {
+            CLIStorage.put("formatting", formatting.name());
+        }
+    }
+
+    public static Headers.Value getHeaders() {
+        return CLIStorage.get("headers") == null ? null : Headers.Value.valueOf(CLIStorage.get("headers"));
+    }
+
+    public static void setHeaders(Headers.Value headers) {
+        if (headers == null) {
+            CLIStorage.remove("headers");
+        } else {
+            CLIStorage.put("headers", headers.name());
+        }
+    }
+}

@@ -1,4 +1,4 @@
-# Dockerfile for godiddy/godiddy-cli
+# Dockerfile for danubetech/did-cli
 
 FROM maven:3-eclipse-temurin-21-alpine AS build
 LABEL org.opencontainers.image.authors="markus@danubetech.com"
@@ -9,14 +9,14 @@ ADD ./settings.xml /root/.m2/
 
 RUN apk add patch
 
-# build godiddy-cli
+# build did-cli
 
-ADD pom.xml /opt/godiddy-cli/
+ADD pom.xml /opt/did-cli/
 RUN --mount=type=secret,id=DANUBETECH_MAVEN_INTERNAL_USERNAME,env=DANUBETECH_MAVEN_INTERNAL_USERNAME --mount=type=secret,id=DANUBETECH_MAVEN_INTERNAL_PASSWORD,env=DANUBETECH_MAVEN_INTERNAL_PASSWORD \
-    cd /opt/godiddy-cli/ && mvn org.apache.maven.plugins:maven-dependency-plugin:3.8.1:go-offline
+    cd /opt/did-cli/ && mvn org.apache.maven.plugins:maven-dependency-plugin:3.8.1:go-offline
 
-ADD . /opt/godiddy-cli/
-RUN cd /opt/godiddy-cli/ && mvn clean package -DskipTests
+ADD . /opt/did-cli/
+RUN cd /opt/did-cli/ && mvn clean package -DskipTests
 
 # build image
 
@@ -25,15 +25,15 @@ LABEL org.opencontainers.image.authors="markus@danubetech.com"
 
 RUN apk add libsodium
 
-COPY --from=build /opt/godiddy-cli/target/*.jar /opt/godiddy-cli/
-RUN ln -s /opt/godiddy-cli/godiddy-cli-*-jar-with-dependencies.jar /opt/godiddy-cli/godiddy-cli.jar
+COPY --from=build /opt/did-cli/target/*.jar /opt/did-cli/
+RUN ln -s /opt/did-cli/did-cli-*-jar-with-dependencies.jar /opt/did-cli/did-cli.jar
 
 # variables
 
-ENV godiddy.cli.dummy=dummy
+ENV com.danubetech.did.cli.dummy=dummy
 
 # done
 
-WORKDIR /opt/godiddy-cli/
-VOLUME godiddy-cli-storage:/opt/godiddy-cli/godiddy-cli-storage/
-ENTRYPOINT [ "java", "-jar", "/opt/godiddy-cli/godiddy-cli.jar" ]
+WORKDIR /opt/did-cli/
+VOLUME did-cli-storage:/opt/did-cli/did-cli-storage/
+ENTRYPOINT [ "java", "-jar", "/opt/did-cli/did-cli.jar" ]

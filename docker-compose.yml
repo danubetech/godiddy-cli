@@ -1,13 +1,13 @@
-name: godiddy-cli
+name: did-cli
 
 volumes:
-  godiddy-cli-storage:
+  did-cli-storage:
 
 services:
-  godiddy-cli:
-    image: godiddy/godiddy-cli:latest
+  did-cli:
+    image: godiddy/did-cli:latest
     build:
       context: .
       dockerfile: ./docker/Dockerfile
     volumes:
-      - godiddy-cli-storage:/opt/godiddy-cli/godiddy-cli-storage
+      - did-cli-storage:/opt/did-cli/did-cli-storage

@@ -7,8 +7,8 @@
 		</Console>
 
 		<RollingFile name="RollingFile"
-		             fileName="./logs/godiddy-cli-.log"
-		             filePattern="./logs/$${date:yyyy-MM}/godiddy-cli-%d{-dd-MMMM-yyyy}-%i.log.gz">
+		             fileName="./logs/did-cli-.log"
+		             filePattern="./logs/$${date:yyyy-MM}/did-cli-%d{-dd-MMMM-yyyy}-%i.log.gz">
 			<PatternLayout>
 				<pattern>%d %p %C{1.} [%t] %m%n</pattern>
 			</PatternLayout>
@@ -26,7 +26,7 @@
 			<AppenderRef ref="RollingFile"/>
 		</Root>
 
-		<Logger name="com.godiddy.cli" level="info"/>
+		<Logger name="com.danubetech.did.cli" level="info"/>
 		<Logger name="com.danubetech" level="warn"/>
 	</Loggers>
 

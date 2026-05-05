@@ -18,7 +18,7 @@ jobs:
   docker-release:
     uses: danubetech/workflows/.github/workflows/docker-release.yml@main
     with:
-      GLOBAL_IMAGE_NAME: godiddy/godiddy-cli
+      GLOBAL_IMAGE_NAME: godiddy/did-cli
       GLOBAL_REPO_NAME: docker.io
       GLOBAL_FRAMEWORK: maven
       PATH_TO_DOCKERFILE: docker/Dockerfile
@@ -30,7 +30,7 @@ jobs:
 
   release-deb-package:
     needs: [ docker-release ]
-    uses: danubetech/godiddy-cli/.github/workflows/release-deb-package.yml@main
+    uses: danubetech/did-cli/.github/workflows/release-deb-package.yml@main
     secrets:
       VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
       CI_SECRET_READER_PERIODIC_TOKEN: ${{ secrets.CI_SECRET_READER_PERIODIC_TOKEN }}
