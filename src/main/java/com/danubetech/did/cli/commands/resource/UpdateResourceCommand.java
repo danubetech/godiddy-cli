@@ -8,6 +8,7 @@ import com.danubetech.did.cli.DIDAbstractCommand;
 import com.danubetech.did.cli.clistorage.clistate.CLIState;
 import com.danubetech.did.cli.commands.registrar.DoContinue;
 import com.danubetech.did.cli.config.Api;
+import com.danubetech.did.cli.util.OptionsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -90,7 +91,7 @@ public class UpdateResourceCommand extends DIDAbstractCommand implements Callabl
         // request
 
         RequestOptions requestOptions = new RequestOptions();
-        if (this.options != null) this.options.forEach(requestOptions::putAdditionalProperty);
+        if (this.options != null) OptionsUtil.optionsFromOptionStrings(this.options).forEach(requestOptions::putAdditionalProperty);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
 
         RequestSecret requestSecret = new RequestSecret();

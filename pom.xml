@@ -97,6 +97,7 @@
 		<!-- Other Versions -->
 
 		<commons-codec.version>1.21.0</commons-codec.version>
+		<commons-lang3.version>3.20.0</commons-lang3.version>
 		<info.picocli-picocli.version>4.7.7</info.picocli-picocli.version>
 		<org.modelmapper-modelmapper.version>3.2.6</org.modelmapper-modelmapper.version>
 		<nimbus-jose-jwt.version>10.8</nimbus-jose-jwt.version>
@@ -568,6 +569,11 @@
 				<version>${commons-codec.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>info.picocli</groupId>
 				<artifactId>picocli</artifactId>
 				<version>${info.picocli-picocli.version}</version>
@@ -697,6 +703,10 @@
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>info.picocli</groupId>

@@ -4,6 +4,7 @@ import com.danubetech.did.api.client.openapi.model.*;
 import com.danubetech.did.cli.DIDAbstractCommand;
 import com.danubetech.did.cli.clistorage.clistate.CLIState;
 import com.danubetech.did.cli.config.Api;
+import com.danubetech.did.cli.util.OptionsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine.Command;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 @Command(
         name = "create",
@@ -116,7 +118,7 @@ public class CreateCommand extends DIDAbstractCommand implements Callable<Intege
         // request
 
         RequestOptions requestOptions = new RequestOptions();
-        if (this.options != null) this.options.forEach(requestOptions::putAdditionalProperty);
+        if (this.options != null) OptionsUtil.optionsFromOptionStrings(this.options).forEach(requestOptions::putAdditionalProperty);
         if (this.clientSecretMode != null) requestOptions.setClientSecretMode(this.clientSecretMode);
         if (this.network != null) requestOptions.putAdditionalProperty("network", this.network);
         if (this.requestVerificationMethodId != null) {
