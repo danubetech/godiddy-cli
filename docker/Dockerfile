@@ -36,4 +36,4 @@ ENV com.danubetech.did.cli.dummy=dummy
 
 WORKDIR /opt/did-cli/
 VOLUME did-cli-storage:/opt/did-cli/did-cli-storage/
-ENTRYPOINT [ "java", "-jar", "/opt/did-cli/did-cli.jar" ]
+ENTRYPOINT [ "java", "--enable-native-access=ALL-UNNAMED", "-jar", "/opt/did-cli/did-cli.jar" ]
