@@ -1,5 +1,6 @@
 package com.danubetech.did.cli.commands.state;
 
+import com.danubetech.did.api.client.openapi.model.DidState;
 import com.danubetech.did.api.client.openapi.model.RegistrarRequest;
 import com.danubetech.did.api.client.openapi.model.RegistrarResourceState;
 import com.danubetech.did.api.client.openapi.model.RegistrarState;
@@ -67,6 +68,8 @@ public class DoProcess {
             CLIState.setNextRequest(null);
         } else if (nextRequest != null) {
             CLIState.setNextRequest(nextRequest);
+        } else {
+            CLIState.setNextRequest(request);
         }
 
         // state not handled?
