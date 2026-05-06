@@ -39,6 +39,7 @@ public class DoProcess {
         // handle
 
         RegistrarRequest nextRequest = null;
+        String didState = null;
 
         if (state instanceof RegistrarState registrarState) {
             uniregistrar.openapi.model.RegistrarRequest mappedRequest = MappingUtil.map(request);
@@ -48,6 +49,7 @@ public class DoProcess {
             uniregistrar.openapi.model.RegistrarRequest mappedNextRequest = handleStateResult == null ? null : handleStateResult.orElse(null);
 
             nextRequest = MappingUtil.map(mappedNextRequest);
+            didState = registrarState.getDidState() == null ? null : registrarState.getDidState().getState();
         } else if (state instanceof RegistrarResourceState registrarResourceState) {
             uniregistrar.openapi.model.RegistrarRequest mappedRequest = MappingUtil.map(request);
             uniregistrar.openapi.model.RegistrarResourceState mappedState = MappingUtil.map(registrarResourceState);
@@ -56,11 +58,16 @@ public class DoProcess {
             uniregistrar.openapi.model.RegistrarRequest mappedNextRequest = handleStateResult == null ? null : handleStateResult.orElse(null);
 
             nextRequest = MappingUtil.map(mappedNextRequest);
+            didState = registrarResourceState.getDidUrlState() == null ? null : registrarResourceState.getDidUrlState().getState();
         }
 
         // save next request
 
-        CLIState.setNextRequest(nextRequest);
+        if ("finished".equals(didState) || "failed".equals(didState)) {
+            CLIState.setNextRequest(null);
+        } else if (nextRequest != null) {
+            CLIState.setNextRequest(nextRequest);
+        }
 
         // state not handled?
 
