@@ -72,14 +72,14 @@
 
 		<!-- Spring Versions -->
 
-		<springframework.boot.version>4.0.5</springframework.boot.version>
+		<springframework.boot.version>4.0.6</springframework.boot.version>
 
 		<!-- OpenAPI Versions -->
 
-		<openapi-generator.version>7.21.0</openapi-generator.version>
-		<fasterxml.jackson.version>2.21.2</fasterxml.jackson.version>
+		<openapi-generator.version>7.22.0</openapi-generator.version>
+		<fasterxml.jackson.version>2.21.3</fasterxml.jackson.version>
 		<fasterxml.jackson.annotations.version>2.21</fasterxml.jackson.annotations.version>
-		<fasterxml.jackson.yaml.version>2.21.2</fasterxml.jackson.yaml.version>
+		<fasterxml.jackson.yaml.version>2.21.3</fasterxml.jackson.yaml.version>
 		<org.openapitools-jackson-databind-nullable.version>0.2.10</org.openapitools-jackson-databind-nullable.version>
 		<jakarta-annotation.version>3.0.0</jakarta-annotation.version>
 		<jakarta-validation.version>3.1.1</jakarta-validation.version>
@@ -87,20 +87,20 @@
 		<!-- Danube Tech Versions -->
 
 		<wallet-service.version>1.19.0</wallet-service.version>
-		<key-formats-java.version>1.30.0</key-formats-java.version>
-		<did-common-java.version>1.26.0</did-common-java.version>
-		<danubetech-kms-java.version>0.20.0</danubetech-kms-java.version>
-		<danubetech-resolver-common-java.version>0.6.0</danubetech-resolver-common-java.version>
-		<danubetech-registrar-common-java.version>0.28.0</danubetech-registrar-common-java.version>
+		<key-formats-java.version>1.31.0</key-formats-java.version>
+		<did-common-java.version>1.27.0</did-common-java.version>
+		<danubetech-kms-java.version>0.21.0</danubetech-kms-java.version>
+		<danubetech-resolver-common-java.version>0.8.0</danubetech-resolver-common-java.version>
+		<danubetech-registrar-common-java.version>0.31.0</danubetech-registrar-common-java.version>
 		<com.github.mattrglobal-bbs.signatures.version>2.0</com.github.mattrglobal-bbs.signatures.version>
 
 		<!-- Other Versions -->
 
-		<commons-codec.version>1.21.0</commons-codec.version>
+		<commons-codec.version>1.22.0</commons-codec.version>
 		<commons-lang3.version>3.20.0</commons-lang3.version>
 		<info.picocli-picocli.version>4.7.7</info.picocli-picocli.version>
 		<org.modelmapper-modelmapper.version>3.2.6</org.modelmapper-modelmapper.version>
-		<nimbus-jose-jwt.version>10.8</nimbus-jose-jwt.version>
+		<nimbus-jose-jwt.version>10.9</nimbus-jose-jwt.version>
 		<org.fusesource.jansi-jansi.version>2.4.3</org.fusesource.jansi-jansi.version>
 
 	</properties>
