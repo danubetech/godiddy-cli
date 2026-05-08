@@ -68,7 +68,7 @@
 
 		<!-- Systems Versions -->
 
-		<apache.log4j.version>2.25.4</apache.log4j.version>
+		<apache.log4j.version>2.26.0</apache.log4j.version>
 
 		<!-- Spring Versions -->
 
@@ -87,12 +87,14 @@
 		<!-- Danube Tech Versions -->
 
 		<wallet-service.version>1.19.0</wallet-service.version>
-		<key-formats-java.version>1.31.0</key-formats-java.version>
+		<key-formats-java.version>1.32.0</key-formats-java.version>
 		<did-common-java.version>1.27.0</did-common-java.version>
-		<danubetech-kms-java.version>0.21.0</danubetech-kms-java.version>
-		<danubetech-resolver-common-java.version>0.8.0</danubetech-resolver-common-java.version>
-		<danubetech-registrar-common-java.version>0.31.0</danubetech-registrar-common-java.version>
+		<danubetech-kms-java.version>0.22.0</danubetech-kms-java.version>
+		<danubetech-resolver-common-java.version>0.9.0</danubetech-resolver-common-java.version>
+		<danubetech-registrar-common-java.version>0.32.0</danubetech-registrar-common-java.version>
 		<com.github.mattrglobal-bbs.signatures.version>2.0</com.github.mattrglobal-bbs.signatures.version>
+		<fr.acinq.bitcoin-bitcoin-kmp-jvm.version>0.30.0</fr.acinq.bitcoin-bitcoin-kmp-jvm.version>
+		<fr.acinq.secp256k1-secp256k1-kmp-jni-jvm.version>0.23.0</fr.acinq.secp256k1-secp256k1-kmp-jni-jvm.version>
 
 		<!-- Other Versions -->
 
@@ -560,6 +562,16 @@
 				<artifactId>bbs.signatures</artifactId>
 				<version>${com.github.mattrglobal-bbs.signatures.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>fr.acinq.bitcoin</groupId>
+				<artifactId>bitcoin-kmp-jvm</artifactId>
+				<version>${fr.acinq.bitcoin-bitcoin-kmp-jvm.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.acinq.secp256k1</groupId>
+				<artifactId>secp256k1-kmp-jni-jvm</artifactId>
+				<version>${fr.acinq.secp256k1-secp256k1-kmp-jni-jvm.version}</version>
+			</dependency>
 
 			<!-- Other Dependencies -->
 
@@ -696,6 +708,14 @@
 		<dependency>
 			<groupId>com.github.mattrglobal</groupId>
 			<artifactId>bbs.signatures</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>fr.acinq.bitcoin</groupId>
+			<artifactId>bitcoin-kmp-jvm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>fr.acinq.secp256k1</groupId>
+			<artifactId>secp256k1-kmp-jni-jvm</artifactId>
 		</dependency>
 
 		<!-- Other Dependencies -->
