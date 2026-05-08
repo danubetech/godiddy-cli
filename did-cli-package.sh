@@ -52,7 +52,7 @@ OUTPUT_DIR="${BUILD_DIR}/output"
 PACKAGE_NAME="did-cli"
 JAR_FILE=$(basename "$(find . -name "did-cli-*-jar-with-dependencies.jar" | head -n 1)")
 FINAL_PACKAGE="${PACKAGE_NAME}_${VERSION}_amd64.deb"
-MAINTAINER="DanubeTech <admin@danubetech.com>"
+MAINTAINER="Danube Tech <admin@danubetech.com>"
 
 echo "Building package version: ${VERSION}"
 echo "Java dependency version: ${JAVA_VERSION}"
@@ -103,7 +103,7 @@ echo "=== Creating copyright file ==="
 cat > "${TEMP_DIR}/${PACKAGE_NAME}/usr/share/doc/${PACKAGE_NAME}/copyright" << EOF
 Upstream-Name: ${PACKAGE_NAME}
 Source: https://github.com/danubetech/did-cli
-Copyright: $(date +%Y) DanubeTech
+Copyright: $(date +%Y) Danube Tech
 License: Apache-2.0
 EOF
 
@@ -132,7 +132,7 @@ cat > "${TEMP_DIR}/${PACKAGE_NAME}/usr/bin/${PACKAGE_NAME}" << EOF
 # Set up library path to use bundled libraries
 export LD_LIBRARY_PATH="/usr/lib/${PACKAGE_NAME}/lib:\$LD_LIBRARY_PATH"
 # Execute the application with any arguments passed to this script
-java --enable-preview -jar /usr/share/${PACKAGE_NAME}/${JAR_FILE} "\$@"
+java --enable-preview --enable-native-access=ALL-UNNAMED -jar /usr/share/${PACKAGE_NAME}/${JAR_FILE} "\$@"
 EOF
 chmod +x "${TEMP_DIR}/${PACKAGE_NAME}/usr/bin/${PACKAGE_NAME}"
 
