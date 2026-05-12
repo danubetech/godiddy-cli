@@ -253,29 +253,34 @@ public class Api {
         if (! decryptionResponses.startsWith("0")) decryptionResponses = ansi().fgBrightYellow().a(decryptionResponses).reset().toString();
 
         return name +
-                ": jobId=" + jobId + " / " +
-                didDocumentVerificationMethods + " / " +
-                secretVerificationMethods + " / " +
-                signingResponses + " / " +
-                decryptionResponses;
+                ": jobId=" + jobId +
+                " / " + didDocumentVerificationMethods +
+                " / " + secretVerificationMethods +
+                " / " + signingResponses +
+                " / " + decryptionResponses;
     }
 
     private static String constructInterpretedString(RegistrarState registrarState) {
         String name = registrarState.getClass().getSimpleName();
         String jobId = "" + (registrarState.getJobId() == null ? "" : string(registrarState.getJobId()));
         String state = registrarState.getDidState() == null ? "null" : registrarState.getDidState().getState();
-        String action = ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? "null" : didStateAction.getAction() == null ? "null" : didStateAction.getAction();
-        String did = registrarState.getDidState() == null ? "null" : registrarState.getDidState().getDid();
+        String action = ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? null : didStateAction.getAction() == null ? null : didStateAction.getAction();
+        String wait = ! (registrarState.getDidState() instanceof DidStateWait didStateWait) ? null : didStateWait.getWait() == null ? null : didStateWait.getWait();
+        String did = registrarState.getDidState() == null ? null : registrarState.getDidState().getDid();
         String verificationMethodTemplates = "" + (registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getVerificationMethodTemplate() == null ? 0 : didStateAction.getVerificationMethodTemplate().size()) + " verification method templates";
+        String verificationMethodTemplatesTypes = (registrarState.getDidState() == null ? "" : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? "" : didStateAction.getVerificationMethodTemplate() == null ? "" : " " + didStateAction.getVerificationMethodTemplate().stream().map(x -> x.getType() + x.getPublicKeyJwk()).toList());
         String signingRequests = "" + (registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getSigningRequest() == null ? 0 : didStateAction.getSigningRequest().size()) + " signing requests";
+        String signingRequestsTypes = "" + (registrarState.getDidState() == null ? "" : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? "" : didStateAction.getSigningRequest() == null ? "" : didStateAction.getSigningRequest().keySet());
         String decryptionRequests = "" + (registrarState.getDidState() == null ? 0 : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? 0 : didStateAction.getDecryptionRequest() == null ? 0 : didStateAction.getDecryptionRequest().size()) + " decryption requests";
+        String decryptionRequestsTypes = "" + (registrarState.getDidState() == null ? "" : ! (registrarState.getDidState() instanceof DidStateAction didStateAction) ? "" : didStateAction.getDecryptionRequest() == null ? "" : didStateAction.getDecryptionRequest().keySet());
 
         name = ansi().bold().a(name).boldOff().toString();
         if ("action".equals(state)) state = ansi().fgBrightGreen().bold().a(state).boldOff().reset().toString();
         if ("wait".equals(state)) state = ansi().fgBrightYellow().bold().a(state).boldOff().reset().toString();
         if ("finished".equals(state)) state = ansi().fgBrightBlue().bold().a(state).boldOff().reset().toString();
         if ("failure".equals(state)) state = ansi().fgBrightRed().bold().a(state).boldOff().reset().toString();
-        if (! action.equals("null")) action = ansi().fgBrightGreen().bold().a(action).boldOff().reset().toString();
+        if (action != null) action = ansi().fgBrightGreen().bold().a(action).boldOff().reset().toString();
+        if (wait != null) wait = ansi().fgBrightGreen().bold().a(wait).boldOff().reset().toString();
         if (did != null) did = ansi().fgBrightMagenta().a(did).reset().toString();
         if (! verificationMethodTemplates.startsWith("0")) verificationMethodTemplates = ansi().fgBrightYellow().a(verificationMethodTemplates).reset().toString();
         if (! signingRequests.startsWith("0")) signingRequests = ansi().fgBrightYellow().a(signingRequests).reset().toString();
@@ -284,22 +289,27 @@ public class Api {
         return name +
                 ": jobId=" + jobId +
                 " / state=" + state +
-                " / action=" + action +
-                " / did=" + did + " / " +
-                verificationMethodTemplates + " / " +
-                signingRequests + " / " +
-                decryptionRequests;
+                (action == null ? "" : " / action=" + action) +
+                (wait == null ? "" : " / wait=" + wait) +
+                (did == null ? "" : " / did=" + did ) +
+                " / " + verificationMethodTemplates + verificationMethodTemplatesTypes +
+                " / " + signingRequests + signingRequestsTypes +
+                " / " + decryptionRequests + decryptionRequestsTypes;
     }
 
     private static String constructInterpretedString(RegistrarResourceState registrarResourceState) {
         String name = registrarResourceState.getClass().getSimpleName();
         String jobId = "" + (registrarResourceState.getJobId() == null ? "" : string(registrarResourceState.getJobId()));
         String state = registrarResourceState.getDidUrlState() == null ? "null" : registrarResourceState.getDidUrlState().getState();
-        String action = ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? "null" : didUrlStateAction.getAction() == null ? "null" : didUrlStateAction.getAction();
-        String didUrl = registrarResourceState.getDidUrlState() == null ? "null" : registrarResourceState.getDidUrlState().getDidUrl();
+        String action = ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? null : didUrlStateAction.getAction() == null ? null : didUrlStateAction.getAction();
+        String wait = ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateWait didUrlStateWait) ? null : didUrlStateWait.getWait() == null ? null : didUrlStateWait.getWait();
+        String didUrl = registrarResourceState.getDidUrlState() == null ? null : registrarResourceState.getDidUrlState().getDidUrl();
         String verificationMethodTemplates = "" + (registrarResourceState.getDidUrlState() == null ? 0 : ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? 0 : didUrlStateAction.getVerificationMethodTemplate() == null ? 0 : didUrlStateAction.getVerificationMethodTemplate().size()) + " verification method templates";
+        String verificationMethodTemplatesTypes = (registrarResourceState.getDidUrlState() == null ? "" : ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? "" : didUrlStateAction.getVerificationMethodTemplate() == null ? "" : " " + didUrlStateAction.getVerificationMethodTemplate().stream().map(x -> x.getType() + x.getPublicKeyJwk()).toList());
         String signingRequests = "" + (registrarResourceState.getDidUrlState() == null ? 0 : ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? 0 : didUrlStateAction.getSigningRequest() == null ? 0 : didUrlStateAction.getSigningRequest().size()) + " signing requests";
+        String signingRequestsTypes = "" + (registrarResourceState.getDidUrlState() == null ? "" : ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? "" : didUrlStateAction.getSigningRequest() == null ? "" : didUrlStateAction.getSigningRequest().keySet());
         String decryptionRequests = "" + (registrarResourceState.getDidUrlState() == null ? 0 : ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? 0 : didUrlStateAction.getDecryptionRequest() == null ? 0 : didUrlStateAction.getDecryptionRequest().size()) + " decryption requests";
+        String decryptionRequestsTypes = "" + (registrarResourceState.getDidUrlState() == null ? "" : ! (registrarResourceState.getDidUrlState() instanceof DidUrlStateAction didUrlStateAction) ? "" : didUrlStateAction.getDecryptionRequest() == null ? "" : didUrlStateAction.getDecryptionRequest().keySet());
 
         name = ansi().bold().a(name).boldOff().toString();
         if ("action".equals(state)) state = ansi().fgBrightGreen().bold().a(state).boldOff().reset().toString();
@@ -314,11 +324,11 @@ public class Api {
 
         return name +
                 ": jobId=" + jobId +
-                " / state=" + state +
-                " / action=" + action +
-                " / didUrl=" + didUrl + " / " +
-                verificationMethodTemplates + " / " +
-                signingRequests + " / " +
-                decryptionRequests;
+                (action == null ? "" : " / action=" + action) +
+                (wait == null ? "" : " / wait=" + wait) +
+                (didUrl == null ? "" : " / didUrl=" + didUrl ) +
+                " / " + verificationMethodTemplates + verificationMethodTemplatesTypes +
+                " / " + signingRequests + signingRequestsTypes +
+                " / " + decryptionRequests + decryptionRequestsTypes;
     }
 }
