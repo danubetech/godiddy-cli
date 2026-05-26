@@ -7,6 +7,7 @@ import com.danubetech.did.api.client.openapi.model.RequestSecret;
 import com.danubetech.did.cli.DIDAbstractCommand;
 import com.danubetech.did.cli.clistorage.clistate.CLIState;
 import com.danubetech.did.cli.config.Api;
+import com.danubetech.did.cli.util.JobIdUtil;
 import com.danubetech.did.cli.util.OptionsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -90,7 +91,8 @@ public class ExecuteCommand extends DIDAbstractCommand implements Callable<Integ
         RequestSecret requestSecret = new RequestSecret();
         if (this.secret != null) this.secret.forEach(requestSecret::putAdditionalProperty);
 
-        RegistrarRequestJobId registrarRequestJobId = this.jobId == null ? null : new RegistrarRequestJobId(this.jobId);
+        RegistrarRequestJobId registrarRequestJobId = null;
+        if (this.jobId != null) registrarRequestJobId = new RegistrarRequestJobId(JobIdUtil.jobIdFromJobIdString(this.jobId));
 
         List<String> operation = Collections.singletonList(this.operation);
 
